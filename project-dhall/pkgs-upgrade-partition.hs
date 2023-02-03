@@ -10,6 +10,9 @@
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
+-- | Description: Partition the packages into those that have been upgraded and
+-- those that have not.
+
 import Data.List (intersect, (\\))
 import qualified Data.Text as T (pack)
 import qualified Data.Text.IO as T (putStrLn)
