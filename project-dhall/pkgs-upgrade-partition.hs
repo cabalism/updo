@@ -1,7 +1,6 @@
-#!/usr/bin/env stack
-{- stack --resolver lts-18.27 script
-   --package dhall
-   --package text
+#!/usr/bin/env cabal
+{- cabal:
+build-depends: base, dhall, text
 -}
 
 {-# LANGUAGE DeriveAnyClass #-}
