@@ -13,7 +13,7 @@ project-files-dhall2cabal: \
   ghc-$(GHC_UPGRADE).dhall2cabal.project
 
 project-dhall/pkgs-sorted.dhall: project-dhall/pkgs/*.dhall
-	cd project-dhall && ./pkgs-sorted.hs > $(@F)
+	updo/project-dhall/pkgs-sorted.hs > $@
 
 project-dhall/pkgs-upgrade-done.dhall: \
   project-dhall/pkgs/*.dhall \
