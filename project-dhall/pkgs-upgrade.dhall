@@ -1,5 +1,5 @@
 \(ghc-version : Text) ->
-\(ghc-upgrade: Text) ->
+\(ghc-upgrade : Text) ->
 \(x : { pkgs : List Text, done : List Text, todo : List Text }) ->
   let N = https://prelude.dhall-lang.org/Natural/package.dhall
 

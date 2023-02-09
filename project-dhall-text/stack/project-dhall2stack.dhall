@@ -49,13 +49,12 @@ in  \(stackage-resolver : Text) ->
       let pkgs-comment =
             merge
               { AllPkgs =
-                  \(pkgs : List Text) ->
-                    "# We have ${countPkgs pkgs} packages."
+                  \(pkgs : List Text) -> "# We have ${countPkgs pkgs} packages."
               , PkgUpgrade =
                   \(pkgs : TYPES.PkgTodoList) ->
                     "# We have upgraded ${countPkgs
-                                             pkgs.done} packages and have ${countPkgs
-                                                                              pkgs.todo} yet to do."
+                                            pkgs.done} packages and have ${countPkgs
+                                                                             pkgs.todo} yet to do."
               }
               pkg-set
 
