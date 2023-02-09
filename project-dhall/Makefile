@@ -19,7 +19,7 @@ project-dhall/pkgs-upgrade-done.dhall: \
   project-dhall/pkgs/*.dhall \
   project-dhall/pkgs-sorted.dhall \
   project-dhall/pkgs-upgrade-todo.dhall
-	cd project-dhall && ./pkgs-upgrade-done.hs "./pkgs-sorted.dhall" > $(@F)
+	./updo/project-dhall/pkgs-upgrade-done.hs ./project-dhall/pkgs-sorted.dhall ./project-dhall/pkgs-upgrade-todo.dhall > $@
 
 ghc-$(GHC_VERSION).dhall2stack.yaml: \
   project-dhall/ghc-$(GHC_VERSION)/project-dhall2stack.dhall \
