@@ -72,8 +72,8 @@ mkSha256Map xs = unsafeTextToLine <$>
 main :: IO ()
 main = do
   s <- getContents
-  repos :: [SourceRepoPkg] <- input auto (pack s)
-  fetches <- sort . parallel $ prefetchSoureRepoPkg <$> repos
+  repos :: [[SourceRepoPkg]] <- input auto (pack s)
+  fetches <- sort . parallel $ prefetchSoureRepoPkg <$> concat repos
   let (_errs, xs) = partitionEithers fetches
   sequence_ $ echo <$> mkSha256Map xs
   return ()
