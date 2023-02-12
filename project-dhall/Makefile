@@ -25,18 +25,11 @@ project-sha256maps: \
   project-dhall/ghc-$(GHC_VERSION)/sha256map.nix \
   project-dhall/ghc-$(GHC_UPGRADE)/sha256map.nix
 
-project-dhall/ghc-$(GHC_VERSION)/sha256map.nix: \
-  project-dhall/ghc-$(GHC_VERSION)/deps-external.dhall \
-  project-dhall/ghc-$(GHC_VERSION)/deps-internal.dhall \
-  project-dhall/ghc-$(GHC_VERSION)/forks-external.dhall \
-  project-dhall/ghc-$(GHC_VERSION)/forks-internal.dhall
-	echo './updo/project-dhall-text/concatSourceRepoPkgs.dhall [$(^:%=./%,) ([] : List {loc : Text, tag : Text, sub : List Text})]' | ./updo/project-dhall/sha256map.hs > $@
-
-project-dhall/ghc-$(GHC_UPGRADE)/sha256map.nix: \
-  project-dhall/ghc-$(GHC_UPGRADE)/deps-external.dhall \
-  project-dhall/ghc-$(GHC_UPGRADE)/deps-internal.dhall \
-  project-dhall/ghc-$(GHC_UPGRADE)/forks-external.dhall \
-  project-dhall/ghc-$(GHC_UPGRADE)/forks-internal.dhall
+project-dhall/ghc-%/sha256map.nix: \
+  project-dhall/ghc-%/deps-external.dhall \
+  project-dhall/ghc-%/deps-internal.dhall \
+  project-dhall/ghc-%/forks-external.dhall \
+  project-dhall/ghc-%/forks-internal.dhall
 	echo './updo/project-dhall-text/concatSourceRepoPkgs.dhall [$(^:%=./%,) ([] : List {loc : Text, tag : Text, sub : List Text})]' | ./updo/project-dhall/sha256map.hs > $@
 
 ghc-$(GHC_VERSION).dhall2stack.yaml: \
