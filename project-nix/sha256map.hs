@@ -13,13 +13,14 @@ build-depends: aeson, base, dhall, text, turtle, utf8-string
 
 -- | Description: Generates a sha256map.
 
+import Prelude hiding (unlines)
+
 import Data.Aeson (FromJSON, decode)
 import Data.ByteString.Lazy.UTF8 (fromString)
 import Data.Either (partitionEithers)
 import Data.Text (pack, unlines, unpack)
 import Dhall (FromDhall, Generic, Text, ToDhall, auto, embed, inject, input)
 import GHC.Generics
-import Prelude hiding (unlines)
 import System.Exit (ExitCode(..))
 import Turtle (Line, echo, empty, parallel, shellStrictWithErr, stdout, sort, unsafeTextToLine, void)
 

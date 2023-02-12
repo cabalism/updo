@@ -21,17 +21,6 @@ project-dhall/pkgs-upgrade-done.dhall: \
   project-dhall/pkgs-upgrade-todo.dhall
 	./updo/project-dhall/pkgs-upgrade-done.hs ./project-dhall/pkgs-sorted.dhall ./project-dhall/pkgs-upgrade-todo.dhall > $@
 
-project-sha256maps: \
-  project-dhall/ghc-$(GHC_VERSION)/sha256map.nix \
-  project-dhall/ghc-$(GHC_UPGRADE)/sha256map.nix
-
-project-dhall/ghc-%/sha256map.nix: \
-  project-dhall/ghc-%/deps-external.dhall \
-  project-dhall/ghc-%/deps-internal.dhall \
-  project-dhall/ghc-%/forks-external.dhall \
-  project-dhall/ghc-%/forks-internal.dhall
-	echo '[$(^:%=./%,) ([] : List {loc : Text, tag : Text, sub : List Text})]' | ./updo/project-dhall/sha256map.hs > $@
-
 ghc-$(GHC_VERSION).dhall2stack.yaml: \
   project-dhall/ghc-$(GHC_VERSION)/project-dhall2stack.dhall \
   project-dhall/pkgs-sorted.dhall \
