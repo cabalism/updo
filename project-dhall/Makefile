@@ -21,6 +21,24 @@ project-dhall/pkgs-upgrade-done.dhall: \
   project-dhall/pkgs-upgrade-todo.dhall
 	./updo/project-dhall/pkgs-upgrade-done.hs ./project-dhall/pkgs-sorted.dhall ./project-dhall/pkgs-upgrade-todo.dhall > $@
 
+project-sha256maps: \
+  project-dhall/ghc-$(GHC_VERSION)/sha256map.nix \
+  project-dhall/ghc-$(GHC_UPGRADE)/sha256map.nix
+
+project-dhall/ghc-$(GHC_VERSION)/sha256map.nix: \
+  project-dhall/ghc-$(GHC_VERSION)/deps-external.dhall \
+  project-dhall/ghc-$(GHC_VERSION)/deps-internal.dhall \
+  project-dhall/ghc-$(GHC_VERSION)/forks-external.dhall \
+  project-dhall/ghc-$(GHC_VERSION)/forks-internal.dhall
+	echo './updo/project-dhall-text/concatSourceRepoPkgs.dhall [$(^:%=./%,) ([] : List {loc : Text, tag : Text, sub : List Text})]' | ./updo/project-dhall/sha256map.hs > $@
+
+project-dhall/ghc-$(GHC_UPGRADE)/sha256map.nix: \
+  project-dhall/ghc-$(GHC_UPGRADE)/deps-external.dhall \
+  project-dhall/ghc-$(GHC_UPGRADE)/deps-internal.dhall \
+  project-dhall/ghc-$(GHC_UPGRADE)/forks-external.dhall \
+  project-dhall/ghc-$(GHC_UPGRADE)/forks-internal.dhall
+	echo './updo/project-dhall-text/concatSourceRepoPkgs.dhall [$(^:%=./%,) ([] : List {loc : Text, tag : Text, sub : List Text})]' | ./updo/project-dhall/sha256map.hs > $@
+
 ghc-$(GHC_VERSION).dhall2stack.yaml: \
   project-dhall/ghc-$(GHC_VERSION)/project-dhall2stack.dhall \
   project-dhall/pkgs-sorted.dhall \
