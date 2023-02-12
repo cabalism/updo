@@ -16,3 +16,8 @@ import: project-cabal/ghc-x.y.z/forks-internal.config
 
 build-info: True
 ```
+
+For this rule using `make --jobs`[^parallel-make] will speed up the recipe a
+lot.
+
+[^parallel-make]: https://www.gnu.org/software/make/manual/html_node/Parallel.html
