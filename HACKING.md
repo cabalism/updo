@@ -14,39 +14,39 @@ $ make project-cabal/pkgs.config
 $ cat project-cabal/pkgs.config
 import: project-cabal/pkgs/shims.config
 ...
-import: project-cabal/pkgs/code-tools.config
+import: project-cabal/pkgs/tools.config
 ```
 
 When `project-dhall/pkgs-upgrade-todo.dhall` is:
 
 ```dhall
-[ "./periodic-jobs/runner/" ]
+[ "./jobs/runner/" ]
 ```
 
-Then the single `periodic-jobs.config` package group as generated is:
+Then the single `jobs.config` package group as generated is:
 
 ```
-$ make project-cabal/pkgs/periodic-jobs.config
-$ cat project-cabal/pkgs/periodic-jobs.config
+$ make project-cabal/pkgs/jobs.config
+$ cat project-cabal/pkgs/jobs.config
 if impl(ghc <= 8.10.7)
   packages:
-      ./periodic-jobs/core/
-    , ./periodic-jobs/runner/
+      ./jobs/core/
+    , ./jobs/runner/
 else
   packages:
-      ./periodic-jobs/core/
+      ./jobs/core/
 
 -- TODO for impl(ghc >= 9.2.5)
--- ./periodic-jobs/runner/
+-- ./jobs/runner/
 ```
 
 To split a group of packages into a dhall record of `{pkgs, done, todo}`:
 
 ```
-$ ./updo/project-dhall/pkgs-upgrade-partition.hs ./project-dhall/pkgs/periodic-jobs.dhall
-{ pkgs = [ "./periodic-jobs/core/", "./periodic-jobs/runner/" ]
-, done = [ "./periodic-jobs/core/" ]
-, todo = [ "./periodic-jobs/runner/" ]
+$ ./updo/project-dhall/pkgs-upgrade-partition.hs ./project-dhall/pkgs/jobs.dhall
+{ pkgs = [ "./jobs/core/", "./jobs/runner/" ]
+, done = [ "./jobs/core/" ]
+, todo = [ "./jobs/runner/" ]
 }
 ```
 
@@ -61,10 +61,10 @@ To sort all the packages.
 ```
 $ cd project-dhall
 $ ./pkgs-sorted.hs
-[ "./administration-client/"
+[ "./admin-client/"
 , "./aeson-shim/"
 ...
-, "./warden/shared/haskell/orphans/servant-docs/"
-, "./warden/shared/haskell/testlib/"
+, "./docs/"
+, "./testing/"
 ]
 ```
