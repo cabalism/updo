@@ -41,8 +41,11 @@
                               ${pkgList "    " x.done}
                         ''
                 )
-            ++  ''
+            ++  ( if    L.null Text x.done
+                  then  ""
+                  else  ''
 
-                -- TODO for impl(ghc >= ${ghc-upgrade})
-                ${pkgListComment x.todo}
-                ''
+                        -- TODO for impl(ghc >= ${ghc-upgrade})
+                        ${pkgListComment x.todo}
+                        ''
+                )
