@@ -55,8 +55,8 @@ Available options:
                            stack resolver versions)
 ```
 
-It generates a freeze file but these lock are problematic as they don't function
-as people expect and they are platform specific [freeze
+It generates a freeze file but these locks are problematic as they don't function
+as people expect and there are platform-specific [freeze
 problems](https://github.com/haskell/cabal/issues/8059).
 
 ### Mirroring with `cabal2stack`
