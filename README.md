@@ -71,8 +71,8 @@ must fit with constraints at the project level.
 ### List of Source Packages
 
 There are various reasons to depend on source packages and forks of source
-packages; to keep a mirror within your organization, to add fixes that might get
-upstreamed or to pick up a fix someone else has made but is not yet been merged
+packages; to keep a mirror within your organization, to add fixes that haven't been
+upstreamed yet, or to pick up a fix someone else has made but hasn't yet been merged
 upstream, released and published.
 
 ### Why Dhall for Configuration?
