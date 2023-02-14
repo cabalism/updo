@@ -82,8 +82,10 @@ language. You won't be able to compare anything but `Natural` values so sorting
 something like `List Text` is not possible within it but there is great interop
 with Haskell so this can be done there.
 
-The dhall executable comes with a `format` command[^format-lsp]. We use its `text` command to
-write cabal and stack projects using [dhall text
+The `dhall` executable comes with a `format` command[^format-lsp]. This helps in the maintenance
+of the various `.dhall` files.
+
+We use dhall's `text` command to write cabal and stack projects using [dhall text
 templating](https://www.haskellforall.com/2017/06/dhall-is-now-template-engine.html).
 
 [^format-lsp]: Formatting is also available with the
