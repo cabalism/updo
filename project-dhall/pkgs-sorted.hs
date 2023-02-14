@@ -1,4 +1,4 @@
-#!/usr/bin/env cabal
+#!/usr/bin/env -S cabal run --verbose=0
 {- cabal:
 build-depends: base, dhall, filepath, text
 -}
