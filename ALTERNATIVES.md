@@ -69,7 +69,7 @@ is buildable on both mac and linux.
 Like `stack2cabal`, this tool also needs to download remote source repositories
 and is about as slow because the download takes most of the time.
 
-The stack project generated will [vary by
-platform](https://github.com/iconnect/cabal2stack/issues/1) it will [repeat
-dependencies](https://github.com/iconnect/cabal2stack/issues/4) already in the
-resolver.
+The generated stack project will [vary by platform][c2s1] and it will [repeat dependencies][c2s4] already in the resolver.
+
+[c2s1]: https://github.com/iconnect/cabal2stack/issues/1
+[c2s4]: https://github.com/iconnect/cabal2stack/issues/4
