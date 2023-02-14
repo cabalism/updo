@@ -82,14 +82,13 @@ language. You won't be able to compare anything but `Natural` values so sorting
 something like `List Text` is not possible within it but there is great interop
 with Haskell so this can be done there.
 
-The `dhall` executable comes with a `format` command[^format-lsp]. This helps in the maintenance
-of the various `.dhall` files.
+The `dhall` executable comes with a `format` command[^format-lsp]. This helps in
+the maintenance of the various `.dhall` files.
 
-We use dhall's `text` command to write cabal and stack projects using [dhall text
-templating](https://www.haskellforall.com/2017/06/dhall-is-now-template-engine.html).
+We use dhall's `text` command to write cabal and stack projects using [dhall
+text templating][dhall-text-templating].
 
-[^format-lsp]: Formatting is also available with the
-  [Dhall LSP Server](https://github.com/PanAeon/vscode-dhall-lsp-server).
+[^format-lsp]: Formatting is also available with the [Dhall LSP Server][LSP].
 
 ## Maintaining a Project
 
@@ -277,3 +276,6 @@ dhall text --file project-dhall/ghc-x.y.z/project-cabal.dhall > ghc-x.y.z.dhall2
 There are rules for copying the GHC_VERSION explicitly named projects to the
 default project names (`cabal.project` and `stack.yaml`) and by default the copy
 source is deleted by make because it is an `.INTERMEDIATE` target.
+
+[dhall-text-templating]: https://www.haskellforall.com/2017/06/dhall-is-now-template-engine.html
+[LSP]: https://github.com/PanAeon/vscode-dhall-lsp-server

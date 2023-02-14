@@ -55,8 +55,8 @@ Available options:
                            stack resolver versions)
 ```
 
-It generates a freeze file but these locks are problematic as they don't function
-as people expect and there are platform-specific [freeze
+It generates a freeze file but these locks are problematic as they don't
+function as people expect and there are platform-specific [freeze
 problems](https://github.com/haskell/cabal/issues/8059).
 
 ### Mirroring with `cabal2stack`
@@ -69,7 +69,8 @@ is buildable on both mac and linux.
 Like `stack2cabal`, this tool also needs to download remote source repositories
 and is about as slow because the download takes most of the time.
 
-The generated stack project will [vary by platform][c2s1] and it will [repeat dependencies][c2s4] already in the resolver.
+The generated stack project will [vary by platform][c2s1] and it will [repeat
+dependencies][c2s4] already in the resolver.
 
 [c2s1]: https://github.com/iconnect/cabal2stack/issues/1
 [c2s4]: https://github.com/iconnect/cabal2stack/issues/4
