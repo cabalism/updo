@@ -68,18 +68,18 @@ in  \(stackage-resolver : Text) ->
           --   * internal forks ${count forks-internal}
 
           -- Source Packages, external (3rd party).
-          ${cabal.repos deps-external}
+          ${cabal.repo-items deps-external}
 
           -- Source Packages, internal to this organisation (private and public).
-          ${cabal.repos deps-internal}
+          ${cabal.repo-items deps-internal}
 
           -- Source Packages, external (3rd party) forks of other repositories.
           -- Can we help upstream?
-          ${cabal.repos forks-external}
+          ${cabal.repo-items forks-external}
 
           -- Source Packages, internal forks of other repositories.
           -- Can we upstream and unfork?
-          ${cabal.repos forks-internal}
+          ${cabal.repo-items forks-internal}
 
           -- Constraints are equivalent to stack package-version extra dependencies.
           ${cabal.constraints pkg-config.constraints}

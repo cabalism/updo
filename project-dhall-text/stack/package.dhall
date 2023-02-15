@@ -1,10 +1,9 @@
 { constraints =
-    ../constraints.dhall
+    ../constraint-section.dhall
       ""
       "  - "
       "  - "
       (\(c : { dep : Text, ver : Text }) -> "${c.dep}-${c.ver}")
-, packages = ../pkgs.dhall "packages: []" "  - "
+, packages = ../pkg-section.dhall "packages: []" "  - "
 , repo-items = ./repo-items.dhall
-, repos = ./repos.dhall
 }
