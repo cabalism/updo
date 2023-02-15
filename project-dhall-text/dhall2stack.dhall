@@ -1,6 +1,6 @@
 let TYPES = ../types.dhall
 
-let length = https://prelude.dhall-lang.org/List/length
+let L = https://prelude.dhall-lang.org/List/package.dhall
 
 let show = https://prelude.dhall-lang.org/Natural/show
 
@@ -29,9 +29,9 @@ in  \(stackage-resolver : Text) ->
 
       let count =
             \(xs : List TYPES.SourceRepoPkg) ->
-              show (length TYPES.SourceRepoPkg xs)
+              show (L.length TYPES.SourceRepoPkg xs)
 
-      let countPkgs = \(xs : List Text) -> show (length Text xs)
+      let countPkgs = \(xs : List Text) -> show (L.length Text xs)
 
       let pkgs =
             merge
@@ -54,29 +54,36 @@ in  \(stackage-resolver : Text) ->
 
       let stack = ./stack/package.dhall
 
-      in  ''
-          resolver: ${stackage-resolver}
+      in      ''
+              resolver: ${stackage-resolver}
 
-          ${pkgs-comment}
-          ${stack.packages pkgs}
-          # We have ${count source-deps} source packages listed in this order:
-          #   * external ${count deps-external}
-          #   * internal ${count deps-internal}
-          #   * external forks ${count forks-external}
-          #   * internal forks ${count forks-internal}
-          extra-deps:
+              ${pkgs-comment}
+              ${stack.packages pkgs}
+              # We have ${count
+                            source-deps} source packages listed in this order:
+              #   * external ${count deps-external}
+              #   * internal ${count deps-internal}
+              #   * external forks ${count forks-external}
+              #   * internal forks ${count forks-internal}
+              ''
+          ++  ( if        L.null TYPES.SourceRepoPkg source-deps
+                      &&  L.null TYPES.PkgVer pkg-config.constraints
+                then  "extra-deps: []"
+                else  ''
+                      extra-deps:
 
-            # Source Packages, external (3rd party).
-          ${stack.repo-items deps-external}
-            # Source Packages, internal to this organisation (private and public).
-          ${stack.repo-items deps-internal}
-            # Source Packages, external (3rd party) forks of other repositories.
-            # Can we help upstream?
-          ${stack.repo-items forks-external}
-            # Source Packages, internal forks of other repositories.
-            # Can we upstream and unfork?
-          ${stack.repo-items forks-internal}
-            # Package versions for published packages either not on Stackage or
-            # not matching the version on Stackage for the resolver we use.
-            # These package-version extra dependencies are equivalent to cabal constraints.
-          ${stack.constraints pkg-config.constraints}''
+                        # Source Packages, external (3rd party).
+                      ${stack.repo-items deps-external}
+                        # Source Packages, internal to this organisation (private and public).
+                      ${stack.repo-items deps-internal}
+                        # Source Packages, external (3rd party) forks of other repositories.
+                        # Can we help upstream?
+                      ${stack.repo-items forks-external}
+                        # Source Packages, internal forks of other repositories.
+                        # Can we upstream and unfork?
+                      ${stack.repo-items forks-internal}
+                        # Package versions for published packages either not on Stackage or
+                        # not matching the version on Stackage for the resolver we use.
+                        # These package-version extra dependencies are equivalent to cabal constraints.
+                      ${stack.constraints pkg-config.constraints}''
+              )
