@@ -3,6 +3,8 @@
 
   let concatMapSep = https://prelude.dhall-lang.org/Text/concatMapSep
 
+  let concat = https://prelude.dhall-lang.org/Text/concat
+
   let subdirs =
         \(xs : List Text) ->
           if    L.null Text xs
@@ -31,6 +33,4 @@
           )
           deps-git
 
-  in  if    L.null Text repos
-      then  ""
-      else  "${concatMapSep "" Text (\(s : Text) -> "${s}") repos}"
+  in  if L.null Text repos then "" else concat repos
