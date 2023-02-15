@@ -1,21 +1,8 @@
+\(sub-template : Text -> Text) ->
 \(deps-git : List { loc : Text, tag : Text, sub : List Text }) ->
   let L = https://prelude.dhall-lang.org/List/package.dhall
 
   let T = https://prelude.dhall-lang.org/Text/package.dhall
-
-  let subdirs =
-        \(xs : List Text) ->
-          if    L.null Text xs
-          then  ""
-          else      ''
-
-                    ${"  "}subdir:
-                    ${"  "}  ''
-                ++  T.concatSep
-                      ''
-
-                      ${"    "}''
-                      xs
 
   let repos =
         L.map
@@ -26,7 +13,10 @@
               source-repository-package
                 type: git
                 location: ${s.loc}
-                tag: ${s.tag}${subdirs s.sub}''
+                tag: ${s.tag}${../internal/sub-items.dhall
+                                 "  subdir:"
+                                 sub-template
+                                 s.sub}''
           )
           deps-git
 

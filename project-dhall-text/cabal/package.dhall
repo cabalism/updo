@@ -4,6 +4,6 @@
       "constraints:"
       "  , "
       (\(c : { dep : Text, ver : Text }) -> "${c.dep} ==${c.ver}")
-, packages = ../internal/pkg-section.dhall "" "  , "
-, repo-items = ./repo-items.dhall
+, packages = ../internal/pkg-section.dhall "" "    " "  , "
+, repo-items = ./repo-items.dhall (\(sub : Text) -> "    ${sub}")
 }
