@@ -9,7 +9,7 @@ PKG_GROUP_CONFIGS = \
   $(shell find project-dhall/pkgs/ -type f -name '*.dhall' -printf "project-cabal/pkgs/%f\n" | sed 's/\.dhall/.config/g')
 
 project-cabal/pkgs.config: \
-  updo/project-dhall-text/cabal/pkgs-dhall2config.dhall \
+  updo/project-dhall-text/cabal/pkg-groups.dhall \
   project-dhall/pkg-groups.dhall \
   $(PKG_GROUP_CONFIGS)
 	echo './$< ./project-dhall/pkg-groups.dhall' | dhall text --output $@
