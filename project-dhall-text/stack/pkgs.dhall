@@ -1,20 +1,9 @@
-\(xs : List Text) ->
-  let concatMapSep = https://prelude.dhall-lang.org/Text/concatMapSep
-
+\(pkgs : List Text) ->
   let null = https://prelude.dhall-lang.org/List/null
 
-  let pkgs =
-        concatMapSep
-          ''
-
-          ${"  "}''
-          Text
-          (\(s : Text) -> "- ${s}")
-          xs
-
-  in  if    null Text xs
+  in  if    null Text pkgs
       then  "packages: []"
       else  ''
             packages:
-              ${pkgs}
+              - ${./pkg-items.dhall pkgs}
             ''
