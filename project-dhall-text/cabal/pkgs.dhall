@@ -1,13 +1,11 @@
 \(xs : List Text) ->
-  let concatMapSep = https://prelude.dhall-lang.org/Text/concatMapSep
+  let concatSep = https://prelude.dhall-lang.org/Text/concatSep
 
   let pkgs =
-        concatMapSep
+        concatSep
           ''
 
           ${"  "}, ''
-          Text
-          (\(s : Text) -> "${s}")
           xs
 
   in  ''

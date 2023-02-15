@@ -1,9 +1,7 @@
 \(deps-git : List { loc : Text, tag : Text, sub : List Text }) ->
   let L = https://prelude.dhall-lang.org/List/package.dhall
 
-  let concatMapSep = https://prelude.dhall-lang.org/Text/concatMapSep
-
-  let concat = https://prelude.dhall-lang.org/Text/concat
+  let T = https://prelude.dhall-lang.org/Text/package.dhall
 
   let subdirs =
         \(xs : List Text) ->
@@ -13,7 +11,7 @@
 
                     ${"    "}subdirs:
                     ${"    "}  ''
-                ++  concatMapSep
+                ++  T.concatMapSep
                       ''
 
                       ${"      "}''
@@ -33,4 +31,4 @@
           )
           deps-git
 
-  in  if L.null Text repos then "" else concat repos
+  in  if L.null Text repos then "" else T.concat repos
