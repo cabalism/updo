@@ -33,10 +33,6 @@ in  \(stackage-resolver : Text) ->
 
       let countPkgs = \(xs : List Text) -> show (length Text xs)
 
-      let project-pkgs = ./pkgs.dhall
-
-      let project-constraint-items = ./constraint-items.dhall
-
       let project-repo-items = ./repo-items.dhall
 
       let pkgs =
@@ -62,7 +58,7 @@ in  \(stackage-resolver : Text) ->
           resolver: ${stackage-resolver}
 
           ${pkgs-comment}
-          ${project-pkgs pkgs}
+          ${../pkgs.dhall "packages: []" "  - " pkgs}
           # We have ${count source-deps} source packages listed in this order:
           #   * external ${count deps-external}
           #   * internal ${count deps-internal}
@@ -83,4 +79,4 @@ in  \(stackage-resolver : Text) ->
             # Package versions for published packages either not on Stackage or
             # not matching the version on Stackage for the resolver we use.
             # These package-version extra dependencies are equivalent to cabal constraints.
-          ${project-constraint-items pkg-config.constraints}''
+          ${./constraint-items.dhall pkg-config.constraints}''

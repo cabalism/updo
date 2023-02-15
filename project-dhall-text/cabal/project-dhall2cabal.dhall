@@ -33,10 +33,6 @@ in  \(stackage-resolver : Text) ->
 
       let countPkgs = \(xs : List Text) -> show (length Text xs)
 
-      let project-pkgs = ./pkgs.dhall
-
-      let project-constraints = ./constraints.dhall
-
       let project-repos = ./repos.dhall
 
       let pkgs =
@@ -63,7 +59,7 @@ in  \(stackage-resolver : Text) ->
           import: ./project-stackage/${stackage-resolver}.config
 
           ${pkgs-comment}
-          ${project-pkgs pkgs}
+          ${../pkgs.dhall "" "  , " pkgs}
 
           -- We have ${count source-deps} source packages listed in this order:
           --   * external ${count deps-external}
@@ -86,5 +82,5 @@ in  \(stackage-resolver : Text) ->
           ${project-repos forks-internal}
 
           -- Constraints are equivalent to stack package-version extra dependencies.
-          ${project-constraints pkg-config.constraints}
+          ${./constraints.dhall pkg-config.constraints}
           ''
