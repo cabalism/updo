@@ -1,8 +1,6 @@
 { constraint-items = ./constraint-items.dhall
 , constraints = ./constraints.dhall
-, pkg-items = ../pkg-items.dhall
-, pkgs = ../pkgs.dhall
+, packages = ../pkgs.dhall "packages: []" "  - "
 , repo-items = ./repo-items.dhall
 , repos = ./repos.dhall
-, project-dhall2stack = ./project-dhall2stack.dhall
 }

@@ -33,7 +33,7 @@ project-cabal/ghc-%.config: \
 	echo "$(^:%=./%)" | dhall text --output $@
 
 ghc-$(GHC_VERSION).dhall2config.project: \
-  updo/project-dhall-text/cabal/project-dhall2config.dhall \
+  updo/project-dhall-text/dhall2config.dhall \
   project-cabal/ghc-$(GHC_VERSION)/constraints.config \
   project-cabal/ghc-$(GHC_VERSION)/deps-external.config \
   project-cabal/ghc-$(GHC_VERSION)/deps-internal.config \
@@ -44,7 +44,7 @@ ghc-$(GHC_VERSION).dhall2config.project: \
 
 ghc-$(GHC_UPGRADE).dhall2config.project: \
   project-cabal/ghc-$(GHC_UPGRADE)/project-dhall2config.dhall \
-  updo/project-dhall-text/cabal/project-dhall2config.dhall \
+  updo/project-dhall-text/dhall2config.dhall \
   project-cabal/ghc-$(GHC_UPGRADE)/constraints.config \
   project-cabal/ghc-$(GHC_UPGRADE)/deps-external.config \
   project-cabal/ghc-$(GHC_UPGRADE)/deps-internal.config \

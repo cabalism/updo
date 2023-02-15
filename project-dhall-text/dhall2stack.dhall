@@ -1,4 +1,4 @@
-let TYPES = ../../types.dhall
+let TYPES = ../types.dhall
 
 let length = https://prelude.dhall-lang.org/List/length
 
@@ -33,8 +33,6 @@ in  \(stackage-resolver : Text) ->
 
       let countPkgs = \(xs : List Text) -> show (length Text xs)
 
-      let project-repo-items = ./repo-items.dhall
-
       let pkgs =
             merge
               { AllPkgs = \(pkgs : List Text) -> pkgs
@@ -54,11 +52,13 @@ in  \(stackage-resolver : Text) ->
               }
               pkg-set
 
+      let stack = ./stack/package.dhall
+
       in  ''
           resolver: ${stackage-resolver}
 
           ${pkgs-comment}
-          ${../pkgs.dhall "packages: []" "  - " pkgs}
+          ${stack.packages pkgs}
           # We have ${count source-deps} source packages listed in this order:
           #   * external ${count deps-external}
           #   * internal ${count deps-internal}
@@ -67,16 +67,16 @@ in  \(stackage-resolver : Text) ->
           extra-deps:
 
             # Source Packages, external (3rd party).
-          ${project-repo-items deps-external}
+          ${stack.repo-items deps-external}
             # Source Packages, internal to this organisation (private and public).
-          ${project-repo-items deps-internal}
+          ${stack.repo-items deps-internal}
             # Source Packages, external (3rd party) forks of other repositories.
             # Can we help upstream?
-          ${project-repo-items forks-external}
+          ${stack.repo-items forks-external}
             # Source Packages, internal forks of other repositories.
             # Can we upstream and unfork?
-          ${project-repo-items forks-internal}
+          ${stack.repo-items forks-internal}
             # Package versions for published packages either not on Stackage or
             # not matching the version on Stackage for the resolver we use.
             # These package-version extra dependencies are equivalent to cabal constraints.
-          ${./constraint-items.dhall pkg-config.constraints}''
+          ${stack.constraint-items pkg-config.constraints}''

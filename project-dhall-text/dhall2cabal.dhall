@@ -1,4 +1,4 @@
-let TYPES = ../../types.dhall
+let TYPES = ../types.dhall
 
 let length = https://prelude.dhall-lang.org/List/length
 
@@ -33,8 +33,6 @@ in  \(stackage-resolver : Text) ->
 
       let countPkgs = \(xs : List Text) -> show (length Text xs)
 
-      let project-repos = ./repos.dhall
-
       let pkgs =
             merge
               { AllPkgs = \(pkgs : List Text) -> pkgs
@@ -55,11 +53,13 @@ in  \(stackage-resolver : Text) ->
               }
               pkg-set
 
+      let cabal = ./cabal/package.dhall
+
       in  ''
           import: ./project-stackage/${stackage-resolver}.config
 
           ${pkgs-comment}
-          ${../pkgs.dhall "" "  , " pkgs}
+          ${cabal.packages pkgs}
 
           -- We have ${count source-deps} source packages listed in this order:
           --   * external ${count deps-external}
@@ -68,19 +68,19 @@ in  \(stackage-resolver : Text) ->
           --   * internal forks ${count forks-internal}
 
           -- Source Packages, external (3rd party).
-          ${project-repos deps-external}
+          ${cabal.repos deps-external}
 
           -- Source Packages, internal to this organisation (private and public).
-          ${project-repos deps-internal}
+          ${cabal.repos deps-internal}
 
           -- Source Packages, external (3rd party) forks of other repositories.
           -- Can we help upstream?
-          ${project-repos forks-external}
+          ${cabal.repos forks-external}
 
           -- Source Packages, internal forks of other repositories.
           -- Can we upstream and unfork?
-          ${project-repos forks-internal}
+          ${cabal.repos forks-internal}
 
           -- Constraints are equivalent to stack package-version extra dependencies.
-          ${./constraints.dhall pkg-config.constraints}
+          ${cabal.constraints pkg-config.constraints}
           ''
