@@ -1,7 +1,8 @@
 # Updo Cabal
 
 The `Makefile` has targets for `ghc-x.y.z.dhall2config.project` that is mostly
-imports of `.config` files from the `.dhall` configuration, something like:
+imports of `.config` files generated from the `.dhall` configuration, something
+like:
 
 ```
 import: project-stackage/stackage-resolver.config
