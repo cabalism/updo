@@ -79,4 +79,4 @@ in  \(stackage-resolver : Text) ->
             # Package versions for published packages either not on Stackage or
             # not matching the version on Stackage for the resolver we use.
             # These package-version extra dependencies are equivalent to cabal constraints.
-          ${stack.constraint-items pkg-config.constraints}''
+          ${stack.constraints pkg-config.constraints}''

@@ -26,11 +26,12 @@ project-cabal/ghc-%/constraints.config : \
   project-dhall/ghc-%/constraints.dhall
 	echo "$(^:%=./%)" | dhall text --output $@
 
+REPOS = updo/project-dhall-text/cabal/repos.dhall
 # Mirror source repositories from dhall to config.
-project-cabal/ghc-%.config: \
-  updo/project-dhall-text/cabal/repos.dhall \
-  project-dhall/ghc-%.dhall
-	echo "$(^:%=./%)" | dhall text --output $@
+project-cabal/ghc-%/deps-internal.config: REPOS project-dhall/ghc-%/deps-internal.dhall; echo "$(^:%=./%)" | dhall text --output $@
+project-cabal/ghc-%/deps-external.config: REPOS project-dhall/ghc-%/deps-external.dhall; echo "$(^:%=./%)" | dhall text --output $@
+project-cabal/ghc-%/forks-internal.config: REPOS project-dhall/ghc-%/deps-internal.dhall; echo "$(^:%=./%)" | dhall text --output $@
+project-cabal/ghc-%/forks-external.config: REPOS project-dhall/ghc-%/forks-external.dhall; echo "$(^:%=./%)" | dhall text --output $@
 
 ghc-$(GHC_VERSION).dhall2config.project: \
   updo/project-dhall-text/dhall2config.dhall \
