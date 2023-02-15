@@ -5,5 +5,5 @@
       then  ""
       else  ''
             packages:
-            ${./pkg-items.dhall pkgs}
+                ${../pkg-items.dhall "  , " pkgs}
             ''

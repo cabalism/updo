@@ -1,3 +1,4 @@
+\(separator : Text) ->
 \(xs : List Text) ->
   let null = https://prelude.dhall-lang.org/List/null
 
@@ -8,5 +9,5 @@
       else  concatSep
               ''
 
-              ${"  "}, ''
+              ${separator}''
               xs
