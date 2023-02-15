@@ -1,22 +1,22 @@
-\(sub-template : Text -> Text) ->
-\(deps-git : List { loc : Text, tag : Text, sub : List Text }) ->
-  let L = https://prelude.dhall-lang.org/List/package.dhall
+let TYPES = ../../types.dhall
 
-  let T = https://prelude.dhall-lang.org/Text/package.dhall
+in  \(sub-template : Text -> Text) ->
+    \(deps-git : List TYPES.SourceRepoPkg) ->
+      let L = https://prelude.dhall-lang.org/List/package.dhall
 
-  let repos =
-        L.map
-          { loc : Text, tag : Text, sub : List Text }
-          Text
-          ( \(s : { loc : Text, tag : Text, sub : List Text }) ->
-              ''
-                - git: ${s.loc}
-                  commit: ${s.tag}${../internal/sub-items.dhall
-                                      "    subdirs:"
-                                      sub-template
-                                      s.sub}
-              ''
-          )
-          deps-git
+      let T = https://prelude.dhall-lang.org/Text/package.dhall
 
-  in  if L.null Text repos then "" else T.concat repos
+      in  if    L.null TYPES.SourceRepoPkg deps-git
+          then  ""
+          else  T.concatMap
+                  TYPES.SourceRepoPkg
+                  ( \(s : TYPES.SourceRepoPkg) ->
+                      ''
+                        - git: ${s.loc}
+                          commit: ${s.tag}${../internal/sub-items.dhall
+                                              "    subdirs:"
+                                              sub-template
+                                              s.sub}
+                      ''
+                  )
+                  deps-git
