@@ -44,12 +44,12 @@ $ nix-prefetch-git https://github.com/input-output-hk/haskell.nix.git bc01ebc05a
 }
 ```
 
-We also include the `sha256map-regenerate.py` script from haskell.nix[^sorted] but this
-is 4 times slower.
+We also include a `sha256map.py` script from haskell.nix[^sorted] but this is 4
+times slower.
 
-[^sorted]: Modified to sort the map by keys.
+[^sorted]: Renamed from `sha256map-regenerate.py` and modified to sort the map by keys.
 
 ```make
 sha256map.nix: stack.yaml
-	updo/project-nix/sha256map-regenerate.py <$^ >$@
+	updo/project-nix/sha256map.py <$^ >$@
 ```

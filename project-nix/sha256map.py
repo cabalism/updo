@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 #
 # NOTE: From input-output-hk/iohk-nix, a repository with no license.
-# https://github.com/input-output-hk/iohk-nix/blob/master/ci/sha256map-regenerate/sha256map-regenerate.py
+# SOURCE: https://github.com/input-output-hk/iohk-nix/blob/master/ci/sha256map-regenerate/sha256map-regenerate.py
 #
 # This script is intended to be run as
 #
-#  python3 sha256map-regenerate.py
+#  python3 sha256map.py
 #
 # And it will iterate over all git references in the given stack project (stack.yaml file)
 # and generate a set of sha256 value for them to stdout.
