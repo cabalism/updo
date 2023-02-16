@@ -1,13 +1,15 @@
-\(null-content : Text) ->
-\(leader : Text) ->
-\(separator : Text) ->
-\(dep-ver-template : { dep : Text, ver : Text } -> Text) ->
-\(constraints : List { dep : Text, ver : Text }) ->
-  let null = https://prelude.dhall-lang.org/List/null
+let TYPES = ../../types.dhall
 
-  in  if    null { dep : Text, ver : Text } constraints
-      then  null-content
-      else  "${leader}${./constraint-items.dhall
-                          separator
-                          dep-ver-template
-                          constraints}"
+in  \(null-content : Text) ->
+    \(leader : Text) ->
+    \(separator : Text) ->
+    \(dep-ver-template : TYPES.PkgVer -> Text) ->
+    \(constraints : List TYPES.PkgVer) ->
+      let null = https://prelude.dhall-lang.org/List/null
+
+      in  if    null TYPES.PkgVer constraints
+          then  null-content
+          else  "${leader}${./constraint-items.dhall
+                              separator
+                              dep-ver-template
+                              constraints}"

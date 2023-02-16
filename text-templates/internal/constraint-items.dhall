@@ -1,16 +1,18 @@
-\(separator : Text) ->
-\(dep-ver-template : { dep : Text, ver : Text } -> Text) ->
-\(xs : List { dep : Text, ver : Text }) ->
-  let null = https://prelude.dhall-lang.org/List/null
+let TYPES = ../../types.dhall
 
-  let concatMapSep = https://prelude.dhall-lang.org/Text/concatMapSep
+in  \(separator : Text) ->
+    \(dep-ver-template : TYPES.PkgVer -> Text) ->
+    \(xs : List TYPES.PkgVer) ->
+      let null = https://prelude.dhall-lang.org/List/null
 
-  in  if    null { dep : Text, ver : Text } xs
-      then  ""
-      else  concatMapSep
-              ''
+      let concatMapSep = https://prelude.dhall-lang.org/Text/concatMapSep
 
-              ${separator}''
-              { dep : Text, ver : Text }
-              dep-ver-template
-              xs
+      in  if    null TYPES.PkgVer xs
+          then  ""
+          else  concatMapSep
+                  ''
+
+                  ${separator}''
+                  TYPES.PkgVer
+                  dep-ver-template
+                  xs
