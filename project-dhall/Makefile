@@ -25,28 +25,28 @@ ghc-$(GHC_VERSION).dhall2stack.yaml: \
   project-dhall/ghc-$(GHC_VERSION)/project-dhall2stack.dhall \
   project-dhall/pkgs-sorted.dhall \
   project-dhall/ghc-$(GHC_VERSION)/*.dhall \
-  updo/project-dhall-text/stack/*.dhall
+  updo/text-templates/stack/*.dhall
 	echo './$< "$(STACKAGE_VERSION)"' | dhall text --output $@
 
 ghc-$(GHC_UPGRADE).dhall2stack.yaml: \
   project-dhall/ghc-$(GHC_UPGRADE)/project-dhall2stack.dhall \
   project-dhall/pkgs-upgrade-done.dhall \
   project-dhall/ghc-$(GHC_UPGRADE)/*.dhall \
-  updo/project-dhall-text/stack/*.dhall
+  updo/text-templates/stack/*.dhall
 	echo './$< "$(STACKAGE_UPGRADE)"' | dhall text --output $@
 
 ghc-$(GHC_VERSION).dhall2cabal.project: \
   project-dhall/ghc-$(GHC_VERSION)/project-dhall2cabal.dhall \
   project-dhall/pkgs-sorted.dhall \
   project-dhall/ghc-$(GHC_VERSION)/*.dhall \
-  updo/project-dhall-text/cabal/*.dhall
+  updo/text-templates/cabal/*.dhall
 	echo './$< "$(STACKAGE_VERSION)"' | dhall text --output $@
 
 ghc-$(GHC_UPGRADE).dhall2cabal.project: \
   project-dhall/ghc-$(GHC_UPGRADE)/project-dhall2cabal.dhall \
   project-dhall/pkgs-upgrade-done.dhall \
   project-dhall/ghc-$(GHC_UPGRADE)/*.dhall \
-  updo/project-dhall-text/cabal/*.dhall
+  updo/text-templates/cabal/*.dhall
 	echo './$< "$(STACKAGE_UPGRADE)"' | dhall text --output $@
 
 ghc-%.dhall2stack.yaml.lock: ghc-%.dhall2stack.yaml

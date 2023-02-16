@@ -18,27 +18,27 @@ project-files-dhall2yaml2stack: \
 # Mirror from pkgs dhall to yaml.
 .INTERMEDIATE: project-stack/ghc-$(GHC_VERSION)/pkgs.yaml
 project-stack/ghc-$(GHC_VERSION)/pkgs.yaml: \
-  updo/project-dhall-text/stack/pkgs.dhall \
+  updo/text-templates/stack/pkgs.dhall \
   project-dhall/pkgs-sorted.dhall
 	echo "$(^:%=./%)" | dhall text --output $@
 
 .INTERMEDIATE: project-stack/ghc-$(GHC_UPGRADE)/pkgs.yaml
 project-stack/ghc-$(GHC_UPGRADE)/pkgs.yaml: \
-  updo/project-dhall-text/stack/pkgs.dhall \
+  updo/text-templates/stack/pkgs.dhall \
   project-dhall/pkgs-upgrade-done.dhall
 	echo "$(^:%=./%)" | dhall text --output $@
 
 # Mirror constraints from dhall to yaml.
 .INTERMEDIATE: project-stack/ghc-%/constraints.yaml
 project-stack/ghc-%/constraints.yaml: \
-  updo/project-dhall-text/stack/constraints.dhall \
+  updo/text-templates/stack/constraints.dhall \
   project-dhall/ghc-%/constraints.dhall
 	echo "$(^:%=./%)" | dhall text --output $@
 
 # Mirror source repositories from dhall to yaml.
 .INTERMEDIATE: project-stack/ghc-%.yaml
 project-stack/ghc-%.yaml: \
-  updo/project-dhall-text/stack/repos.dhall \
+  updo/text-templates/stack/repos.dhall \
   project-dhall/ghc-%.dhall
 	echo "$(^:%=./%)" | dhall text --output $@
 
