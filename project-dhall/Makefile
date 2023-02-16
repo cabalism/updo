@@ -12,7 +12,9 @@ project-files-dhall2cabal: \
   ghc-$(GHC_VERSION).dhall2cabal.project \
   ghc-$(GHC_UPGRADE).dhall2cabal.project
 
-project-dhall/pkgs-sorted.dhall: project-dhall/pkgs/*.dhall
+project-dhall/pkgs-sorted.dhall: \
+  project-dhall/pkg-groups.dhall \
+  project-dhall/pkgs/*.dhall
 	updo/project-dhall/pkgs-sorted.hs > $@
 
 project-dhall/pkgs-upgrade-done.dhall: \

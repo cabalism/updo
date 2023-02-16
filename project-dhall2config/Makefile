@@ -4,21 +4,20 @@ project-files-dhall2config: \
   ghc-$(GHC_VERSION).dhall2config.project \
   ghc-$(GHC_UPGRADE).dhall2config.project
 
-# SEE: https://stackoverflow.com/questions/14289513/makefile-rule-that-depends-on-all-files-under-a-directory-including-within-subd
-PKG_GROUP_CONFIGS = \
-  $(shell find project-dhall/pkgs/ -type f -name '*.dhall' -printf "project-cabal/pkgs/%f\n" | sed 's/\.dhall/.config/g')
-
 project-cabal/pkgs.config: \
   updo/text-templates/cabal/pkg-groups.dhall \
   project-dhall/pkg-groups.dhall \
-  $(PKG_GROUP_CONFIGS)
+  $(patsubst project-dhall/pkgs/%.dhall, project-cabal/pkgs/%.config, $(wildcard project-dhall/pkgs/*.dhall))
 	echo './$< ./project-dhall/pkg-groups.dhall' | dhall text --output $@
 
 # Mirror packages (package groups) from dhall to config.
 project-cabal/pkgs/%.config: \
   project-dhall/pkgs/%.dhall \
   project-dhall/pkgs-upgrade-done.dhall
-	echo './updo/project-dhall/pkgs-upgrade.dhall "$(GHC_VERSION)" "$(GHC_UPGRADE)" $(shell updo/project-dhall/pkgs-upgrade-partition.hs ./project-dhall/pkgs/$(<F))' | dhall text --output $@
+	( \
+	echo './updo/project-dhall/pkgs-upgrade.dhall "$(GHC_VERSION)" "$(GHC_UPGRADE)"'; \
+	updo/project-dhall/pkgs-upgrade-partition.hs ./$<; \
+	) | dhall text --output $@
 
 # Mirror constraints from dhall to config.
 project-cabal/ghc-%/constraints.config : \
