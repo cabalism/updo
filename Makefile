@@ -28,11 +28,6 @@ STACK_VIA := dhall2stack
 # ${../../project-stackage/$(STACKAGE_VERSION).config as Text}
 CABAL_VIA := dhall2config
 
-# How to generate nix/services/stackProject/sha256map.nix?
-#  - True to generate from *.dhall inputs.
-#  - False to generate from stack.yaml.
-DHALL_SHA256MAP := true
-
 # Are we going to run cabal2stack or stack2cabal on the default project names?
 # These mirrors (cabal2stack and stack2cabal) are slow.
 CABAL2STACK := false
@@ -49,22 +44,14 @@ include updo/alternatives/yaml2stack/Makefile
 include updo/project-dhall2config/Makefile
 include updo/project-nix/Makefile
 
-ifeq ($(DHALL_SHA256MAP), true)
-nix/services/stackProject/sha256map.nix: ghc-$(GHC_VERSION).sha256map.nix
-	cp $^ $@
-else
-nix/services/stackProject/sha256map.nix: stack.yaml
-	updo/project-nix/sha256map-regenerate.py <$^ >$@
-endif
-
 # Project files used inproduction, not in GHC upgrade.
 #
 # By waiting for targets to the left of .WAIT, we ensure that what cabal
 # downloads is not read before it is completely written.
-.PHONY: all
-all: \
+.PHONY: projects
+projects: \
   project-dhall/pkgs-sorted.dhall \
-  nix/services/stackProject/sha256map.nix \
+  ghc-$(GHC_VERSION).sha256map.nix \
   .WAIT \
   stack.yaml \
   stack.yaml.lock \
@@ -81,11 +68,11 @@ all: \
 
 .NOTPARALLEL: \
   project-dhall/pkgs-sorted.dhall \
-  ghc-%.sha256map.nix \
-  nix/services/stackProject/sha256map.nix 
+  ghc-%.sha256map.nix
 
-.PHONY: upgrade
-upgrade: \
+.PHONY: upgrade-projects
+upgrade-projects: \
+  ghc-$(GHC_UPGRADE).sha256map.nix \
   ghc-$(GHC_UPGRADE).stack.yaml \
   ghc-$(GHC_UPGRADE).stack.yaml.lock \
   ghc-$(GHC_UPGRADE).cabal.project \
@@ -102,7 +89,7 @@ upgrade: \
 #  - project-files-dhall2yaml2stack
 .PHONY: all-possible-projects
 all-possible-projects: \
-  all \
+  projects \
   project-files-mirror \
   project-files-dhall2config \
   project-files-dhall2cabal \
@@ -110,7 +97,7 @@ all-possible-projects: \
 
 .PHONY: clean
 clean:
-	rm -f ghc-*.stack.* ghc-*.dhall2config.* ghc-*.dhall2cabal.* ghc-*.dhall2stack.* ghc-*.stack2cabal.* ghc-*.cabal2stack.* ghc-*.dhall2yaml2stack.*
+	rm -f ghc-*.stack.* ghc-*.dhall2config.* ghc-*.dhall2cabal.* ghc-*.dhall2stack.* ghc-*.stack2cabal.* ghc-*.cabal2stack.* ghc-*.dhall2yaml2stack.* ghc-*.sha256map.nix
 
 .PHONY: cabal
 cabal: \
