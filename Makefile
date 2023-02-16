@@ -102,7 +102,7 @@ upgrade: \
 #  - project-files-dhall2yaml2stack
 .PHONY: all-possible-projects
 all-possible-projects: \
-  project-files \
+  all \
   project-files-mirror \
   project-files-dhall2config \
   project-files-dhall2cabal \
