@@ -1,8 +1,9 @@
 # Dhall Text Templates
 
-The `ghc-x.y.z.dhall2cabal.project` and `ghc-x.y.z.dhall2stack.yaml` projects
-are generated from Dhall text templates in `project-dhall/ghc-x.y.z`, from
-`project-cabal.dhall` and `project-stack.dhall` respectively.
+We use Dhall text templates in `project-dhall/ghc-x.y.z/text-templates`:
+
+- From template `dhall2cabal.dhall`, we generate `ghc-x.y.z.dhall2cabal.project`
+- From template `dhall2stack.dhall`, we generate `ghc-x.y.z.dhall2stack.yaml`
 
 Dhall text templating was
 [announced](https://www.haskellforall.com/2017/06/dhall-is-now-template-engine.html)
