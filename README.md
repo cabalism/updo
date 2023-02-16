@@ -131,8 +131,9 @@ For each compiler version, such as `ghc-x.y.z`, create this set of files:
 │   ├── deps-internal.dhall
 │   ├── forks-external.dhall
 │   ├── forks-internal.dhall
-│   ├── project-dhall2cabal.dhall
-│   └── project-dhall2stack.dhall
+|   └── text-templates
+│       ├── dhall2cabal.dhall
+│       └── dhall2stack.dhall
 ```
 
 By default, Updo will create a single pair of projects (`cabal.project` and
