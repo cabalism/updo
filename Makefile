@@ -37,14 +37,15 @@ DHALL_SHA256MAP := true
 # These mirrors (cabal2stack and stack2cabal) are slow.
 CABAL2STACK := false
 STACK2CABAL := false
-include updo/project-mirror/Makefile
+include updo/alternatives/_2_mirrors/Makefile
 
 # Updo Dhall gives us these targets:
 #  - project-files-dhall2stack
 #  - project-files-dhall2cabal
+#  - project-files-dhall2config
 #  - project-sha256maps
 include updo/project-dhall/Makefile
-include updo/project-stack/Makefile
+include updo/alternatives/yaml2stack/Makefile
 include updo/project-cabal/Makefile
 include updo/project-nix/Makefile
 

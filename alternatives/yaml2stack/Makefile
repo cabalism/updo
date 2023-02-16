@@ -51,8 +51,8 @@ ghc-%.dhall2yaml2stack.yaml: \
   project-stack/ghc-%/deps-internal.yaml \
   project-stack/ghc-%/forks-external.yaml \
   project-stack/ghc-%/forks-internal.yaml \
-  updo/project-stack/join-sort-fragments.sh
-	./updo/project-stack/join-sort-fragments.sh $(<D) >$@
+  updo/alternatives/yaml2stack/join-sort-fragments.sh
+	./updo/alternatives/yaml2stack/join-sort-fragments.sh $(<D) >$@
 
 ghc-%.dhall2yaml2stack.yaml.lock: ghc-%.dhall2yaml2stack.yaml
 	stack build --dry-run --stack-yaml $<

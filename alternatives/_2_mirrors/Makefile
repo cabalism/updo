@@ -1,5 +1,5 @@
-include updo/project-cabal2stack/Makefile
-include updo/project-stack2cabal/Makefile
+include updo/alternatives/cabal2stack/Makefile
+include updo/alternatives/stack2cabal/Makefile
 
 ifeq ($(CABAL2STACK), true)
   ifeq ($(STACK2CABAL), true)
