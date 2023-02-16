@@ -60,9 +60,9 @@ ghc-%.dhall2yaml2stack.yaml.lock: ghc-%.dhall2yaml2stack.yaml
 .INTERMEDIATE: project-stack/ghc-$(GHC_VERSION)/base.yaml
 project-stack/ghc-$(GHC_VERSION)/base.yaml: \
   project-dhall/ghc-$(GHC_VERSION)/text-templates/stacksnippet.dhall
-	echo '$(<:%=./%) (Some "$(STACKAGE_VERSION)" : Optional Text)' | dhall text --output $@
+	[ -d $(@D) ] || mkdir -p $(@D) && echo '$(<:%=./%) (Some "$(STACKAGE_VERSION)" : Optional Text)' | dhall text --output $@
 
 .INTERMEDIATE: project-stack/ghc-$(GHC_UPGRADE)/base.yaml
 project-stack/ghc-$(GHC_UPGRADE)/base.yaml: \
   project-dhall/ghc-$(GHC_UPGRADE)/text-templates/stacksnippet.dhall
-	echo '$(<:%=./%) (Some "$(STACKAGE_UPGRADE)" : Optional Text)' | dhall text --output $@
+	[ -d $(@D) ] || mkdir -p $(@D) && echo '$(<:%=./%) (Some "$(STACKAGE_UPGRADE)" : Optional Text)' | dhall text --output $@
