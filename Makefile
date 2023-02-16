@@ -46,7 +46,7 @@ include updo/alternatives/_2_mirrors/Makefile
 #  - project-sha256maps
 include updo/project-dhall/Makefile
 include updo/alternatives/yaml2stack/Makefile
-include updo/project-cabal/Makefile
+include updo/project-dhall2config/Makefile
 include updo/project-nix/Makefile
 
 ifeq ($(DHALL_SHA256MAP), true)
