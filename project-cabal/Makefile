@@ -1,6 +1,6 @@
-.PHONY: project-files-cabal
+.PHONY: project-files-dhall2config
 
-project-files-cabal: \
+project-files-dhall2config: \
   ghc-$(GHC_VERSION).dhall2config.project \
   ghc-$(GHC_UPGRADE).dhall2config.project
 
