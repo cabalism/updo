@@ -1,4 +1,4 @@
-# Updo Stack
+# Updo Dhall2Yaml2Stack
 
 The `Makefile` has targets for `ghc-x.y.z.dhall2yaml2stack.yaml` and its `.lock`
 file.
