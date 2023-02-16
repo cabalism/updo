@@ -28,19 +28,12 @@ STACK_VIA := dhall2stack
 # ${../../project-stackage/$(STACKAGE_VERSION).config as Text}
 CABAL_VIA := dhall2config
 
-# Are we going to run cabal2stack or stack2cabal on the default project names?
-# These mirrors (cabal2stack and stack2cabal) are slow.
-CABAL2STACK := false
-STACK2CABAL := false
-include updo/alternatives/_2_mirrors/Makefile
-
 # Updo Dhall gives us these targets:
 #  - project-files-dhall2stack
 #  - project-files-dhall2cabal
 #  - project-files-dhall2config
 #  - project-sha256maps
 include updo/project-dhall/Makefile
-include updo/alternatives/yaml2stack/Makefile
 include updo/project-dhall2config/Makefile
 include updo/project-nix/Makefile
 
