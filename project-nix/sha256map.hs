@@ -1,7 +1,5 @@
-#!/usr/bin/env -S cabal run --verbose=0
-{- cabal:
-build-depends: aeson, base, dhall, text, turtle, utf8-string
--}
+#!/usr/bin/env stack
+-- stack script --resolver=lts-18.27 --package=aeson --package=base --package=dhall --package=text --package=turtle --package=utf8-string
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE LambdaCase #-}
