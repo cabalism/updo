@@ -1,7 +1,9 @@
 { constraints =
     ../internal/constraint-section.dhall
       ""
-      "constraints:"
+      ''
+      constraints:
+          ''
       "  , "
       (\(c : { dep : Text, ver : Text }) -> "${c.dep} ==${c.ver}")
 , packages = ../internal/pkg-section.dhall "" "    " "  , "
