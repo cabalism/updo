@@ -92,24 +92,25 @@ text templating][dhall-text-templating].
 
 ## Maintaining a Project
 
-For a GHC compiler version, say `ghc-x.y.z`, all configuration goes into the
-`project-dhall/ghc-x.y.z` folder within your project except for the
-`cabal.config` that we'll need to download from stackage. Save this file as
-`project-stackage/lts-m.n` using the exact resolver name.
+All configuration goes into `./project-dhall` (where `.` is the root folder for
+your Haskell project) except for the `cabal.config` that we'll need to download
+from stackage. Save this file as `project-stackage/lts-m.n` using the exact
+resolver name.
 
-```bash
-.
-├── ghc-x.y.z
-└── pkgs
+```
+project-stackage
+└── lts-m.n.config
 ```
 
 In the `pkgs` folder, create one or more groups for related packages.
 
 ```
-.
-├── db.dhall
-├── server.dhall
-└── tools.dhall
+project-dhall
+├── ghc-x.y.z
+└── pkgs
+    ├── db.dhall     ▨ List Text
+    ├── server.dhall ▨ List Text
+    └── tools.dhall  ▨ List Text
 ```
 
 The contents of each group is a `List Text` of relative paths to folders
@@ -121,21 +122,21 @@ containing package `.cabal` files.
 ]
 ```
 
-For each compiler version, such as `ghc-x.y.z`, create this set of files:
+For each `ghc-x.y.z` compiler version, create this set of inputs and templates:
 
 ```
-.
-├── ghc-x.y.z
-│   ├── constraints.dhall      ▨ List { dep : Text, ver : Text }
-│   ├── deps-external.dhall    ▨ List { loc : Text, tag : Text, sub : List Text }
-│   ├── deps-internal.dhall    ▨ List { loc : Text, tag : Text, sub : List Text }
-│   ├── forks-external.dhall   ▨ List { loc : Text, tag : Text, sub : List Text }
-│   ├── forks-internal.dhall   ▨ List { loc : Text, tag : Text, sub : List Text }
-|   └── text-templates
-│       ├── dhall2cabal.dhall  ▨ template for `ghc-x.y.z.dhall2cabal.project`
-│       ├── dhall2config.dhall ▨ template for `ghc-x.y.z.dhall2config.project`
-│       ├── dhall2stack.dhall  ▨ template for `ghc-x.y.z.dhall2stack.yaml`
-│       └── stacksnippet.dhall ▨ anything for `ghc-x.y.z.dhall2stack.yaml`
+project-dhall
+└── ghc-x.y.z
+    ├── constraints.dhall      ▨ List { dep : Text, ver : Text }
+    ├── deps-external.dhall    ▨ List { loc : Text, tag : Text, sub : List Text }
+    ├── deps-internal.dhall    ▨ List { loc : Text, tag : Text, sub : List Text }
+    ├── forks-external.dhall   ▨ List { loc : Text, tag : Text, sub : List Text }
+    ├── forks-internal.dhall   ▨ List { loc : Text, tag : Text, sub : List Text }
+    └── text-templates
+        ├── dhall2cabal.dhall  ▨ template for ghc-x.y.z.dhall2cabal.project
+        ├── dhall2config.dhall ▨ template for ghc-x.y.z.dhall2config.project
+        ├── dhall2stack.dhall  ▨ template for ghc-x.y.z.dhall2stack.yaml
+        └── stacksnippet.dhall ▨ anything for ghc-x.y.z.dhall2stack.yaml
 ```
 
 Anything in `stacksnippet.dhall` gets added to the top of the generated stack
@@ -197,8 +198,8 @@ projects using string templates. See [templates](./TEMPLATES.md) for more.
 For a GHC compiler upgrade, add another folder to `project-dhall` for the
 upgrade from `ghc-u.v.w` to `ghc-x.y.z`:
 
-```bash
-.
+```
+project-dhall
 ├── ghc-u.v.w
 ├── ghc-x.y.z
 └── pkgs
@@ -238,6 +239,7 @@ entry in `constraints.dhall`.
 In the root of your project, add two files.
 
 ```
+.
 ├── project-files.mk
 └── project-versions.mk
 ```
