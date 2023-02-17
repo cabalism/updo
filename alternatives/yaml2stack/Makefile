@@ -9,60 +9,64 @@
 # if necessary."
 # SOURCE:https://github.com/dhall-lang/dhall-lang/blob/master/standard/imports.md#import-resolution-judgment
 
+Y2S_TMP := ./.updo/dhall2yaml2stack
+
 project-files-dhall2yaml2stack: \
   ghc-$(GHC_VERSION).dhall2yaml2stack.yaml \
   ghc-$(GHC_VERSION).dhall2yaml2stack.yaml.lock \
   ghc-$(GHC_UPGRADE).dhall2yaml2stack.yaml \
   ghc-$(GHC_UPGRADE).dhall2yaml2stack.yaml.lock
 
+.INTERMEDIATE: $(Y2S_TMP)/ghc-$(GHC_VERSION)/base.yaml
+$(Y2S_TMP)/ghc-$(GHC_VERSION)/base.yaml: \
+  project-dhall/ghc-$(GHC_VERSION)/text-templates/stacksnippet.dhall
+	[ -d $(@D) ] || mkdir -p $(@D) && echo '$(<:%=./%) (Some "$(STACKAGE_VERSION)" : Optional Text)' | dhall text --output $@
+
+.INTERMEDIATE: $(Y2S_TMP)/ghc-$(GHC_UPGRADE)/base.yaml
+$(Y2S_TMP)/ghc-$(GHC_UPGRADE)/base.yaml: \
+  project-dhall/ghc-$(GHC_UPGRADE)/text-templates/stacksnippet.dhall
+	[ -d $(@D) ] || mkdir -p $(@D) && echo '$(<:%=./%) (Some "$(STACKAGE_UPGRADE)" : Optional Text)' | dhall text --output $@
+
 # Mirror from pkgs dhall to yaml.
-.INTERMEDIATE: project-stack/ghc-$(GHC_VERSION)/pkgs.yaml
-project-stack/ghc-$(GHC_VERSION)/pkgs.yaml: \
+.INTERMEDIATE: $(Y2S_TMP)/ghc-$(GHC_VERSION)/pkgs.yaml
+$(Y2S_TMP)/ghc-$(GHC_VERSION)/pkgs.yaml: \
   updo/text-templates/yaml2stack/pkgs.dhall \
   project-dhall/pkgs-sorted.dhall
 	echo "$(^:%=./%)" | dhall text --output $@
 
-.INTERMEDIATE: project-stack/ghc-$(GHC_UPGRADE)/pkgs.yaml
-project-stack/ghc-$(GHC_UPGRADE)/pkgs.yaml: \
+.INTERMEDIATE: $(Y2S_TMP)/ghc-$(GHC_UPGRADE)/pkgs.yaml
+$(Y2S_TMP)/ghc-$(GHC_UPGRADE)/pkgs.yaml: \
   updo/text-templates/yaml2stack/pkgs.dhall \
   project-dhall/pkgs-upgrade-done.dhall
 	echo "$(^:%=./%)" | dhall text --output $@
 
 # Mirror constraints from dhall to yaml.
-.INTERMEDIATE: project-stack/ghc-%/constraints.yaml
-project-stack/ghc-%/constraints.yaml: \
+$(Y2S_TMP)/ghc-%/constraints.yaml: \
   updo/text-templates/yaml2stack/constraints.dhall \
   project-dhall/ghc-%/constraints.dhall
 	echo "$(^:%=./%)" | dhall text --output $@
 
 # Mirror source repositories from dhall to yaml.
-.INTERMEDIATE: project-stack/ghc-%.yaml
-project-stack/ghc-%.yaml: \
+$(Y2S_TMP)/ghc-%.yaml: \
   updo/text-templates/yaml2stack/repo-items.dhall \
   project-dhall/ghc-%.dhall
 	echo "$(^:%=./%)" | dhall text --output $@
 
 # Join the YAML fragments into a single file, the stack project.
 ghc-%.dhall2yaml2stack.yaml: \
-  project-stack/ghc-%/base.yaml \
-  project-stack/ghc-%/pkgs.yaml \
-  project-stack/ghc-%/constraints.yaml \
-  project-stack/ghc-%/deps-external.yaml \
-  project-stack/ghc-%/deps-internal.yaml \
-  project-stack/ghc-%/forks-external.yaml \
-  project-stack/ghc-%/forks-internal.yaml \
+  $(Y2S_TMP)/ghc-%/base.yaml \
+  $(Y2S_TMP)/ghc-%/pkgs.yaml \
+  $(Y2S_TMP)/ghc-%/constraints.yaml \
+  $(Y2S_TMP)/ghc-%/deps-external.yaml \
+  $(Y2S_TMP)/ghc-%/deps-internal.yaml \
+  $(Y2S_TMP)/ghc-%/forks-external.yaml \
+  $(Y2S_TMP)/ghc-%/forks-internal.yaml \
   updo/alternatives/yaml2stack/join-sort-fragments.sh
 	./updo/alternatives/yaml2stack/join-sort-fragments.sh $(<D) >$@
 
 ghc-%.dhall2yaml2stack.yaml.lock: ghc-%.dhall2yaml2stack.yaml
 	stack build --dry-run --stack-yaml $<
 
-.INTERMEDIATE: project-stack/ghc-$(GHC_VERSION)/base.yaml
-project-stack/ghc-$(GHC_VERSION)/base.yaml: \
-  project-dhall/ghc-$(GHC_VERSION)/text-templates/stacksnippet.dhall
-	[ -d $(@D) ] || mkdir -p $(@D) && echo '$(<:%=./%) (Some "$(STACKAGE_VERSION)" : Optional Text)' | dhall text --output $@
-
-.INTERMEDIATE: project-stack/ghc-$(GHC_UPGRADE)/base.yaml
-project-stack/ghc-$(GHC_UPGRADE)/base.yaml: \
-  project-dhall/ghc-$(GHC_UPGRADE)/text-templates/stacksnippet.dhall
-	[ -d $(@D) ] || mkdir -p $(@D) && echo '$(<:%=./%) (Some "$(STACKAGE_UPGRADE)" : Optional Text)' | dhall text --output $@
+# To keep dhall to yaml intermediate files, uncomment the following (no need to
+# comment out the .INTERMEDIATE lines above):
+.SECONDARY: $(wildcard $(Y2S_TMP)/*.yaml)
