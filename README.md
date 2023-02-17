@@ -94,8 +94,8 @@ text templating][dhall-text-templating].
 
 All configuration goes into `./project-dhall` (where `.` is the root folder for
 your Haskell project) except for the `cabal.config` that we'll need to download
-from stackage. Save this file as `project-stackage/lts-m.n` using the exact
-resolver name.
+from stackage. Save this file as `project-stackage/lts-m.n.config` using the
+exact resolver name.
 
 ```
 project-stackage
