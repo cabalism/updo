@@ -228,7 +228,10 @@ project-dhall
 ├── ghc-u.v.w
 ├── ghc-x.y.z
 ├── pkgs
-├── pkgs-groups.dhall       ▨ List Text
+│   ├── db.dhall            ▨ List Text
+│   ├── server.dhall        ▨ List Text
+│   └── tools.dhall         ▨ List Text
+├── pkg-groups.dhall        ▨ List Text
 ├── pkgs-sorted.dhall       ▨ List Text (generated)
 ├── pkgs-upgrade-done.dhall ▨ List Text (generated)
 └── pkgs-upgrade-todo.dhall ▨ List Text
@@ -236,7 +239,8 @@ project-dhall
 
 At the start of a GHC upgrade put all packages into
 `project-dhall/pkgs-upgrade-todo.dhall`. As the upgrade progresses remove
-packages from this list as you work on them.
+packages from this list as you work on them. Updo will generate
+`pkgs-sorted.dhall` and `pkgs-upgrade-done.dhall`.
 
 For a dependency version upgrade, add or change an entry in `constraints.dhall`
 and if that dependency is on stackage for the resolver we're using and if the
