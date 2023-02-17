@@ -138,7 +138,7 @@ For each compiler version, such as `ghc-x.y.z`, create this set of files:
 
 By default, Updo will create a single pair of projects (`cabal.project` and
 `stack.yaml`) for one version of GHC. Specify which version to use by setting 
-make variables in `Make-project`.
+make variables in `project-versions.mk`.
 
 The `project-dhall2cabal.dhall` file is the template for the
 `ghc-x.y.z.dhall2cabal.project` file we'll produce.  Likewise
@@ -225,29 +225,34 @@ entry in `constraints.dhall`.
 
 ## Make Targets
 
-In the root of your project, add `Make-project` and include that from the root
-`Makefile`.
+In the root of your project, add two files.
 
-```make
-include Make-project
+```
+├── project-files.mk
+└── project-versions.mk
 ```
 
-For the contents of `Make-project` in this order, set variables for GHC and
-STACKAGE and include another makefile.
+In `project-versions.mk` set variables for GHC and STACKAGE.
 
 ```make
 GHC_VERSION := u.v.w
 GHC_UPGRADE := x.y.z
 STACKAGE_VERSION := lts-j.k
 STACKAGE_UPGRADE := lts-m.n
+```
 
-include project-dhall/Makefile
+Here is a basic set up for `project-files.mk`:
+
+```
+include project-versions.mk
+include updo/Makefile
 ```
 
 With this we can build certain explicitly named projects GHC_VERSION and
-GHC_UPGRADE `dhall2cabal` and `dhall2stack` projects:
+GHC_UPGRADE `dhall2config`, `dhall2cabal` and `dhall2stack` projects:
 
 ```
+make ghc-x.y.z.dhall2config.project
 make ghc-x.y.z.dhall2cabal.project
 make ghc-x.y.z.dhall2stack.yaml
 ```
@@ -277,6 +282,17 @@ dhall text --file project-dhall/ghc-x.y.z/project-cabal.dhall > ghc-x.y.z.dhall2
 There are rules for copying the GHC_VERSION explicitly named projects to the
 default project names (`cabal.project` and `stack.yaml`) and by default the copy
 source is deleted by make because it is an `.INTERMEDIATE` target.
+
+## GHC Prefixed Projects as Temporary
+
+To treat `ghc-x.y.z` prefixed files as temporary, add lines like these to
+`project-files.mk`:
+
+```make
+.INTERMEDIATE: ghc-$(GHC_VERSION).$(CABAL_VIA).project
+.INTERMEDIATE: ghc-$(GHC_VERSION).$(STACK_VIA).yaml
+.INTERMEDIATE: ghc-$(GHC_VERSION).sha256map.nix
+```
 
 [dhall-text-templating]: https://www.haskellforall.com/2017/06/dhall-is-now-template-engine.html
 [LSP]: https://github.com/PanAeon/vscode-dhall-lsp-server
