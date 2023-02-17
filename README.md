@@ -133,19 +133,35 @@ For each compiler version, such as `ghc-x.y.z`, create this set of files:
 │   ├── forks-internal.dhall
 |   └── text-templates
 │       ├── dhall2cabal.dhall
-│       └── dhall2stack.dhall
+│       ├── dhall2stack.dhall
+│       └── stacksnippet.dhall
 ```
 
 By default, Updo will create a single pair of projects (`cabal.project` and
 `stack.yaml`) for one version of GHC. Specify which version to use by setting 
 make variables in `project-versions.mk`.
 
-The `project-dhall2cabal.dhall` file is the template for the
-`ghc-x.y.z.dhall2cabal.project` file we'll produce.  Likewise
-`project-dhall2stack.dhall` is the template for producing
-`ghc-x.y.z.dhall2stack.yaml`. The rest of the files are inputs. In constraints
-put published packages that you want to use that are not on stackage or if they
-are on stackage where you want to use a different version.
+In `text-templates`, `dhall2cabal.dhall` is the template for the
+`ghc-x.y.z.dhall2cabal.project` project we'll produce.  Likewise
+`dhall2stack.dhall` is the template for producing `ghc-x.y.z.dhall2stack.yaml`.
+Anything in `stacksnippet.dhall` gets added to the top of the generated stack
+project[^base.yaml].  The rest of the files are inputs. In
+constraints[^constraints] put published packages that you want to use that are
+not on stackage or if they are on stackage where you want to use a different
+version.
+
+[^base.yaml]: Anything in `stacksnippet.dhall` will be used by
+  [dhall2yaml2stack](alternatives/yaml2stack#readme) too and is put into a
+  `base.yaml`, the topmost fragment when stitching together fragments.
+
+[^constraints]: To stack, constraints and source repository packages are
+    both `extra-deps`. We use cabal-like nomenclature but, be warned, cabal
+    constraints cover more than just `package ==version`, such as flags:
+    ```cabal
+    constraints:
+        bson -_old-network
+      , HaXml +splitbase
+    ```
 
 ```
 [ { dep = "diagrams-postscript", ver = "1.5" }
