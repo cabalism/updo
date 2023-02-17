@@ -132,20 +132,11 @@ For each compiler version, such as `ghc-x.y.z`, create this set of files:
 │   ├── forks-external.dhall
 │   ├── forks-internal.dhall
 |   └── text-templates
-│       ├── dhall2cabal.dhall
-│       ├── dhall2config.dhall
-│       ├── dhall2stack.dhall
+│       ├── dhall2cabal.dhall  ▨ template for `ghc-x.y.z.dhall2cabal.project`
+│       ├── dhall2config.dhall ▨ template for `ghc-x.y.z.dhall2config.project`
+│       ├── dhall2stack.dhall  ▨ template for `ghc-x.y.z.dhall2stack.yaml`
 │       └── stacksnippet.dhall
 ```
-
-By default, Updo will create a single pair of projects (`cabal.project` and
-`stack.yaml`) for one version of GHC. Specify which version to use by setting 
-make variables in `project-versions.mk`.
-
-In `text-templates`:
-- `dhall2cabal.dhall` is the template for `ghc-x.y.z.dhall2cabal.project`
-- `dhall2config.dall` is the template for `ghc-x.y.z.dhall2config.project`
-- `dhall2stack.dhall` is the template for `ghc-x.y.z.dhall2stack.yaml`
 
 Anything in `stacksnippet.dhall` gets added to the top of the generated stack
 project[^base.yaml].  The rest of the files are inputs. In
@@ -312,6 +303,9 @@ To treat `ghc-x.y.z` prefixed files as temporary, add lines like these to
 We use CABAL_VIA and STACK_VIA variables to decide which `ghc-x.y.z` prefixed
 projects will be copied to the default project names (`cabal.project` and
 `stack.yaml`).
+
+This way, Updo will create a single pair of projects (`cabal.project` and
+`stack.yaml`) for one version of GHC.
 
 [dhall-text-templating]: https://www.haskellforall.com/2017/06/dhall-is-now-template-engine.html
 [LSP]: https://github.com/PanAeon/vscode-dhall-lsp-server
