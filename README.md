@@ -183,7 +183,7 @@ version.
       , HaXml +splitbase
     ```
 
-```
+```dhall
 [ { dep = "diagrams-postscript", ver = "1.5" }
 , { dep = "diagrams-svg", ver = "1.4.3" }
 ]
@@ -288,7 +288,7 @@ STACKAGE_UPGRADE := lts-m.n
 
 Here is a basic set up for `project-files.mk`:
 
-```
+```make
 include project-versions.mk
 include updo/Makefile
 ```
