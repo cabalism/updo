@@ -295,10 +295,6 @@ $ make ghc-x.y.z.dhall2cabal.project
 dhall text --file project-dhall/ghc-x.y.z/project-cabal.dhall > ghc-x.y.z.dhall2cabal.project
 ```
 
-There are rules for copying the GHC_VERSION explicitly named projects to the
-default project names (`cabal.project` and `stack.yaml`) and by default the copy
-source is deleted by make because it is an `.INTERMEDIATE` target.
-
 ## GHC Prefixed Projects as Temporary
 
 To treat `ghc-x.y.z` prefixed files as temporary, add lines like these to
@@ -309,6 +305,10 @@ To treat `ghc-x.y.z` prefixed files as temporary, add lines like these to
 .INTERMEDIATE: ghc-$(GHC_VERSION).$(STACK_VIA).yaml
 .INTERMEDIATE: ghc-$(GHC_VERSION).sha256map.nix
 ```
+
+We use CABAL_VIA and STACK_VIA variables to decide which `ghc-x.y.z` prefixed
+projects will be copied to the default project names (`cabal.project` and
+`stack.yaml`).
 
 [dhall-text-templating]: https://www.haskellforall.com/2017/06/dhall-is-now-template-engine.html
 [LSP]: https://github.com/PanAeon/vscode-dhall-lsp-server
