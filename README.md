@@ -296,21 +296,21 @@ include updo/Makefile
 With this set up we can build projects:
 
 ```
-make ghc-x.y.z.dhall2config.project
-make ghc-x.y.z.dhall2cabal.project
-make ghc-x.y.z.dhall2stack.yaml
+$ make -f project-files.mk ghc-x.y.z.dhall2config.project
+$ make -f project-files.mk ghc-x.y.z.dhall2cabal.project
+$ make -f project-files.mk ghc-x.y.z.dhall2stack.yaml
 ```
 
 For stack, the project and its lock are separate targets (`.yaml` and
 `.yaml.lock`).
 
 ```
-$ make ghc-x.y.z.dhall2stack.yaml
+$ make -f project-files.mk ghc-x.y.z.dhall2stack.yaml
 dhall text --file project-dhall/ghc-x.y.z/project-stack.dhall > ghc-x.y.z.dhall2stack.yaml
 ```
 
 ```
-$ make ghc-x.y.z.dhall2stack.yaml.lock
+$ make -f project-files.mk ghc-x.y.z.dhall2stack.yaml.lock
 stack build --dry-run --stack-yaml ghc-x.y.z.dhall2stack.yaml
 ```
 
@@ -320,11 +320,21 @@ from stackage and those we add ourselves to `constraints.dhall`. If you do want
 to freeze anyway there's a cabal command to generate a freeze file.
 
 ```
-$ make ghc-x.y.z.dhall2cabal.project
+$ make -f project-files.mk ghc-x.y.z.dhall2cabal.project
 dhall text --file project-dhall/ghc-x.y.z/project-cabal.dhall > ghc-x.y.z.dhall2cabal.project
 ```
 
-## GHC Prefixed Projects as Temporary
+## Clean GHC-Prefixed Projects
+
+There's a make target to remove all `ghc-x.y.z` prefixed projects:
+
+```
+$ make -f project-files.mk clean
+rm -f ghc-*.stack.* ghc-*.dhall2config.* ghc-*.dhall2cabal.* ghc-*.dhall2stack.*
+ghc-*.stack2cabal.* ghc-*.cabal2stack.* ghc-*.dhall2yaml2stack.* ghc-*.sha256map.nix
+```
+
+## GHC-Prefixed Projects as Temporary
 
 To treat `ghc-x.y.z` prefixed files as temporary, add lines like these to
 `project-files.mk`:
