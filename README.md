@@ -133,6 +133,7 @@ For each compiler version, such as `ghc-x.y.z`, create this set of files:
 │   ├── forks-internal.dhall
 |   └── text-templates
 │       ├── dhall2cabal.dhall
+│       ├── dhall2config.dhall
 │       ├── dhall2stack.dhall
 │       └── stacksnippet.dhall
 ```
@@ -142,13 +143,13 @@ By default, Updo will create a single pair of projects (`cabal.project` and
 make variables in `project-versions.mk`.
 
 In `text-templates`, `dhall2cabal.dhall` is the template for the
-`ghc-x.y.z.dhall2cabal.project` project we'll produce.  Likewise
-`dhall2stack.dhall` is the template for producing `ghc-x.y.z.dhall2stack.yaml`.
-Anything in `stacksnippet.dhall` gets added to the top of the generated stack
-project[^base.yaml].  The rest of the files are inputs. In
-constraints[^constraints] put published packages that you want to use that are
-not on stackage or if they are on stackage where you want to use a different
-version.
+`ghc-x.y.z.dhall2cabal.project` project.  Likewise `dhall2config.dall` is the
+template for `ghc-x.y.z.dhall2config.project` and `dhall2stack.dhall` is the
+template for `ghc-x.y.z.dhall2stack.yaml`.  Anything in `stacksnippet.dhall`
+gets added to the top of the generated stack project[^base.yaml].  The rest of
+the files are inputs. In constraints[^constraints] put published packages that
+you want to use that are not on stackage or if they are on stackage where you
+want to use a different version.
 
 [^base.yaml]: Anything in `stacksnippet.dhall` will be used by
   [dhall2yaml2stack](alternatives/yaml2stack#readme) too and is put into a

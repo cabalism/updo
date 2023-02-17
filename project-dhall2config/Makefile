@@ -33,6 +33,7 @@ project-cabal/ghc-%/forks-internal.config: REPOS project-dhall/ghc-%/deps-intern
 project-cabal/ghc-%/forks-external.config: REPOS project-dhall/ghc-%/forks-external.dhall; echo "$(^:%=./%)" | dhall text --output $@
 
 ghc-$(GHC_VERSION).dhall2config.project: \
+  project-dhall/ghc-$(GHC_VERSION)/text-templates/dhall2config.dhall \
   updo/text-templates/dhall2config.dhall \
   project-cabal/ghc-$(GHC_VERSION)/constraints.config \
   project-cabal/ghc-$(GHC_VERSION)/deps-external.config \
@@ -43,7 +44,7 @@ ghc-$(GHC_VERSION).dhall2config.project: \
 	echo './$< "$(STACKAGE_VERSION)" "$(GHC_VERSION)"' | dhall text --output $@
 
 ghc-$(GHC_UPGRADE).dhall2config.project: \
-  project-cabal/ghc-$(GHC_UPGRADE)/project-dhall2config.dhall \
+  project-dhall/ghc-$(GHC_UPGRADE)/text-templates/dhall2config.dhall \
   updo/text-templates/dhall2config.dhall \
   project-cabal/ghc-$(GHC_UPGRADE)/constraints.config \
   project-cabal/ghc-$(GHC_UPGRADE)/deps-external.config \
