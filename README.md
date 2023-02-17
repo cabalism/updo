@@ -107,10 +107,11 @@ In the `pkgs` folder, create one or more groups for related packages.
 ```
 project-dhall
 ├── ghc-x.y.z
-└── pkgs
-    ├── db.dhall     ▨ List Text
-    ├── server.dhall ▨ List Text
-    └── tools.dhall  ▨ List Text
+├── pkgs
+│   ├── db.dhall      ▨ List Text
+│   ├── server.dhall  ▨ List Text
+│   └── tools.dhall   ▨ List Text
+└── pkg-groups.dhall  ▨ List Text
 ```
 
 The contents of each group is a `List Text` of relative paths to folders
@@ -121,6 +122,30 @@ containing package `.cabal` files.
 , "./tool/formatter/"
 ]
 ```
+
+List the package groups in `pkg-groups.dhall`[^pkg-groups]. This gives you
+control of the imports in the generated `./project-cabal/pkgs.config`,
+itself imported into `ghc-x.y.z.dhall2config.project`:
+
+```cabal
+-- ./project-cabal/pkgs.config
+import: project-cabal/pkgs/db.config
+import: project-cabal/pkgs/serer.config
+import: project-cabal/pkgs/tools.config
+
+-- ./ghc-x.y.z.dhall2config.project
+import: project-stackage/lts-m.n.config
+
+import: project-cabal/pkgs.config
+
+import: project-cabal/ghc-x.y.z/constraints.config
+import: project-cabal/ghc-x.y.z/deps-external.config
+import: project-cabal/ghc-x.y.z/deps-internal.config
+import: project-cabal/ghc-x.y.z/forks-external.config
+import: project-cabal/ghc-x.y.z/forks-internal.config
+```
+
+[^pkg-groups]: Dhall can't do arbitrary IO like reading files from a folder.
 
 For each `ghc-x.y.z` compiler version, create this set of inputs and templates:
 
@@ -202,7 +227,11 @@ upgrade from `ghc-u.v.w` to `ghc-x.y.z`:
 project-dhall
 ├── ghc-u.v.w
 ├── ghc-x.y.z
-└── pkgs
+├── pkgs
+├── pkgs-groups.dhall       ▨ List Text
+├── pkgs-sorted.dhall       ▨ List Text (generated)
+├── pkgs-upgrade-done.dhall ▨ List Text (generated)
+└── pkgs-upgrade-todo.dhall ▨ List Text
 ```
 
 At the start of a GHC upgrade put all packages into
