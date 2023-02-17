@@ -272,7 +272,8 @@ make ghc-x.y.z.dhall2cabal.project
 make ghc-x.y.z.dhall2stack.yaml
 ```
 
-The stack `.yaml` and `.yaml.lock` are separate targets.
+For stack, the project, `.yaml`, and its lock, `.yaml.lock`, are separate
+targets.
 
 ```
 $ make ghc-x.y.z.dhall2stack.yaml
@@ -284,7 +285,7 @@ $ make ghc-x.y.z.dhall2stack.yaml.lock
 stack build --dry-run --stack-yaml ghc-x.y.z.dhall2stack.yaml
 ```
 
-We don't provide a make target for cabal `*.project.freeze` files, relying
+We don't provide a make target for cabal `.project.freeze` files, relying
 instead on a combination of constraints, those in the `cabal.config` downloaded
 from stackage and those we add ourselves to `constraints.dhall`. If you do want
 to freeze anyway there's a cabal command to generate a freeze file.
