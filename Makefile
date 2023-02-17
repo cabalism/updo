@@ -83,7 +83,6 @@ upgrade-projects: \
 .PHONY: all-possible-projects
 all-possible-projects: \
   projects \
-  project-files-mirror \
   project-files-dhall2config \
   project-files-dhall2cabal \
   project-files-dhall2stack
