@@ -126,16 +126,16 @@ For each compiler version, such as `ghc-x.y.z`, create this set of files:
 ```
 .
 ├── ghc-x.y.z
-│   ├── constraints.dhall
-│   ├── deps-external.dhall
-│   ├── deps-internal.dhall
-│   ├── forks-external.dhall
-│   ├── forks-internal.dhall
+│   ├── constraints.dhall      ▨ List { dep : Text, ver : Text }
+│   ├── deps-external.dhall    ▨ List { loc : Text, tag : Text, sub : List Text }
+│   ├── deps-internal.dhall    ▨ List { loc : Text, tag : Text, sub : List Text }
+│   ├── forks-external.dhall   ▨ List { loc : Text, tag : Text, sub : List Text }
+│   ├── forks-internal.dhall   ▨ List { loc : Text, tag : Text, sub : List Text }
 |   └── text-templates
 │       ├── dhall2cabal.dhall  ▨ template for `ghc-x.y.z.dhall2cabal.project`
 │       ├── dhall2config.dhall ▨ template for `ghc-x.y.z.dhall2config.project`
 │       ├── dhall2stack.dhall  ▨ template for `ghc-x.y.z.dhall2stack.yaml`
-│       └── stacksnippet.dhall
+│       └── stacksnippet.dhall ▨ anything for `ghc-x.y.z.dhall2stack.yaml`
 ```
 
 Anything in `stacksnippet.dhall` gets added to the top of the generated stack
