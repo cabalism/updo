@@ -264,8 +264,7 @@ include project-versions.mk
 include updo/Makefile
 ```
 
-With this we can build certain explicitly named projects GHC_VERSION and
-GHC_UPGRADE `dhall2config`, `dhall2cabal` and `dhall2stack` projects:
+With this set up we can build projects:
 
 ```
 make ghc-x.y.z.dhall2config.project
