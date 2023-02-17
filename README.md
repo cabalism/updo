@@ -301,8 +301,8 @@ make ghc-x.y.z.dhall2cabal.project
 make ghc-x.y.z.dhall2stack.yaml
 ```
 
-For stack, the project, `.yaml`, and its lock, `.yaml.lock`, are separate
-targets.
+For stack, the project and its lock are separate targets (`.yaml` and
+`.yaml.lock`).
 
 ```
 $ make ghc-x.y.z.dhall2stack.yaml
