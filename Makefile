@@ -66,9 +66,9 @@ projects: \
 .PHONY: upgrade-projects
 upgrade-projects: \
   ghc-$(GHC_UPGRADE).sha256map.nix \
-  ghc-$(GHC_UPGRADE).stack.yaml \
-  ghc-$(GHC_UPGRADE).stack.yaml.lock \
-  ghc-$(GHC_UPGRADE).cabal.project \
+  stack.upgrade.yaml \
+  stack.upgrade.yaml.lock \
+  cabal.upgrade.project \
   ghc-$(GHC_UPGRADE).dhall2stack.yaml \
   ghc-$(GHC_UPGRADE).dhall2stack.yaml.lock \
   ghc-$(GHC_UPGRADE).dhall2cabal.project
@@ -106,8 +106,17 @@ stack: \
 cabal.project: ghc-$(GHC_VERSION).$(CABAL_VIA).project
 	cp $^ $@
 
+cabal.upgrade.project: ghc-$(GHC_UPGRADE).$(CABAL_VIA).project
+	cp $^ $@
+
 stack.yaml: ghc-$(GHC_VERSION).$(STACK_VIA).yaml
 	cp $< $@
 
+stack.upgrade.yaml: ghc-$(GHC_UPGRADE).$(STACK_VIA).yaml
+	cp $< $@
+
 stack.yaml.lock: stack.yaml
+	stack build --dry-run --stack-yaml $<
+
+stack.upgrade.yaml.lock: stack.upgrade.yaml
 	stack build --dry-run --stack-yaml $<
