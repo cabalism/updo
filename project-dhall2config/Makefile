@@ -10,14 +10,15 @@ project-cabal/pkgs.config: \
   $(patsubst project-dhall/pkgs/%.dhall, project-cabal/pkgs/%.config, $(wildcard project-dhall/pkgs/*.dhall))
 	echo './$< ./project-dhall/pkg-groups.dhall' | dhall text --output $@
 
+generate-pkg-configs: \
+  project-dhall/pkg-groups.dhall \
+  project-dhall/pkgs-upgrade-todo.dhall
+	./updo/project-dhall2config/pkg-groups.hs "$(GHC_VERSION)" "$(GHC_UPGRADE)"
+
 # Mirror packages (package groups) from dhall to config.
 project-cabal/pkgs/%.config: \
   project-dhall/pkgs/%.dhall \
-  project-dhall/pkgs-upgrade-done.dhall
-	( \
-	echo './updo/project-dhall/pkgs-upgrade.dhall "$(GHC_VERSION)" "$(GHC_UPGRADE)"'; \
-	updo/project-dhall/pkgs-upgrade-partition.hs ./$<; \
-	) | dhall text --output $@
+  generate-pkg-configs ;
 
 # Mirror constraints from dhall to config.
 project-cabal/ghc-%/constraints.config : \
