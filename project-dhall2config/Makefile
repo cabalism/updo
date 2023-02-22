@@ -13,7 +13,7 @@ project-cabal/pkgs.config: \
 generate-pkg-configs: \
   project-dhall/pkg-groups.dhall \
   project-dhall/pkgs-upgrade-todo.dhall
-	./updo/project-dhall2config/pkg-groups.hs "$(GHC_VERSION)" "$(GHC_UPGRADE)"
+	mkdir -p project-cabal/pkgs && ./updo/project-dhall2config/pkg-groups.hs "$(GHC_VERSION)" "$(GHC_UPGRADE)"
 
 # Mirror packages (package groups) from dhall to config with
 # generate-pkg-configs doing the work once for all package groups.
