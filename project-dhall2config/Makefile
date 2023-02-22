@@ -23,17 +23,22 @@ generate-pkg-configs: \
 project-cabal/pkgs/%.config: project-dhall/pkgs/%.dhall generate-pkg-configs ;
 
 # Mirror constraints from dhall to config.
-project-cabal/ghc-%/constraints.config : \
-  updo/text-templates/cabal/constraints.dhall \
-  project-dhall/ghc-%/constraints.dhall
-	echo "$(^:%=./%)" | dhall text --output $@
+project-cabal/ghc-$(GHC_VERSION)/constraints.config : \
+  updo/text-templates/cabal/package.dhall \
+  project-dhall/ghc-$(GHC_VERSION)/constraints.dhall
+	echo "let f = ./$< in f.constraints ./project-dhall/ghc-$(GHC_VERSION)/constraints.dhall" | dhall text --output $@
 
-REPOS = updo/text-templates/cabal/repos.dhall
+# Mirror constraints from dhall to config.
+project-cabal/ghc-$(GHC_UPGRADE)/constraints.config : \
+  updo/text-templates/cabal/package.dhall \
+  project-dhall/ghc-$(GHC_UPGRADE)/constraints.dhall
+	echo "let f = ./$< in f.constraints ./project-dhall/ghc-$(GHC_UPGRADE)/constraints.dhall" | dhall text --output $@
+
 # Mirror source repositories from dhall to config.
-project-cabal/ghc-%/deps-internal.config: REPOS project-dhall/ghc-%/deps-internal.dhall; echo "$(^:%=./%)" | dhall text --output $@
-project-cabal/ghc-%/deps-external.config: REPOS project-dhall/ghc-%/deps-external.dhall; echo "$(^:%=./%)" | dhall text --output $@
-project-cabal/ghc-%/forks-internal.config: REPOS project-dhall/ghc-%/deps-internal.dhall; echo "$(^:%=./%)" | dhall text --output $@
-project-cabal/ghc-%/forks-external.config: REPOS project-dhall/ghc-%/forks-external.dhall; echo "$(^:%=./%)" | dhall text --output $@
+project-cabal/ghc-%.config: \
+  updo/text-templates/cabal/package.dhall \
+  project-dhall/ghc-%.dhall
+	echo "let f = ./$< in f.repo-items ./project-dhall/ghc-$*.dhall" | dhall text --output $@
 
 ghc-$(GHC_VERSION).dhall2config.project: \
   project-dhall/ghc-$(GHC_VERSION)/text-templates/dhall2config.dhall \
