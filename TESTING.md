@@ -72,7 +72,7 @@ include updo/alternatives/yaml2stack/Makefile
 ## Default Targets
 
 The default targets are `stack.yaml` and `cabal.project`. Can we build just
-those without leaving behind[^check-temps] any temporary files?
+those without leaving behind[^check-temp-files] any temporary files?
 
 [^check-temp-files]: You could check for unwanted files with `git status`.
 
