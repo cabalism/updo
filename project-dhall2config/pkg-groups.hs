@@ -11,6 +11,7 @@
 -- conditionals if needed.
 module Main where
 
+import Control.Monad (forM_)
 import Data.List (concat, filter, intersect, sortOn, (\\))
 import qualified Data.Text as T (pack, unpack)
 import qualified Data.Text.IO as T (putStrLn)
@@ -41,10 +42,7 @@ main = do
     remaining :: [Text] <- input auto "./project-dhall/pkgs-upgrade-todo.dhall"
     pkgUpgrade :: UpgradeConfig <- input auto "./updo/project-dhall/pkgs-upgrade.dhall"
     pkgGroups :: [String] <- input auto "./project-dhall/pkg-groups.dhall"
-    sequence_
-        [ do
-            up <- groupUpgrade remaining p
-            let config = pkgUpgrade (T.pack ghcVersion) (T.pack ghcUpgrade) up
-            writeFile ("./project-cabal/pkgs" </> p <.> "config") (T.unpack config)
-        | p <- pkgGroups
-        ]
+    forM_ pkgGroups $ \p -> do
+        up <- groupUpgrade remaining p
+        let config = pkgUpgrade (T.pack ghcVersion) (T.pack ghcUpgrade) up
+        writeFile ("./project-cabal/pkgs" </> p <.> "config") (T.unpack config)
