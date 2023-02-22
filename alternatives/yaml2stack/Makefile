@@ -20,12 +20,12 @@ project-files-dhall2yaml2stack: \
 .INTERMEDIATE: $(Y2S_TMP)/ghc-$(GHC_VERSION)/base.yaml
 $(Y2S_TMP)/ghc-$(GHC_VERSION)/base.yaml: \
   project-dhall/ghc-$(GHC_VERSION)/text-templates/stacksnippet.dhall
-	[ -d $(@D) ] || mkdir -p $(@D) && echo '$(<:%=./%) (Some "$(STACKAGE_VERSION)" : Optional Text)' | dhall text --output $@
+	mkdir -p $(@D) && echo '$(<:%=./%) (Some "$(STACKAGE_VERSION)" : Optional Text)' | dhall text --output $@
 
 .INTERMEDIATE: $(Y2S_TMP)/ghc-$(GHC_UPGRADE)/base.yaml
 $(Y2S_TMP)/ghc-$(GHC_UPGRADE)/base.yaml: \
   project-dhall/ghc-$(GHC_UPGRADE)/text-templates/stacksnippet.dhall
-	[ -d $(@D) ] || mkdir -p $(@D) && echo '$(<:%=./%) (Some "$(STACKAGE_UPGRADE)" : Optional Text)' | dhall text --output $@
+	mkdir -p $(@D) && echo '$(<:%=./%) (Some "$(STACKAGE_UPGRADE)" : Optional Text)' | dhall text --output $@
 
 # Mirror pkgs from dhall to yaml.
 .INTERMEDIATE: $(Y2S_TMP)/ghc-$(GHC_VERSION)/pkgs.yaml
@@ -69,4 +69,4 @@ ghc-%.dhall2yaml2stack.yaml.lock: ghc-%.dhall2yaml2stack.yaml
 
 # To keep dhall to yaml intermediate files, uncomment the following (no need to
 # comment out the .INTERMEDIATE lines above):
-.SECONDARY: $(wildcard $(Y2S_TMP)/*.yaml)
+# .SECONDARY: $(wildcard $(Y2S_TMP)/*.yaml)
