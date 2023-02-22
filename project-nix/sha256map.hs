@@ -13,6 +13,7 @@ import Data.Aeson (FromJSON, decode)
 import Data.ByteString.Lazy.UTF8 (fromString)
 import Data.Either (partitionEithers)
 import Data.Text (pack, unpack)
+import qualified Data.Text.IO as T (getContents)
 import Dhall (FromDhall, Generic, Text, ToDhall, auto, input)
 import GHC.Generics
 import System.Exit (ExitCode (..))
@@ -64,8 +65,7 @@ printUrlTagSha NixPrefetchGitOutput{..} =
 
 main :: IO ()
 main = do
-    s <- getContents
-    repos :: [[SourceRepoPkg]] <- input auto (pack s)
+    repos :: [[SourceRepoPkg]] <- input auto =<< T.getContents
     fetches <- sort . parallel $ prefetchSourceRepoPkg <$> concat repos
     let (_errs, xs) = partitionEithers fetches
     printf "{\n"
