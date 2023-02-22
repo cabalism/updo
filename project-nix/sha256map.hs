@@ -2,7 +2,6 @@
 -- stack script --resolver=lts-18.27 --package=aeson --package=base --package=dhall --package=text --package=turtle --package=utf8-string
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE DeriveGeneric #-}
-{-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE ScopedTypeVariables #-}
@@ -13,12 +12,12 @@ module Main where
 import Data.Aeson (FromJSON, decode)
 import Data.ByteString.Lazy.UTF8 (fromString)
 import Data.Either (partitionEithers)
-import Data.Text (pack, unlines, unpack)
-import Dhall (FromDhall, Generic, Text, ToDhall, auto, embed, inject, input)
+import Data.Text (pack, unpack)
+import Dhall (FromDhall, Generic, Text, ToDhall, auto, input)
 import GHC.Generics
 import System.Exit (ExitCode (..))
-import Turtle (Line, echo, empty, parallel, shellStrictWithErr, sort, stdout, unsafeTextToLine, void)
-import Prelude hiding (unlines)
+import Turtle (empty, parallel, shellStrictWithErr, sort)
+import Turtle.Format (printf, (%), s)
 
 data SourceRepoPkg = SourceRepoPkg
     { loc :: Text
@@ -41,7 +40,7 @@ data NixPrefetchGitOutput = NixPrefetchGitOutput
     deriving (Eq, Ord, Show, Generic, FromJSON)
 
 prefetchSoureRepoPkg :: SourceRepoPkg -> IO (Either Warning NixPrefetchGitOutput)
-prefetchSoureRepoPkg SourceRepoPkg{loc, tag} = nixPrefetchGit (loc, tag)
+prefetchSoureRepoPkg SourceRepoPkg{..} = nixPrefetchGit (loc, tag)
 {-# INLINE prefetchSoureRepoPkg #-}
 
 nixPrefetchGit :: (Text, Text) -> IO (Either Warning NixPrefetchGitOutput)
@@ -59,14 +58,9 @@ nixPrefetchGit (repo, commit) = do
                     Right
                     (decode (fromString $ unpack stdout))
 
-mkSha256Map :: [NixPrefetchGitOutput] -> [Line]
-mkSha256Map xs =
-    unsafeTextToLine
-        <$> "{"
-            : [ "  \"" <> url <> "\".\"" <> rev <> "\" = \"" <> sha256 <> "\";"
-              | NixPrefetchGitOutput{..} <- xs
-              ]
-                <> ["}"]
+printUrlTagSha :: NixPrefetchGitOutput -> IO ()
+printUrlTagSha NixPrefetchGitOutput{..} =
+    printf ("  \""%s%"\".\""%s%"\" = \""%s%"\";\n") url rev sha256
 
 main :: IO ()
 main = do
@@ -74,4 +68,6 @@ main = do
     repos :: [[SourceRepoPkg]] <- input auto (pack s)
     fetches <- sort . parallel $ prefetchSoureRepoPkg <$> concat repos
     let (_errs, xs) = partitionEithers fetches
-    mapM_ echo (mkSha256Map xs)
+    printf "{\n"
+    mapM_ printUrlTagSha xs
+    printf "}\n"
