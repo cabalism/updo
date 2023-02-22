@@ -61,8 +61,12 @@ packages published to stackage. Stackage also publishes a `cabal.config` file
 that has these package versions as cabal constraints. As cabal constraints are
 additive, in practice importing directly from stackage often leads to conflicts
 between stackage's constraints and the project's own constraints and for that
-reason we'll usually have to download the `cabal.config` from stackage and
-comment out lines that are conflicted.
+reason we'll usually have to download the `cabal.config` from
+stackage[^stackage-config-url-path] and comment out lines that are conflicted.
+
+[^stackage-config-url-path]: The URL path to download this file from is
+  `/resolver/cabal.config`. The latest nightly is always at
+  https://www.stackage.org/nightly/cabal.config.
 
 We don't expect any packages to impose constraints on their dependencies at the
 package level, in their `.cabal` files, but if they do then these constraints
