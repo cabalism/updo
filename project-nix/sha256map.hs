@@ -2,7 +2,6 @@
 -- stack script --resolver=lts-18.27 --package=aeson --package=base --package=dhall --package=text --package=turtle --package=utf8-string
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE DeriveGeneric #-}
-{-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards #-}
@@ -75,5 +74,4 @@ main = do
     repos :: [[SourceRepoPkg]] <- input auto (pack s)
     fetches <- sort . parallel $ prefetchSoureRepoPkg <$> concat repos
     let (_errs, xs) = partitionEithers fetches
-    sequence_ $ echo <$> mkSha256Map xs
-    return ()
+    mapM_ echo (mkSha256Map xs)
