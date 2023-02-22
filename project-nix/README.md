@@ -8,9 +8,10 @@ The `Makefile` has targets for `ghc-x.y.z.sha256map.nix` which has the form:
 }
 ```
 
-This can be used with
-[haskell.nix](https://input-output-hk.github.io/haskell.nix/tutorials/source-repository-hashes.html#avoiding-modifying-cabalproject-and-stackyaml).
-We grab the sha256 hash with `nix-prefetch-git` from the shell so you'll need that installed.
+This can be used with [haskell.nix][haskell-nix].  We grab the sha256 hash with
+`nix-prefetch-git` from the shell so you'll need that installed.
+
+[haskell-nix]: https://input-output-hk.github.io/haskell.nix/tutorials/source-repository-hashes.html#avoiding-modifying-cabalproject-and-stackyaml
 
 ```
 $ nix-prefetch-git --help
