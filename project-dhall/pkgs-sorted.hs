@@ -6,8 +6,8 @@
 -- | Description: Sorts packages as a flat list.
 module Main where
 
-import Data.List (concat, filter, sortOn)
-import qualified Data.Text as T (pack, unpack)
+import Data.List (concat, sortOn)
+import qualified Data.Text as T (filter, pack)
 import qualified Data.Text.IO as T (putStrLn)
 import Dhall (Text, auto, embed, inject, input)
 import Dhall.Core (pretty)
@@ -19,5 +19,9 @@ grab name = input auto (T.pack $ "./project-dhall/pkgs" </> name <.> "dhall")
 main :: IO ()
 main = do
     pkgGroups :: [String] <- input auto "./project-dhall/pkg-groups.dhall"
-    xs <- sequence [do grab p | p <- pkgGroups]
-    T.putStrLn . pretty $ embed inject (sortOn (filter (/= '/') . T.unpack) $ concat xs)
+    xs <- traverse grab pkgGroups
+    -- Package items are (usually in this project) paths to folders containing a
+    -- .cabal file.  These aren't canonical so may or may not have a trailing
+    -- slash.  To sort them consistently, we filter out the slashes.
+    let sortedPkgPaths = sortOn (T.filter (/= '/')) $ concat xs
+    T.putStrLn . pretty $ embed inject sortedPkgPaths
