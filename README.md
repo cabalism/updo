@@ -251,7 +251,7 @@ solving conflicts with cabal.
 For a source repository upgrade, bump the `tag` field if picking up a newer
 version.
 
-If the `tag` you were on has been superceded by a published version then delete
+If the `tag` you were on has been superseded by a published version then delete
 the entry and add a constraint unless the published version is already a match
 in the downloaded `cabal.config` file from stackage.
 
