@@ -23,16 +23,10 @@ generate-pkg-configs: \
 project-cabal/pkgs/%.config: project-dhall/pkgs/%.dhall generate-pkg-configs ;
 
 # Mirror constraints from dhall to config.
-project-cabal/ghc-$(GHC_VERSION)/constraints.config : \
+project-cabal/ghc-%/constraints.config : \
   updo/text-templates/cabal/package.dhall \
-  project-dhall/ghc-$(GHC_VERSION)/constraints.dhall
-	mkdir -p $(@D) && echo "let f = ./$< in f.constraints ./project-dhall/ghc-$(GHC_VERSION)/constraints.dhall" | dhall text --output $@
-
-# Mirror constraints from dhall to config.
-project-cabal/ghc-$(GHC_UPGRADE)/constraints.config : \
-  updo/text-templates/cabal/package.dhall \
-  project-dhall/ghc-$(GHC_UPGRADE)/constraints.dhall
-	mkdir -p $(@D) && echo "let f = ./$< in f.constraints ./project-dhall/ghc-$(GHC_UPGRADE)/constraints.dhall" | dhall text --output $@
+  project-dhall/ghc-%/constraints.dhall
+	mkdir -p $(@D) && echo "let f = ./$< in f.constraints ./project-dhall/ghc-$*/constraints.dhall" | dhall text --output $@
 
 # Mirror source repositories from dhall to config.
 project-cabal/ghc-%.config: \
