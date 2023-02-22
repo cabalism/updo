@@ -129,8 +129,9 @@ We need to run a Haskell script to generate `project-dhall/pkgs-sorted.dhall`.
 After a cabal clean, this script will need to download dependencies.
 
 * [ ] Can it do that without polluting the generated file with status updates from cabal saying
-      that it has downloaded this or that dependency? The Haskell script must
-      run silently for this to work.
+      that it has downloaded this or that dependency[^silent-script]?
+      
+[^silent-script]: The Haskell script must run silently for this to work.
 
 ```
 $ cabal clean
