@@ -39,9 +39,9 @@ data NixPrefetchGitOutput = NixPrefetchGitOutput
     }
     deriving (Eq, Ord, Show, Generic, FromJSON)
 
-prefetchSoureRepoPkg :: SourceRepoPkg -> IO (Either Warning NixPrefetchGitOutput)
-prefetchSoureRepoPkg SourceRepoPkg{..} = nixPrefetchGit (loc, tag)
-{-# INLINE prefetchSoureRepoPkg #-}
+prefetchSourceRepoPkg :: SourceRepoPkg -> IO (Either Warning NixPrefetchGitOutput)
+prefetchSourceRepoPkg SourceRepoPkg{..} = nixPrefetchGit (loc, tag)
+{-# INLINE prefetchSourceRepoPkg #-}
 
 nixPrefetchGit :: (Text, Text) -> IO (Either Warning NixPrefetchGitOutput)
 nixPrefetchGit (repo, commit) = do
@@ -66,7 +66,7 @@ main :: IO ()
 main = do
     s <- getContents
     repos :: [[SourceRepoPkg]] <- input auto (pack s)
-    fetches <- sort . parallel $ prefetchSoureRepoPkg <$> concat repos
+    fetches <- sort . parallel $ prefetchSourceRepoPkg <$> concat repos
     let (_errs, xs) = partitionEithers fetches
     printf "{\n"
     mapM_ printUrlTagSha xs
