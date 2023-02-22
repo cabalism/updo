@@ -1,6 +1,5 @@
-.PHONY: project-files-cabal2stack
-
-project-files-cabal2stack: \
+.PHONY: cabal2stack-projects
+cabal2stack-projects: \
   ghc-$(GHC_VERSION).cabal2stack.yaml \
   ghc-$(GHC_VERSION).cabal2stack.yaml.lock \
   ghc-$(GHC_UPGRADE).cabal2stack.yaml \

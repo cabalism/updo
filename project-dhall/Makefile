@@ -1,14 +1,12 @@
-.PHONY: \
-  project-files-dhall2stack \
-  project-files-dhall2cabal
-
-project-files-dhall2stack: \
+.PHONY: dhall2stack-projects
+dhall2stack-projects: \
   ghc-$(GHC_VERSION).dhall2stack.yaml \
   ghc-$(GHC_VERSION).dhall2stack.yaml.lock \
   ghc-$(GHC_UPGRADE).dhall2stack.yaml \
   ghc-$(GHC_UPGRADE).dhall2stack.yaml.lock \
 
-project-files-dhall2cabal: \
+.PHONY: dhall2cabal-projects
+dhall2cabal-projects: \
   ghc-$(GHC_VERSION).dhall2cabal.project \
   ghc-$(GHC_UPGRADE).dhall2cabal.project
 

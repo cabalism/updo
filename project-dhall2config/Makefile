@@ -1,6 +1,5 @@
-.PHONY: project-files-dhall2config
-
-project-files-dhall2config: \
+.PHONY: dhall2config-projects
+dhall2config-projects: \
   ghc-$(GHC_VERSION).dhall2config.project \
   ghc-$(GHC_UPGRADE).dhall2config.project
 

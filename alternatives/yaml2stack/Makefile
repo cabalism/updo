@@ -11,7 +11,8 @@
 
 Y2S_TMP := ./.updo/dhall2yaml2stack
 
-project-files-dhall2yaml2stack: \
+.PHONY: dhall2yaml2stack-projects
+dhall2yaml2stack-projects: \
   ghc-$(GHC_VERSION).dhall2yaml2stack.yaml \
   ghc-$(GHC_VERSION).dhall2yaml2stack.yaml.lock \
   ghc-$(GHC_UPGRADE).dhall2yaml2stack.yaml \

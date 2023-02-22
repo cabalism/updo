@@ -29,9 +29,9 @@ STACK_VIA := dhall2stack
 CABAL_VIA := dhall2config
 
 # Updo Dhall gives us these targets:
-#  - project-files-dhall2stack
-#  - project-files-dhall2cabal
-#  - project-files-dhall2config
+#  - dhall2stack-projects
+#  - dhall2cabal-projects
+#  - dhall2config-projects
 #  - project-sha256maps
 include updo/project-dhall/Makefile
 include updo/project-dhall2config/Makefile
@@ -61,17 +61,14 @@ upgrade-projects: \
 
 # All the kinds of project files we might want to generate.
 #
-#  - project-files-mirror is included but will only generate projects if
-#    CABAL2STACK or STACK2CABAL is true.
-#
 # These are alternative methods we could include but don't.
-#  - project-files-dhall2yaml2stack
+#  - dhall2yaml2stack-projects
 .PHONY: all-possible-projects
 all-possible-projects: \
   projects \
-  project-files-dhall2config \
-  project-files-dhall2cabal \
-  project-files-dhall2stack
+  dhall2config-projects \
+  dhall2cabal-projects \
+  dhall2stack-projects
 
 .PHONY: clean
 clean:
