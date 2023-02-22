@@ -9,7 +9,7 @@ Assuming this layout of make files in updo and at the root of your project.
 │   │   └── Makefile
 │   ├── project-dhall2config
 │   │   ├── Makefile
-│   └── projec-nix
+│   └── project-nix
 │       └── Makefile
 ├── project-files.mk
 └── project-versions.mk
