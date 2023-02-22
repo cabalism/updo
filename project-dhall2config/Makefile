@@ -15,10 +15,12 @@ generate-pkg-configs: \
   project-dhall/pkgs-upgrade-todo.dhall
 	./updo/project-dhall2config/pkg-groups.hs "$(GHC_VERSION)" "$(GHC_UPGRADE)"
 
-# Mirror packages (package groups) from dhall to config.
-project-cabal/pkgs/%.config: \
-  project-dhall/pkgs/%.dhall \
-  generate-pkg-configs ;
+# Mirror packages (package groups) from dhall to config with
+# generate-pkg-configs doing the work once for all package groups.
+#
+# The "target: prerequisites ;" explicitly defines an empty recipe.
+# SEE: https://www.gnu.org/software/make/manual/html_node/Empty-Recipes.html
+project-cabal/pkgs/%.config: project-dhall/pkgs/%.dhall generate-pkg-configs ;
 
 # Mirror constraints from dhall to config.
 project-cabal/ghc-%/constraints.config : \
