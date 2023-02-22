@@ -71,8 +71,10 @@ include updo/alternatives/yaml2stack/Makefile
 
 ## Default Targets
 
-The default targets are `stack.yaml` and `cabal.project`. Can we build just
-those without leaving behind[^check-temp-files] any temporary files?
+The default targets are `stack.yaml` and `cabal.project`.
+
+* [ ] Can we build just those without leaving behind[^check-temp-files] any
+      temporary files?
 
 [^check-temp-files]: You could check for unwanted files with `git status`.
 
@@ -89,7 +91,8 @@ Comment out the `.INTERMEDIATE` targets in `project-files.mk` and then:
 $ make -f project-files.mk all-possible-projects --always-make --jobs
 ```
 
-This should make two sets of:
+* [ ] Does this make two sets of each of the following?
+
 - `ghc-x.y.z.dhall2cabal.project`
 - `ghc-x.y.z.dhall2config.project`
 - `ghc-x.y.z.dhall2stack.yaml`
@@ -98,7 +101,7 @@ This should make two sets of:
 
 ## Clean
 
-After making `all-possible-projects`, can we clean all of these?
+* [ ] After making `all-possible-projects`, can we clean all of these?
 
 ```
 $ make -f project-files.mk clean
@@ -106,15 +109,16 @@ $ make -f project-files.mk clean
 
 ## SHA Map Targets
 
-Can we build `ghc-x.y.z.sha256map.nix`?
+* [ ] Can we build `ghc-x.y.z.sha256map.nix`?
 
 ```
 $ make -f project-files.mk project-sha256maps
 ```
 
-Try again flipping the sense of the variable DHALL_SHA256MAP. Is it generating
-maps using another script, the Python one instead of the Haskell one? Are the
-entries in the generated map sorted in both cases?
+Try again flipping the sense of the variable DHALL_SHA256MAP.
+
+* [ ] Is it generating maps using another script, the Python one instead of the Haskell one?
+* [ ] Are the entries in the generated map sorted in both cases?
 
 This should make two of `ghc-x.y.z.sha256map.nix`. You might like to use those
 file names as targets explicitly.
@@ -122,10 +126,11 @@ file names as targets explicitly.
 ## Sorting Packages Works
 
 We need to run a Haskell script to generate `project-dhall/pkgs-sorted.dhall`.
-After a cabal clean, this script will need to download dependencies. Can it do
-that without polluting the generated file with status updates from cabal saying
-that it has downloaded this or that dependency? The Haskell script must run
-silently for this to work.
+After a cabal clean, this script will need to download dependencies.
+
+* [ ] Can it do that without polluting the generated file with status updates from cabal saying
+      that it has downloaded this or that dependency? The Haskell script must
+      run silently for this to work.
 
 ```
 $ cabal clean
@@ -135,7 +140,7 @@ updo/project-dhall/pkgs-sorted.hs > project-dhall/pkgs-sorted.dhall
 
 ## Alternative Targets
 
-Can we build these targets?
+* [ ] Can we build these targets?
 
 - `ghc-x.y.z.dhall2yaml2stack.yaml`
 - `ghc-x.y.z.stack2cabal.project`
