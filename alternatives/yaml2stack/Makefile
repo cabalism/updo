@@ -27,7 +27,7 @@ $(Y2S_TMP)/ghc-$(GHC_UPGRADE)/base.yaml: \
   project-dhall/ghc-$(GHC_UPGRADE)/text-templates/stacksnippet.dhall
 	[ -d $(@D) ] || mkdir -p $(@D) && echo '$(<:%=./%) (Some "$(STACKAGE_UPGRADE)" : Optional Text)' | dhall text --output $@
 
-# Mirror from pkgs dhall to yaml.
+# Mirror pkgs from dhall to yaml.
 .INTERMEDIATE: $(Y2S_TMP)/ghc-$(GHC_VERSION)/pkgs.yaml
 $(Y2S_TMP)/ghc-$(GHC_VERSION)/pkgs.yaml: \
   updo/text-templates/yaml2stack/pkgs.dhall \
