@@ -37,27 +37,13 @@ include updo/project-dhall/Makefile
 include updo/project-dhall2config/Makefile
 include updo/project-nix/Makefile
 
-# Project files used inproduction, not in GHC upgrade.
-#
-# By waiting for targets to the left of .WAIT, we ensure that what cabal
-# downloads is not read before it is completely written.
+# Project (and related sha256map) files used in production, not in GHC upgrade.
 .PHONY: projects
 projects: \
-  project-dhall/pkgs-sorted.dhall \
   ghc-$(GHC_VERSION).sha256map.nix \
-  .WAIT \
   stack.yaml \
   stack.yaml.lock \
   cabal.project
-
-# "You can create an actual target .WAIT in your makefile for portability but
-# this is not required to use this feature. If a .WAIT target is created it
-# should not have prerequisites or commands."
-# SOURCE: https://www.gnu.org/software/make/manual/html_node/Parallel.html
-#
-# A .WAIT target is not meant to be required but we need it to avoid:
-# make: *** No rule to make target '.WAIT', needed by 'project-files'.  Stop.
-.WAIT:
 
 .NOTPARALLEL: \
   project-dhall/pkgs-sorted.dhall \
