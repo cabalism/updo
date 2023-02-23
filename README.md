@@ -355,8 +355,8 @@ This way, Updo will create a single pair of projects (`cabal.project` and
 
 ## SHA256 Map Generation Method
 
-With these snippet from `project-files.mk`, we can switch methods for generating
-`ghc-x.y.z.sha256map.nix`.
+With this snippet from `project-files.mk`, we can switch between two methods of
+generating `ghc-x.y.z.sha256map.nix`.
 
 ```make
 # How to generate nix/services/stackProject/sha256map.nix?
