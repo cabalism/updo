@@ -49,8 +49,3 @@ We also include a `sha256map.py` script from haskell.nix[^sorted] but this is 4
 times slower.
 
 [^sorted]: Renamed from `sha256map-regenerate.py` and modified to sort the map by keys.
-
-```make
-ghc-$(GHC_VERSION).sha256map.nix: stack.yaml
-	updo/project-nix/sha256map.py <$^ >$@
-```

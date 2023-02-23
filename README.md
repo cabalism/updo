@@ -353,5 +353,60 @@ projects will be copied to the default project names (`cabal.project` and
 This way, Updo will create a single pair of projects (`cabal.project` and
 `stack.yaml`) for one version of GHC.
 
+## SHA256 Map Generation Method
+
+With these snippet from `project-files.mk`, we can switch methods for generating
+`ghc-x.y.z.sha256map.nix`.
+
+```make
+# How to generate nix/services/stackProject/sha256map.nix?
+#  - false to generate from *.dhall inputs via sha256map.hs.
+#  - true to generate from stack.yaml via sha256map.py.
+SHA256MAP_VIA_PYTHON := false
+
+# If true, generate the sha256map from the stack.yaml with python,
+# overriding the recipe for this target.
+ifeq ($(SHA256MAP_VIA_PYTHON), true)
+ghc-$(GHC_VERSION).sha256map.nix: stack.yaml
+	updo/project-nix/sha256map.py <$^ >$@
+endif
+```
+
+The default is to use the `sha256map.hs` script to generate
+it[^replacing_versions]:
+
+[^replacing_versions]: Using ghc-x.y.z and lts-m.n in the example output, not
+  the actual GHC version or resolver.
+
+```
+$ make -f project-files.mk ghc-x.y.z.sha256map.nix --always-make
+echo \
+  '[./project-dhall/ghc-x.y.z/deps-external.dhall
+  , ./project-dhall/ghc-x.y.z/deps-internal.dhall
+  , ./project-dhall/ghc-x.y.z/forks-external.dhall
+  , ./project-dhall/ghc-x.y.z/forks-internal.dhall
+  , ([] : List {loc : Text, tag : Text, sub : List Text})
+  ]' \
+  | ./updo/project-nix/sha256map.hs > ghc-x.y.z.sha256map.nix
+```
+
+To use the `sha256map.py` script instead that is much slower:
+
+```
+$ make -f project-files.mk ghc-x.y.z.sha256map.nix --always-make SHA256MAP_VIA_PYTHON=true
+mkdir -p .updo && updo/project-dhall/pkgs-sorted.hs > .updo/pkgs-sorted.dhall
+echo \
+  './project-dhall/ghc-x.y.z/text-templates/dhall2stack.dhall
+   ./.updo/pkgs-sorted.dhall "lts-m.n"' \
+  | dhall text --output ghc-x.y.z.dhall2stack.yaml
+cp ghc-x.y.z.dhall2stack.yaml stack.yaml
+updo/project-nix/sha256map.py <stack.yaml >ghc-x.y.z.sha256map.nix
+rm ghc-x.y.z.dhall2stack.yaml
+```
+
+You can [read more about Updo Nix](project-nix#readme) and its use with
+haskell.nix.
+
 [dhall-text-templating]: https://www.haskellforall.com/2017/06/dhall-is-now-template-engine.html
 [LSP]: https://github.com/PanAeon/vscode-dhall-lsp-server
+
