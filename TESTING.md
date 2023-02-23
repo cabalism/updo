@@ -29,23 +29,18 @@ STACKAGE_UPGRADE := lts-20.5
 
 We'll need to set up our `project-files.mk`:
 
-```
-$ cat project-files.mk
+```make
 # How to generate nix/services/stackProject/sha256map.nix?
-#  - True to generate from *.dhall inputs.
-#  - False to generate from stack.yaml.
-DHALL_SHA256MAP := true
+# This is copied from ghc-$(GHC_VERSION).sha256map.nix.
+#  - false to generate from *.dhall inputs via sha256map.hs.
+#  - true to generate from stack.yaml via sha256map.py.
+SHA256MAP_VIA_PYTHON := false
 
 include project-versions.mk
 include updo/Makefile
 
-ifeq ($(DHALL_SHA256MAP), true)
 nix/services/stackProject/sha256map.nix: ghc-$(GHC_VERSION).sha256map.nix
 	cp $^ $@
-else
-nix/services/stackProject/sha256map.nix: stack.yaml
-	updo/project-nix/sha256map.py <$^ >$@
-endif
 
 .PHONY: all
 all: \
@@ -67,6 +62,15 @@ all: \
 include updo/alternatives/cabal2stack/Makefile
 include updo/alternatives/stack2cabal/Makefile
 include updo/alternatives/yaml2stack/Makefile
+
+# If true, generate the sha256map from the stack.yaml with python,
+# overriding the recipe for this target.
+ifeq ($(SHA256MAP_VIA_PYTHON), true)
+ghc-$(GHC_VERSION).sha256map.nix: stack.yaml
+	updo/project-nix/sha256map.py <$^ >$@
+endif
+
+.DEFAULT_GOAL := all
 ```
 
 ## Default Targets
@@ -115,13 +119,23 @@ $ make -f project-files.mk clean
 $ make -f project-files.mk project-sha256maps
 ```
 
-Try again flipping the sense of the variable DHALL_SHA256MAP.
+Try again flipping the sense of the variable SHA256MAP_VIA_PYTHON or by setting
+it on the command line:
+
+```
+$ make -f project-files.mk ghc-x.y.z.sha256map.nix --always-make SHA256MAP_VIA_PYTHON=true
+```
 
 * [ ] Is it generating maps using another script, the Python one instead of the Haskell one?
 * [ ] Are the entries in the generated map sorted in both cases?
 
-This should make two of `ghc-x.y.z.sha256map.nix`. You might like to use those
+This should make two of `ghc-x.y.z.sha256map.nix`[^version_only]. You might like to use those
 file names as targets explicitly.
+
+[^version_only]: For now we only provide the option to pick which script to use
+  to generate `ghc-$(GHC_VERSION).sha256map.nix`. The
+  `ghc-$(GHC_UPGRADE).sha256map.nix` is only ever generated using the Haskell
+  script.
 
 ## Sorting Packages Works
 

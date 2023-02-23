@@ -360,6 +360,7 @@ generating `ghc-x.y.z.sha256map.nix`.
 
 ```make
 # How to generate nix/services/stackProject/sha256map.nix?
+# This is copied from ghc-$(GHC_VERSION).sha256map.nix.
 #  - false to generate from *.dhall inputs via sha256map.hs.
 #  - true to generate from stack.yaml via sha256map.py.
 SHA256MAP_VIA_PYTHON := false
