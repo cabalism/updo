@@ -21,7 +21,7 @@ pkgs-upgrade-done: $(UPDO_TMP)/pkgs-upgrade-done.dhall
 $(UPDO_TMP)/pkgs-sorted.dhall: \
   project-dhall/pkg-groups.dhall \
   project-dhall/pkgs/*.dhall
-	updo/project-dhall/pkgs-sorted.hs > $@
+	mkdir -p $(UPDO_TMP) && updo/project-dhall/pkgs-sorted.hs > $@
 
 $(UPDO_TMP)/pkgs-upgrade-done.dhall: \
   project-dhall/pkgs/*.dhall \
