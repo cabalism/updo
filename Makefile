@@ -47,10 +47,6 @@ projects: \
   stack.yaml.lock \
   cabal.project
 
-.NOTPARALLEL: \
-  $(UPDO_TMP)/pkgs-sorted.dhall \
-  ghc-%.sha256map.nix
-
 .PHONY: upgrade-projects
 upgrade-projects: \
   ghc-$(GHC_UPGRADE).sha256map.nix \
