@@ -51,6 +51,6 @@ times slower.
 [^sorted]: Renamed from `sha256map-regenerate.py` and modified to sort the map by keys.
 
 ```make
-sha256map.nix: stack.yaml
+ghc-$(GHC_VERSION).sha256map.nix: stack.yaml
 	updo/project-nix/sha256map.py <$^ >$@
 ```
