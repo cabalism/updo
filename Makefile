@@ -28,7 +28,7 @@ STACK_VIA := dhall2stack
 # ${../../project-stackage/$(STACKAGE_VERSION).config as Text}
 CABAL_VIA := dhall2config
 
-UPDO_TMP := ./.updo
+UPDO_TMP := .updo
 
 # Updo Dhall gives us these targets:
 #  - dhall2stack-projects
