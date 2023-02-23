@@ -9,7 +9,8 @@
 # if necessary."
 # SOURCE:https://github.com/dhall-lang/dhall-lang/blob/master/standard/imports.md#import-resolution-judgment
 
-Y2S_TMP := ./.updo/dhall2yaml2stack
+UPDO_TMP := .updo
+Y2S_TMP := $(UPDO_TMP)/dhall2yaml2stack
 
 .PHONY: dhall2yaml2stack-projects
 dhall2yaml2stack-projects: \
@@ -32,13 +33,13 @@ $(Y2S_TMP)/ghc-$(GHC_UPGRADE)/base.yaml: \
 .INTERMEDIATE: $(Y2S_TMP)/ghc-$(GHC_VERSION)/pkgs.yaml
 $(Y2S_TMP)/ghc-$(GHC_VERSION)/pkgs.yaml: \
   updo/text-templates/yaml2stack/pkgs.dhall \
-  project-dhall/pkgs-sorted.dhall
+  $(UPDO_TMP)/pkgs-sorted.dhall
 	echo "$(^:%=./%)" | dhall text --output $@
 
 .INTERMEDIATE: $(Y2S_TMP)/ghc-$(GHC_UPGRADE)/pkgs.yaml
 $(Y2S_TMP)/ghc-$(GHC_UPGRADE)/pkgs.yaml: \
   updo/text-templates/yaml2stack/pkgs.dhall \
-  project-dhall/pkgs-upgrade-done.dhall
+  $(UPDO_TMP)/pkgs-upgrade-done.dhall
 	echo "$(^:%=./%)" | dhall text --output $@
 
 # Mirror constraints from dhall to yaml.

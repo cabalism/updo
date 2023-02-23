@@ -28,6 +28,8 @@ STACK_VIA := dhall2stack
 # ${../../project-stackage/$(STACKAGE_VERSION).config as Text}
 CABAL_VIA := dhall2config
 
+UPDO_TMP := ./.updo
+
 # Updo Dhall gives us these targets:
 #  - dhall2stack-projects
 #  - dhall2cabal-projects
@@ -46,7 +48,7 @@ projects: \
   cabal.project
 
 .NOTPARALLEL: \
-  project-dhall/pkgs-sorted.dhall \
+  $(UPDO_TMP)/pkgs-sorted.dhall \
   ghc-%.sha256map.nix
 
 .PHONY: upgrade-projects

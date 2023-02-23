@@ -125,8 +125,8 @@ file names as targets explicitly.
 
 ## Sorting Packages Works
 
-We need to run a Haskell script to generate `project-dhall/pkgs-sorted.dhall`.
-After a cabal clean, this script will need to download dependencies.
+We need to run a Haskell script to generate `.updo/pkgs-sorted.dhall`.  After a
+cabal clean, this script will need to download dependencies.
 
 * [ ] Can it do that without polluting the generated file with status updates from cabal saying
       that it has downloaded this or that dependency[^silent-script]?
@@ -135,8 +135,26 @@ After a cabal clean, this script will need to download dependencies.
 
 ```
 $ cabal clean
-$ make -f project-files.mk project-dhall/pkgs-sorted.dhall --always-make
-updo/project-dhall/pkgs-sorted.hs > project-dhall/pkgs-sorted.dhall
+$ make -f project-files.mk pkgs-sorted --always-make
+updo/project-dhall/pkgs-sorted.hs > .updo/pkgs-sorted.dhall
+```
+
+## Upgrade Packages Done Works
+
+Generated files, not for source control are written to  `.updo`.
+
+* [ ] Can we generate `.updo/pkgs-upgrade-done.dhall`?
+* [ ] Does adding or removing packages from
+      `project-dhall/pkgs-upgrade-todo.dhall` change the list of packages in
+      `.updo/pkgs-upgrade-done.dhall`?
+
+```
+$ make -f project-files.mk pkgs-upgrade-done --always-make
+updo/project-dhall/pkgs-sorted.hs > .updo/pkgs-sorted.dhall
+./updo/project-dhall/pkgs-upgrade-done.hs \
+  ./.updo/pkgs-sorted.dhall \
+  ./project-dhall/pkgs-upgrade-todo.dhall \
+  > .updo/pkgs-upgrade-done.dhall
 ```
 
 ## Alternative Targets
