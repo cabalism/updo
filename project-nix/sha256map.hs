@@ -9,6 +9,7 @@
 -- | Description: Generates a sha256map.
 module Main where
 
+import Control.Monad (unless)
 import Data.Aeson (FromJSON, decode)
 import Data.ByteString.Lazy.UTF8 (fromString)
 import Data.Either (partitionEithers)
@@ -16,7 +17,7 @@ import Data.Text (pack, unpack)
 import qualified Data.Text.IO as T (getContents)
 import Dhall (FromDhall, Generic, Text, ToDhall, auto, input)
 import GHC.Generics
-import System.Exit (ExitCode (..))
+import System.Exit (ExitCode (..), die)
 import Turtle (empty, parallel, shellStrictWithErr, sort)
 import Turtle.Format (printf, (%), s)
 
@@ -67,7 +68,9 @@ main :: IO ()
 main = do
     repos :: [[SourceRepoPkg]] <- input auto =<< T.getContents
     fetches <- sort . parallel $ prefetchSourceRepoPkg <$> concat repos
-    let (_errs, xs) = partitionEithers fetches
+    let (errs, xs) = partitionEithers fetches
+    unless (null errs) $
+        die . unlines $ map show errs
     printf "{\n"
     mapM_ printUrlTagSha xs
     printf "}\n"
