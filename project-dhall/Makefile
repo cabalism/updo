@@ -28,9 +28,9 @@ $(UPDO_TMP)/pkgs-upgrade-done.dhall: \
   $(UPDO_TMP)/pkgs-sorted.dhall \
   project-dhall/pkgs-upgrade-todo.dhall
 	./updo/project-dhall/pkgs-upgrade-done.hs \
-  ./$(UPDO_TMP)/pkgs-sorted.dhall \
-  ./project-dhall/pkgs-upgrade-todo.dhall \
-  > $@
+	  ./$(UPDO_TMP)/pkgs-sorted.dhall \
+	  ./project-dhall/pkgs-upgrade-todo.dhall \
+	  > $@
 
 ghc-$(GHC_VERSION).dhall2stack.yaml: \
   project-dhall/ghc-$(GHC_VERSION)/text-templates/dhall2stack.dhall \
