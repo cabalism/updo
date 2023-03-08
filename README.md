@@ -136,21 +136,34 @@ The contents of each group is a `List Text` of relative paths to folders
 containing package `.cabal` files.
 
 ```dhall
+-- ./project-dhall/pkgs/tools.dhall
 [ "./tool/linter/"
 , "./tool/formatter/"
 ]
 ```
 
-List the package groups in `pkg-groups.dhall`[^pkg-groups]. This gives you
-control of the imports in the generated `./project-cabal/pkgs.config`,
-itself imported into `ghc-x.y.z.dhall2config.project`:
+List the package groups in `pkg-groups.dhall`[^pkg-groups].
+
+```dhall
+-- ./project-dhall/pkg-groups.dhall
+[ "tools"
+, "db"
+, "server"
+]
+```
+
+This gives you control of the imports in the generated
+`./project-cabal/pkgs.config`, itself imported into
+`ghc-x.y.z.dhall2config.project`:
 
 ```cabal
 -- ./project-cabal/pkgs.config
+import: project-cabal/pkgs/tools.config
 import: project-cabal/pkgs/db.config
 import: project-cabal/pkgs/server.config
-import: project-cabal/pkgs/tools.config
+```
 
+```cabal
 -- ./ghc-x.y.z.dhall2config.project
 import: project-stackage/lts-m.n.config
 
