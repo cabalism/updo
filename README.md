@@ -134,7 +134,7 @@ itself imported into `ghc-x.y.z.dhall2config.project`:
 ```cabal
 -- ./project-cabal/pkgs.config
 import: project-cabal/pkgs/db.config
-import: project-cabal/pkgs/serer.config
+import: project-cabal/pkgs/server.config
 import: project-cabal/pkgs/tools.config
 
 -- ./ghc-x.y.z.dhall2config.project
