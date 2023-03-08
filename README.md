@@ -26,7 +26,7 @@ in Dhall like sorting a `List Text`[^dhall-sort-list-nat].
 
 [^dhall-sort-list-nat]: Dhall can only sort `List Natural`.
 
-## Configure
+## Configure Inputs
 
 What do we want to configure? We don't need much:
 
@@ -38,7 +38,7 @@ What do we want to configure? We don't need much:
 
 [^unpublished-packages]: A package not published to hackage or stackage.
 
-## Templates
+## Template Outputs
 
 We generate projects from the configured inputs using templates.
 
