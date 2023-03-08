@@ -44,11 +44,14 @@ It is nice to be able to look at packages both grouped and as one sorted list.
 We provide one level of nesting for groups for the list of internal packages. If
 you don't want groups then please put all packages in the one group.
 
-For the cabal project we keep the grouping with each group in its own
-`group-name.config` file and then in the project there is one `import
-group-name.config` for each group. If you don't want to use cabal imports then
-the list of packages can be put directly into the `cabal.project`.  Stack
-projects cannot import so the all the packages there are in one list.
+* `dhall2config` - When generating the cabal project we keep [package
+  groups](#package-groups), generating the same tree structure but replacing the
+  leaves. From each `group-name.dhall`, we generate a `group-name.config` file
+  and then in the project there is one `import
+  project-cabal/pkgs/group-name.config` for each group.
+* `dhall2cabal` - This template lists packages within the cabal project.
+* `dhall2stack` - Stack projects cannot import so necessarily must lose the
+  grouping and contain the list of packages.
 
 ### Stackage Resolver and Constraints
 
@@ -106,6 +109,7 @@ project-stackage
 └── lts-m.n.config
 ```
 
+### Package Groups
 In the `pkgs` folder, create one or more groups for related packages.
 
 ```
