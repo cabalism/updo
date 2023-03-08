@@ -1,8 +1,8 @@
-🫸 Updo 🫷
+# 🫸 Updo 🫷
 
 > A hairstyle and a way of maintaining and upgrading Haskell projects.
 
-# What is a Project?
+### What is a Project?
 
 Updo is good for project packages, constraints, source repository packages and
 stackage resolver[^download-stackage-config]. More than this can be added into a
@@ -13,7 +13,7 @@ project template.
   out constraints that would otherwise lead to impossible to solve conflicting
   constraints because cabal constraints are additive and cannot be overridden.
 
-# Goals
+### Goals
 
 1. Map a single set of packages, constraints and source repository packages to
    projects for cabal and stack.
@@ -30,7 +30,7 @@ in Dhall like sorting a `List Text`[^dhall-sort-list-nat].
 
 We generate projects from the configured inputs using templates.  With the
 `dhall text` command we're able to mirror to both stack and cabal projects using
-string templates. See [templates](./TEMPLATES.md) for more.
+text templates. See [templates](./TEMPLATES.md) for more.
 
 We provide one stack template `dhall2stack`. The `dhall2cabal` template for
 cabal is so similar that the generated outputs can be compared using file diff
@@ -38,24 +38,33 @@ tooling. However, we prefer the `dhall2config` template because it retains
 package groups that can bring order to an [upgrade](#upgrading-a-project) if the
 cabal solving order is roughly captured by package group ordering.
 
-## Lists of Packages
+We provide one level of nesting for grouping packages together as inputs. Groups
+are preserved or flattened depending on the template.
 
-It is nice to be able to look at packages both grouped and as one sorted list.
-We provide one level of nesting for groups for the list of internal packages. If
-you don't want groups then please put all packages in the one group.
-
-* `dhall2config` - When generating the cabal project we keep [package
-  groups](#package-groups), generating the same tree structure but replacing the
-  leaves. From each `group-name.dhall`, we generate a `group-name.config` file
-  and then in the project there is one `import
-  project-cabal/pkgs/group-name.config` for each group.
-* `dhall2cabal` - This template lists packages within the cabal project.
 * `dhall2stack` - Stack projects cannot import so necessarily must lose the
   grouping and contain the list of packages.
+* `dhall2cabal` - This template lists packages within the cabal project.
+* `dhall2config` - When generating the cabal project we keep [package
+  groups](#package-groups), generating the same tree structure but replacing the
+  leaves. From each `group-name.dhall` we generate a `group-name.config` file.
 
-# Configure Inputs
+It is nice to be able to look at packages both grouped and as one sorted list.
+Find the flat sorted lists of packages used by some templates in the `.updo`
+folder.
 
-What do we want to configure? We don't need much:
+```
+.updo
+├── pkgs-sorted.dhall        ▨ List Text
+└── pkgs-upgrade-done.dhall  ▨ List Text
+```
+
+If you don't want groups then please put all packages in the one group.
+
+# Maintaining a Project
+
+Maintaining a project involves configuring or reconfiguring inputs and then
+using make to generate the projects. What do we want to configure? We don't need
+much:
 
 1. A stackage resolver[^download-stackage-config].
 2. A list of constraints (package dependencies with their versions).
@@ -65,7 +74,6 @@ What do we want to configure? We don't need much:
 
 [^unpublished-packages]: A package not published to hackage or stackage.
 
-# Maintaining a Project
 
 All configuration goes into `./project-dhall` (where `.` is the root folder for
 your Haskell project) except for the `cabal.config` that we'll need to download
@@ -101,7 +109,7 @@ project[^base.yaml].  The rest of the files are inputs.
   [dhall2yaml2stack](alternatives/yaml2stack#readme) too and is put into a
   `base.yaml`, the topmost fragment when stitching together fragments.
 
-## 1. Stackage Resolver and Constraints
+### 1. Stackage Resolver and Constraints
 
 The stackage resolver is able to provide us with a list of packages that work
 together for both stack and cabal. Any other dependencies as constraints or
@@ -123,7 +131,7 @@ We don't expect any packages to impose constraints on their dependencies at the
 package level, in their `.cabal` files, but if they do then these constraints
 must fit with constraints at the project level.
 
-## 2. Constraints
+### 2. Constraints
 
 In constraints[^constraints] put published packages that you want to use that are
 not on stackage or if they are on stackage where you want to use a different
@@ -150,7 +158,7 @@ The type of constraints is a list of records with dependency and version fields:
 List { dep : Text, ver : Text }
 ```
 
-## 3. Source Repository Packages
+### 3. Source Repository Packages
 
 There are various reasons to depend on source packages and forks of source
 packages; to keep a mirror within your organization, to add fixes that haven't been
@@ -186,7 +194,7 @@ explicit type annotation:
 [] : List { loc : Text, tag : Text, sub : List Text }
 ```
 
-## 4. Package Groups
+### 4. Package Groups
 In the `pkgs` folder, create one or more groups for related packages.
 
 ```
@@ -209,7 +217,9 @@ containing package `.cabal` files.
 ]
 ```
 
-List the package groups in `pkg-groups.dhall`[^pkg-groups].
+List the package groups in `pkg-groups.dhall`[^pkg-groups]. A good order to use
+is the order of cabal constraint solving that you may witness when upgrading a
+project and seeing solving failures.
 
 [^pkg-groups]: Dhall can't do arbitrary IO like reading files from a folder.
 
@@ -247,7 +257,7 @@ import: project-cabal/ghc-x.y.z/forks-internal.config
 
 # Upgrading a Project
 
-## GHC Upgrade
+### GHC Upgrade
 For a GHC compiler upgrade, add another folder to `project-dhall` for the
 upgrade from `ghc-u.v.w` to `ghc-x.y.z`:
 
@@ -264,14 +274,14 @@ At the start of a GHC upgrade put all packages into
 `project-dhall/pkgs-upgrade-todo.dhall`. As the upgrade progresses remove
 packages from this list as you work on them.
 
-## Constraint Upgrade
+### Constraint Upgrade
 For a dependency version upgrade, add or change an entry in `constraints.dhall`
 and if that dependency is on stackage for the resolver we're using and if the
 version there differs then comment out that entry in the downloaded
 `project-stackage/resolver-name.config` file to avoid impossible constraint
 solving conflicts with cabal.
 
-## Source Repository Upgrade
+### Source Repository Upgrade
 For a source repository upgrade, bump the `tag` field if picking up a newer
 version.
 
@@ -279,7 +289,7 @@ If the `tag` you were on has been superseded by a published version then delete
 the entry and add a constraint unless the published version is already a match
 in the downloaded `cabal.config` file from stackage.
 
-## Adding a Fork
+### Adding a Fork
 If you are forking then you'll want to add a record to `fork-internal.dhall` and
 then:
 - If forking a stackage package: comment out the entry in the downloaded `cabal.config`
@@ -318,13 +328,36 @@ include project-versions.mk
 include updo/Makefile
 ```
 
-With this set up we can build projects:
+### Canonical Targets
+
+We consider the following as canonical project names and no target is required
+to build them (they're built by the default `all` target):
+
+```
+$ make -f project-files.mk
+```
+
+- `stack.yaml`
+- `cabal.project`
+- `stack.upgrade.yaml`
+- `cabal.upgrade.project`
+
+We use CABAL_VIA and STACK_VIA makefile variables to decide which `ghc-x.y.z`
+prefixed projects will be copied to the default project names (`cabal.project`
+and `stack.yaml`). This way, Updo will create a single pair of projects for one
+version of GHC.
+
+### GHC-Prefixed Targets
+
+We can build `ghc-x.y.z` projects explicitly:
 
 ```
 $ make -f project-files.mk ghc-x.y.z.dhall2config.project
 $ make -f project-files.mk ghc-x.y.z.dhall2cabal.project
 $ make -f project-files.mk ghc-x.y.z.dhall2stack.yaml
 ```
+
+### Lock Files
 
 For stack, the project and its lock are separate targets (`.yaml` and
 `.yaml.lock`).
@@ -365,17 +398,11 @@ To treat `ghc-x.y.z` prefixed files as temporary, add lines like these to
 `project-files.mk`:
 
 ```make
-.INTERMEDIATE: ghc-$(GHC_VERSION).$(CABAL_VIA).project
-.INTERMEDIATE: ghc-$(GHC_VERSION).$(STACK_VIA).yaml
+.INTERMEDIATE: ghc-$(GHC_VERSION).dhall2config.project
+.INTERMEDIATE: ghc-$(GHC_VERSION).dhall2cabal.project
+.INTERMEDIATE: ghc-$(GHC_VERSION).dhall2stack.yaml
 .INTERMEDIATE: ghc-$(GHC_VERSION).sha256map.nix
 ```
-
-We use CABAL_VIA and STACK_VIA variables to decide which `ghc-x.y.z` prefixed
-projects will be copied to the default project names (`cabal.project` and
-`stack.yaml`).
-
-This way, Updo will create a single pair of projects (`cabal.project` and
-`stack.yaml`) for one version of GHC.
 
 # SHA256 Map Generation Method
 
@@ -432,21 +459,21 @@ rm ghc-x.y.z.dhall2stack.yaml
 You can [read more about Updo Nix](project-nix#readme) and its use with
 haskell.nix.
 
-# Why Dhall for Configuration?
+### Why Dhall for Configuration?
 
-Dhall has excellent imports. It is an intentionally limited programming
-language. You won't be able to compare anything but `Natural` values so sorting
-something like `List Text` is not possible within it but there is great interop
-with Haskell so this can be done there.
+Dhall has excellent imports and is an intentionally limited typed programming
+language. We use dhall's `text` command to write cabal and stack projects using
+[dhall text templating][dhall-text-templating].
 
 The `dhall` executable comes with a `format` command[^format-lsp]. This helps in
 the maintenance of the various `.dhall` files.
 
-We use dhall's `text` command to write cabal and stack projects using [dhall
-text templating][dhall-text-templating].
+An example of the limits of the language we encountered in Updo is not being
+able to compare anything but `Natural` values. Sorting something like `List
+Text` is not possible but there is great interop with Haskell so this can be
+done over there as we do with scripts.
 
 [^format-lsp]: Formatting is also available with the [Dhall LSP Server][LSP].
 
 [dhall-text-templating]: https://www.haskellforall.com/2017/06/dhall-is-now-template-engine.html
 [LSP]: https://github.com/PanAeon/vscode-dhall-lsp-server
-
