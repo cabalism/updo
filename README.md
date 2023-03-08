@@ -38,6 +38,16 @@ What do we want to configure? We don't need much:
 
 [^unpublished-packages]: A package not published to hackage or stackage.
 
+## Templates
+
+We generate projects from the configured inputs using templates.
+
+We provide one stack template `dhall2stack`. The `dhall2cabal` template for
+cabal is so similar that the generated outputs can be compared using file diff
+tooling. However, we prefer the `dhall2config` template because it retains
+package groups that can bring order to an [upgrade](#upgrading-a-project) if the
+cabal solving order is roughly captured by package group ordering.
+
 ### Lists of Packages
 
 It is nice to be able to look at packages both grouped and as one sorted list.
