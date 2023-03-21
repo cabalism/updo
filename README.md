@@ -362,11 +362,11 @@ $ make -f project-files.mk ghc-x.y.z.dhall2stack.yaml
 Be careful with modified time that make relies on. If you hand-modify a target
 so that it is newer than a prerequisite then make will not use its recipe to
 build the target. This is easy to do inadvertently with a git GUI tool when
-discarding changes or by doing a `git restore` of a project, such as
-`stack.upgrade.yaml`. As git advances the modified time, this is effectively the
-same as `touch stack.upgrade.yaml`.  To recover from this situation, either;
+discarding changes or by doing a `git restore <project-name>`. As git advances
+the modified time, this is effectively the same as `touch <project-name>`.  To
+recover from this situation, either;
 - Run make with its `--always-make` flag.
-- Remove the target with `rm stack.upgrade.yaml`.
+- Remove the target with `rm <project-name>`.
 
 ### Lock Files
 
