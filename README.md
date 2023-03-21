@@ -357,6 +357,17 @@ $ make -f project-files.mk ghc-x.y.z.dhall2cabal.project
 $ make -f project-files.mk ghc-x.y.z.dhall2stack.yaml
 ```
 
+### Modified Time Travel
+
+Be careful with modified time that make relies on. If you hand-modify a target
+so that it is newer than a prerequisite then make will not use its recipe to
+build the target. This is easy to do inadvertently with a git GUI tool when
+discarding changes or by doing a `git restore` of a project, such as
+`stack.upgrade.yaml`. As git advances the modified time, this is effectively the
+same as `touch stack.upgrade.yaml`.  To recover from this situation, either;
+- Run make with its `--always-make` flag.
+- Remove the target with `rm stack.upgrade.yaml`.
+
 ### Lock Files
 
 For stack, the project and its lock are separate targets (`.yaml` and
