@@ -67,7 +67,7 @@ ghc-%.dhall2yaml2stack.yaml: \
 	./updo/alternatives/yaml2stack/join-sort-fragments.sh $(<D) >$@
 
 ghc-%.dhall2yaml2stack.yaml.lock: ghc-%.dhall2yaml2stack.yaml
-	stack build --dry-run --stack-yaml $<
+	stack build --test --no-run-tests --bench --no-run-benchmarks --dry-run --stack-yaml $<
 
 # To keep dhall to yaml intermediate files, uncomment the following (no need to
 # comment out the .INTERMEDIATE lines above):

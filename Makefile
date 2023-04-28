@@ -97,7 +97,7 @@ stack.upgrade.yaml: ghc-$(GHC_UPGRADE).$(STACK_VIA).yaml
 	cp $< $@
 
 stack.yaml.lock: stack.yaml
-	stack build --dry-run --stack-yaml $<
+	stack build --test --no-run-tests --bench --no-run-benchmarks --dry-run --stack-yaml $<
 
 stack.upgrade.yaml.lock: stack.upgrade.yaml
-	stack build --dry-run --stack-yaml $<
+	stack build --test --no-run-tests --bench --no-run-benchmarks --dry-run --stack-yaml $<

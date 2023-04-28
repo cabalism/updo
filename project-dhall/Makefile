@@ -61,4 +61,4 @@ ghc-$(GHC_UPGRADE).dhall2cabal.project: \
 	echo './$< ./$(UPDO_TMP)/pkgs-upgrade-done.dhall "$(STACKAGE_UPGRADE)"' | dhall text --output $@
 
 ghc-%.dhall2stack.yaml.lock: ghc-%.dhall2stack.yaml
-	stack build --dry-run --stack-yaml $<
+	stack build  --test --no-run-tests --bench --no-run-benchmarks --dry-run --stack-yaml $<

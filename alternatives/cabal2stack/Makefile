@@ -16,4 +16,4 @@ ghc-$(GHC_UPGRADE).cabal2stack.yaml: ghc-$(GHC_UPGRADE).$(CABAL_VIA).project
 	cabal2stack --resolver=$(STACKAGE_UPGRADE) --allow-newer --output $@ --plan-json dist-newstyle/cache/plan.json
 
 ghc-%.cabal2stack.yaml.lock: ghc-%.cabal2stack.yaml
-	stack build --dry-run --stack-yaml $<
+	stack build --test --no-run-tests --bench --no-run-benchmarks --dry-run --stack-yaml $<
