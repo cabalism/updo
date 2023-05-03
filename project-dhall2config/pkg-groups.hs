@@ -20,13 +20,16 @@ import Dhall.Core (pretty)
 import System.Environment (getArgs)
 import System.FilePath ((<.>), (</>))
 
-type UpgradeConfig = Text -> Text -> PkgUpgrade -> Text
+type UpgradeConfig = CabalRelativity -> Text -> Text -> PkgUpgrade -> Text
 
 data PkgUpgrade = PkgUpgrade
     { pkgs :: [Text]
     , done :: [Text]
     , todo :: [Text]
     }
+    deriving (Show, Generic, ToDhall, FromDhall)
+
+data CabalRelativity = CabalProjectRelative | CabalImportRelative
     deriving (Show, Generic, ToDhall, FromDhall)
 
 groupUpgrade :: [Text] -> String -> IO PkgUpgrade
@@ -38,11 +41,12 @@ groupUpgrade remaining name = do
 
 main :: IO ()
 main = do
-    ghcVersion : ghcUpgrade : _ <- getArgs
+    cabalRelativity : ghcVersion : ghcUpgrade : _ <- getArgs
     remaining :: [Text] <- input auto "./project-dhall/pkgs-upgrade-todo.dhall"
+    relativity :: CabalRelativity <- input auto $ T.pack cabalRelativity
     pkgUpgrade :: UpgradeConfig <- input auto "./updo/project-dhall/pkgs-upgrade.dhall"
     pkgGroups :: [String] <- input auto "./project-dhall/pkg-groups.dhall"
     forM_ pkgGroups $ \p -> do
         up <- groupUpgrade remaining p
-        let config = pkgUpgrade (T.pack ghcVersion) (T.pack ghcUpgrade) up
+        let config = pkgUpgrade relativity (T.pack ghcVersion) (T.pack ghcUpgrade) up
         writeFile ("./project-cabal/pkgs" </> p <.> "config") (T.unpack config)

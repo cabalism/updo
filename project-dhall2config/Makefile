@@ -7,12 +7,20 @@ project-cabal/pkgs.config: \
   updo/text-templates/cabal/pkg-groups.dhall \
   project-dhall/pkg-groups.dhall \
   $(patsubst project-dhall/pkgs/%.dhall, project-cabal/pkgs/%.config, $(wildcard project-dhall/pkgs/*.dhall))
-	echo './$< ./project-dhall/pkg-groups.dhall' | dhall text --output $@
+  ifeq ($(CABAL_RELATIVITY), ImportRelative)
+	echo 'let f = ./updo/types/CabalRelativity.dhall in ./$< f.CabalImportRelative ./project-dhall/pkg-groups.dhall' | dhall text --output $@
+  else
+	echo 'let f = ./updo/types/CabalRelativity.dhall in ./$< f.CabalProjectRelative ./project-dhall/pkg-groups.dhall' | dhall text --output $@
+  endif
 
 generate-pkg-configs: \
   project-dhall/pkg-groups.dhall \
   project-dhall/pkgs-upgrade-todo.dhall
-	mkdir -p project-cabal/pkgs && ./updo/project-dhall2config/pkg-groups.hs "$(GHC_VERSION)" "$(GHC_UPGRADE)"
+  ifeq ($(CABAL_RELATIVITY), ImportRelative)
+	mkdir -p project-cabal/pkgs && ./updo/project-dhall2config/pkg-groups.hs "let f = ./updo/types/CabalRelativity.dhall in f.CabalImportRelative" "$(GHC_VERSION)" "$(GHC_UPGRADE)"
+  else
+	mkdir -p project-cabal/pkgs && ./updo/project-dhall2config/pkg-groups.hs "let f = ./updo/types/CabalRelativity.dhall in f.CabalProjectRelative" "$(GHC_VERSION)" "$(GHC_UPGRADE)"
+  endif
 
 # Mirror packages (package groups) from dhall to config with
 # generate-pkg-configs doing the work once for all package groups.

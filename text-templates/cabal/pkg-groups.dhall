@@ -1,12 +1,20 @@
-\(pkg-groups : List Text) ->
-  let null = https://prelude.dhall-lang.org/List/null
+let TYPES = ./../../types.dhall
 
-  let concatMapSep = https://prelude.dhall-lang.org/Text/concatMapSep
+in  \(pkg-import : TYPES.CabalRelativity) ->
+    \(pkg-groups : List Text) ->
+      let null = https://prelude.dhall-lang.org/List/null
 
-  in  if    null Text pkg-groups
-      then  ""
-      else  concatMapSep
-              "\n"
-              Text
-              (\(pkg : Text) -> "import: project-cabal/pkgs/${pkg}.config")
-              pkg-groups
+      let concatMapSep = https://prelude.dhall-lang.org/Text/concatMapSep
+
+      let import-pkg =
+            merge
+              { CabalProjectRelative =
+                  \(pkg : Text) -> "import: ./project-cabal/pkgs/${pkg}.config"
+              , CabalImportRelative =
+                  \(pkg : Text) -> "import: ./pkgs/${pkg}.config"
+              }
+              pkg-import
+
+      in  if    null Text pkg-groups
+          then  ""
+          else  concatMapSep "\n" Text import-pkg pkg-groups
