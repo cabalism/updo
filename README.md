@@ -235,24 +235,33 @@ This gives you control of the imports in the generated
 `./project-cabal/pkgs.config`, itself imported into
 `ghc-x.y.z.dhall2config.project`:
 
-```cabal
--- ./project-cabal/pkgs.config
-import: project-cabal/pkgs/tools.config
-import: project-cabal/pkgs/db.config
-import: project-cabal/pkgs/server.config
-```
+* Use `CABAL_RELATIVITY=ImportRelative` to be import-compatible with `cabal-3.8`.
+  ```cabal
+  -- ./project-cabal/pkgs.config
+  import: ./pkgs/tools.config
+  import: ./pkgs/db.config
+  import: ./pkgs/server.config
+  ```
+* The default of `CABAL_RELATIVITY=ProjectRelative` is import-compatible with `cabal-3.6`.
+  ```cabal
+  -- ./project-cabal/pkgs.config
+  import: ./project-cabal/pkgs/tools.config
+  import: ./project-cabal/pkgs/db.config
+  import: ./project-cabal/pkgs/server.config
+  ```
+
 
 ```cabal
 -- ./ghc-x.y.z.dhall2config.project
-import: project-stackage/lts-m.n.config
+import: ./project-stackage/lts-m.n.config
 
-import: project-cabal/pkgs.config
+import: ./project-cabal/pkgs.config
 
-import: project-cabal/ghc-x.y.z/constraints.config
-import: project-cabal/ghc-x.y.z/deps-external.config
-import: project-cabal/ghc-x.y.z/deps-internal.config
-import: project-cabal/ghc-x.y.z/forks-external.config
-import: project-cabal/ghc-x.y.z/forks-internal.config
+import: ./project-cabal/ghc-x.y.z/constraints.config
+import: ./project-cabal/ghc-x.y.z/deps-external.config
+import: ./project-cabal/ghc-x.y.z/deps-internal.config
+import: ./project-cabal/ghc-x.y.z/forks-external.config
+import: ./project-cabal/ghc-x.y.z/forks-internal.config
 ```
 
 # Upgrading a Project
