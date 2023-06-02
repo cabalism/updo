@@ -49,7 +49,7 @@ projects: \
 
 .PHONY: upgrade-projects
 upgrade-projects: \
-  ghc-$(GHC_UPGRADE).sha256map.nix \
+  project-nix/ghc-$(GHC_UPGRADE)/sha256map.nix \
   stack.upgrade.yaml \
   stack.upgrade.yaml.lock \
   cabal.upgrade.project \

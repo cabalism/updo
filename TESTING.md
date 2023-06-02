@@ -30,7 +30,7 @@ STACKAGE_UPGRADE := lts-20.5
 We'll need to set up our `project-files.mk`:
 
 ```make
-# How to generate nix/services/stackProject/sha256map.nix?
+# How to generate project-nix/ghc-$(GHC_VERSION)/sha256map.nix?
 # This is copied from ghc-$(GHC_VERSION).sha256map.nix.
 #  - false to generate from *.dhall inputs via sha256map.hs.
 #  - true to generate from stack.yaml via sha256map.py.
@@ -39,21 +39,24 @@ SHA256MAP_VIA_PYTHON := false
 include project-versions.mk
 include updo/Makefile
 
-nix/services/stackProject/sha256map.nix: ghc-$(GHC_VERSION).sha256map.nix
-	cp $^ $@
+project-nix/ghc-%/sha256map.nix: ghc-%.sha256map.nix
+	mkdir -p $(@D) && cp $^ $@
 
 .PHONY: all
 all: \
   projects \
-  nix/services/stackProject/sha256map.nix
+  project-nix/ghc-$(GHC_VERSION)/sha256map.nix
 
 # To make stack.yaml or cabal.project and no other, mark the file we copy from
 # as intermediate. This is all we want when not doing a GHC upgrade.
 #
 # Comment out these .INTERMEDIATE targets to allow these files to be kept.
 .INTERMEDIATE: ghc-$(GHC_VERSION).$(CABAL_VIA).project
+.INTERMEDIATE: ghc-$(GHC_UPGRADE).$(CABAL_VIA).project
 .INTERMEDIATE: ghc-$(GHC_VERSION).$(STACK_VIA).yaml
+.INTERMEDIATE: ghc-$(GHC_UPGRADE).$(STACK_VIA).yaml
 .INTERMEDIATE: ghc-$(GHC_VERSION).sha256map.nix
+.INTERMEDIATE: ghc-$(GHC_UPGRADE).sha256map.nix
 
 # Alternative targets for generating project files (not recommended):
 #  - ghc-x.y.z.stack2cabal.project
@@ -67,6 +70,8 @@ include updo/alternatives/yaml2stack/Makefile
 # overriding the recipe for this target.
 ifeq ($(SHA256MAP_VIA_PYTHON), true)
 ghc-$(GHC_VERSION).sha256map.nix: stack.yaml
+	updo/project-nix/sha256map.py <$^ >$@
+ghc-$(GHC_UPGRADE).sha256map.nix: stack.yaml
 	updo/project-nix/sha256map.py <$^ >$@
 endif
 
