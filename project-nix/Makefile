@@ -8,3 +8,6 @@ ghc-%.sha256map.nix: \
   project-dhall/ghc-%/forks-external.dhall \
   project-dhall/ghc-%/forks-internal.dhall
 	echo '[$(^:%=./%,) ([] : List {loc : Text, tag : Text, sub : List Text})]' | ./updo/project-nix/sha256map.hs > $@
+
+project-versions.nix:
+	echo './updo/project-nix/project-versions.dhall "$(GHC_VERSION)" "$(GHC_UPGRADE)"' | dhall text > $@

@@ -48,4 +48,20 @@ $ nix-prefetch-git https://github.com/input-output-hk/haskell.nix.git bc01ebc05a
 We also include a `sha256map.py` script from haskell.nix[^sorted] but this is 4
 times slower.
 
+The `Makefile` also has `project-versions.nix` as a target.
+
+```nix
+{ current-version =
+    { ghc-xyz-project-stack = "stack.yaml";
+      ghc-xyz-project-cabal = "cabal.project";
+      ghc-xyz-sha256map = import ./project-nix/ghc-u.v.w/sha256map.nix;
+    };
+  upgrade-version =
+    { ghc-xyz-project-stack = "stack.upgrade.yaml";
+      ghc-xyz-project-cabal = "cabal.upgrade.project";
+      ghc-xyz-sha256map = import ./project-nix/ghc-x.y.z/sha256map.nix;
+    };
+}
+```
+
 [^sorted]: Renamed from `sha256map-regenerate.py` and modified to sort the map by keys.
