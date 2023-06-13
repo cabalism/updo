@@ -36,9 +36,9 @@ project-cabal/pkgs/%.config: project-dhall/pkgs/%.dhall generate-pkg-configs ;
 project-cabal/ghc-%/constraints.config : \
   updo/text-templates/cabal/package.dhall \
   project-dhall/ghc-%/constraints.dhall
-	mkdir -p $(@D) \
-  && echo "let f = ./$< in f.constraints ./project-dhall/ghc-$*/constraints.dhall" | dhall text --output $@ \
-  && sed "s/@rev:.*//" $@ --in-place
+	mkdir -p $(@D)
+	echo "let f = ./$< in f.constraints ./project-dhall/ghc-$*/constraints.dhall" \
+	| dhall text | sed "s/@rev:.*//" >$@
 
 # Mirror source repositories from dhall to config.
 project-cabal/ghc-%.config: \
