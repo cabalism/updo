@@ -11,6 +11,8 @@
 , author = "Phil de Joux"
 , maintainer = "phil.dejoux@blockscope.com"
 , copyright = "© 2023 Phil de Joux, © 2023 Block Scope Limited"
+, tested-with =
+  [ "GHC == 8.6.5", "GHC == 8.10.7", "GHC == 9.2.8", "GHC == 9.4.5" ]
 , extra-source-files =
   [ "**/*.md", "**/*.dhall", "**/Makefile", "**/*hs", "**/*.py", "**/*.sh" ]
 , dependencies =
