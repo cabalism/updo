@@ -1,3 +1,9 @@
+ifeq ($(PKG_GROUPS_HS_EXE), true)
+PKG_GROUPS_HS := updo-pkg-groups
+else
+PKG_GROUPS_HS := ./updo/project-dhall2config/pkg-groups.hs
+endif
+
 .PHONY: dhall2config-projects
 dhall2config-projects: \
   ghc-$(GHC_VERSION).dhall2config.project \
@@ -17,9 +23,9 @@ generate-pkg-configs: \
   project-dhall/pkg-groups.dhall \
   project-dhall/pkgs-upgrade-todo.dhall
   ifeq ($(CABAL_RELATIVITY), ImportRelative)
-	mkdir -p project-cabal/pkgs && ./updo/project-dhall2config/pkg-groups.hs "let f = ./updo/types/CabalRelativity.dhall in f.CabalImportRelative" "$(GHC_VERSION)" "$(GHC_UPGRADE)"
+	mkdir -p project-cabal/pkgs && $(PKG_GROUPS_HS) "let f = ./updo/types/CabalRelativity.dhall in f.CabalImportRelative" "$(GHC_VERSION)" "$(GHC_UPGRADE)"
   else
-	mkdir -p project-cabal/pkgs && ./updo/project-dhall2config/pkg-groups.hs "let f = ./updo/types/CabalRelativity.dhall in f.CabalProjectRelative" "$(GHC_VERSION)" "$(GHC_UPGRADE)"
+	mkdir -p project-cabal/pkgs && $(PKG_GROUPS_HS) "let f = ./updo/types/CabalRelativity.dhall in f.CabalProjectRelative" "$(GHC_VERSION)" "$(GHC_UPGRADE)"
   endif
 
 # Mirror packages (package groups) from dhall to config with

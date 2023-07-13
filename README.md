@@ -481,6 +481,18 @@ rm ghc-x.y.z.dhall2stack.yaml
 You can [read more about Updo Nix](project-nix#readme) and its use with
 haskell.nix.
 
+# Installed Exes or Scripts
+
+To use the executables of Updo's own package instead of its scripts, add these
+lines to `project-files.mk`:
+
+```make
+SHA256MAP_HS_EXE := true
+PKG_GROUPS_HS_EXE := true
+PKGS_SORTED_HS_EXE := true
+PKGS_UPGRADE_DONE_HS_EXE := true
+```
+
 ### Why Dhall for Configuration?
 
 Dhall has excellent imports and is an intentionally limited typed programming

@@ -1,5 +1,17 @@
 UPDO_TMP := ./.updo
 
+ifeq ($(PKGS_SORTED_HS_EXE), true)
+PKGS_SORTED_HS := updo-pkgs-sorted
+else
+PKGS_SORTED_HS := ./updo/project-dhall/pkgs-sorted.hs
+endif
+
+ifeq ($(PKGS_UPGRADE_DONE_HS_EXE), true)
+PKGS_UPGRADE_DONE_HS := updo-pkgs-upgrade-done
+else
+PKGS_UPGRADE_DONE_HS := ./updo/project-dhall/pkgs-upgrade-done.hs
+endif
+
 .PHONY: dhall2stack-projects
 dhall2stack-projects: \
   ghc-$(GHC_VERSION).dhall2stack.yaml \
@@ -21,7 +33,7 @@ pkgs-upgrade-done: $(UPDO_TMP)/pkgs-upgrade-done.dhall
 $(UPDO_TMP)/pkgs-sorted.dhall: \
   project-dhall/pkg-groups.dhall \
   project-dhall/pkgs/*.dhall
-	mkdir -p $(@D) && updo/project-dhall/pkgs-sorted.hs > $@
+	mkdir -p $(@D) && $(PKGS_SORTED_HS) > $@
 
 $(UPDO_TMP)/pkgs-upgrade-done.dhall: \
   project-dhall/pkgs/*.dhall \
