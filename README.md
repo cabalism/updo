@@ -235,14 +235,14 @@ This gives you control of the imports in the generated
 `./project-cabal/pkgs.config`, itself imported into
 `ghc-x.y.z.dhall2config.project`:
 
-* Use `CABAL_RELATIVITY=ImportRelative` to be import-compatible with `cabal-3.8`.
+* Use `CABAL_RELATIVITY=ImportRelative` to be import-compatible with `cabal-3.10`.
   ```cabal
   -- ./project-cabal/pkgs.config
   import: ./pkgs/tools.config
   import: ./pkgs/db.config
   import: ./pkgs/server.config
   ```
-* The default of `CABAL_RELATIVITY=ProjectRelative` is import-compatible with `cabal-3.6`.
+* The default of `CABAL_RELATIVITY=ProjectRelative` is import-compatible with `cabal-3.8`.
   ```cabal
   -- ./project-cabal/pkgs.config
   import: ./project-cabal/pkgs/tools.config
