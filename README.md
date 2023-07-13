@@ -495,6 +495,27 @@ able to compare anything but `Natural` values. Sorting something like `List
 Text` is not possible but there is great interop with Haskell so this can be
 done over there as we do with scripts.
 
+## Acknowledgements
+
+I already knew Dhall well from maintaining hpack-dhall. Thanks Simon Hengel for
+suggesting I take over its maintenance.
+
+FP Complete is the corporate sponsor of this tooling. Thanks to my collegues;
+Daniel Herrera Rendón for first seeing this could work, Neil Mayhew for makefile
+tips and tricks, Abel Sen for careful reviews and thoughtful suggestions and
+Eduardo Lemos Rocha for advocacy and enthusiasm.
+
+Please contact me for any questions, problems, suggestions or the like.
+Maintenance of Updo will be coming from me and not FP Complete.
+
+Updo grew to fill a need after every other way I could find to maintain projects
+was unsatisfactory for the specific problem I had, herding hundreds of packages
+and their dependencies into buildable projects over two compiler versions for
+both cabal and stack.  The more I use it, the more I love it as a fast, simple
+and appropriate solution for maintaining Haskell projects.
+
+Thanks FP Complete.
+
 [^format-lsp]: Formatting is also available with the [Dhall LSP Server][LSP].
 
 [dhall-text-templating]: https://www.haskellforall.com/2017/06/dhall-is-now-template-engine.html
