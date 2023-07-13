@@ -212,8 +212,8 @@ containing package `.cabal` files.
 
 ```dhall
 -- ./project-dhall/pkgs/tools.dhall
-[ "./tool/linter/"
-, "./tool/formatter/"
+[ "tool/linter/"
+, "tool/formatter/"
 ]
 ```
 
