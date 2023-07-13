@@ -434,14 +434,12 @@ generating `ghc-x.y.z.sha256map.nix`.
 # This is copied from ghc-$(GHC_VERSION).sha256map.nix.
 #  - false to generate from *.dhall inputs via sha256map.hs.
 #  - true to generate from stack.yaml via sha256map.py.
-SHA256MAP_VIA_PYTHON := false
+SHA256MAP_VIA_PYTHON ?= false
 
 # If true, generate the sha256map from the stack.yaml with python,
 # overriding the recipe for this target.
 ifeq ($(SHA256MAP_VIA_PYTHON), true)
 ghc-$(GHC_VERSION).sha256map.nix: stack.yaml
-	updo/project-nix/sha256map.py <$^ >$@
-ghc-$(GHC_UPGRADE).sha256map.nix: stack.yaml
 	updo/project-nix/sha256map.py <$^ >$@
 endif
 ```
@@ -467,15 +465,12 @@ echo \
 To use the `sha256map.py` script instead that is much slower:
 
 ```
-$ make -f project-files.mk ghc-x.y.z.sha256map.nix --always-make SHA256MAP_VIA_PYTHON=true
-mkdir -p .updo && updo/project-dhall/pkgs-sorted.hs > .updo/pkgs-sorted.dhall
-echo \
-  './project-dhall/ghc-x.y.z/text-templates/dhall2stack.dhall
-   ./.updo/pkgs-sorted.dhall "lts-m.n"' \
-  | dhall text --output ghc-x.y.z.dhall2stack.yaml
-cp ghc-x.y.z.dhall2stack.yaml stack.yaml
+$ SHA256MAP_VIA_PYTHON=true \
+  make -f project-files.mk project-nix/ghc-x.y.z/sha256map.nix
 updo/project-nix/sha256map.py <stack.yaml >ghc-x.y.z.sha256map.nix
-rm ghc-x.y.z.dhall2stack.yaml
+mkdir -p project-nix/ghc-x.y.z && cp ghc-x.y.z.sha256map.nix project-nix/ghc-x.y.z/sha256map.nix
+rm ghc-x.y.z.sha256map.nix
+
 ```
 
 You can [read more about Updo Nix](project-nix#readme) and its use with
@@ -483,14 +478,14 @@ haskell.nix.
 
 # Installed Exes or Scripts
 
-To use the executables of Updo's own package instead of its scripts, add these
-lines to `project-files.mk`:
+To use the executables of Updo's own package, by default, instead of its
+scripts, add these lines to `project-files.mk`:
 
 ```make
-SHA256MAP_HS_EXE := true
-PKG_GROUPS_HS_EXE := true
-PKGS_SORTED_HS_EXE := true
-PKGS_UPGRADE_DONE_HS_EXE := true
+SHA256MAP_HS_EXE ?= true
+PKG_GROUPS_HS_EXE ?= true
+PKGS_SORTED_HS_EXE ?= true
+PKGS_UPGRADE_DONE_HS_EXE ?= true
 ```
 
 ### Why Dhall for Configuration?
