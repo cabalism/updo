@@ -346,7 +346,7 @@ updo/Makefile:
 	mv updo-* updo
 ```
 
-Instead of curl and tar, `cabal get` or `stack unpack` can unpack of package sources.
+Instead of curl and tar, `cabal get` or `stack unpack` can unpack package sources.
 
 # Make Targets
 
