@@ -330,13 +330,8 @@ UPDO_URL := ${HACKAGE}/updo-${UPDO_VERSION}/updo-${UPDO_VERSION}.tar.gz
 updo/Makefile:
 	rm -rf updo
 	curl -sSL ${UPDO_URL} | tar -xz
-	chmod +x ./updo-${UPDO_VERSION}/project-nix/sha256map.hs
-	chmod +x ./updo-${UPDO_VERSION}/project-nix/sha256map.py
-	chmod +x ./updo-${UPDO_VERSION}/project-dhall/pkgs-sorted.hs
-	chmod +x ./updo-${UPDO_VERSION}/project-dhall/pkgs-upgrade-done.hs
-	chmod +x ./updo-${UPDO_VERSION}/project-dhall/pkgs-upgrade-partition.hs
-	chmod +x ./updo-${UPDO_VERSION}/project-dhall2config/pkg-groups.hs
 	mv updo-* updo
+	chmod +x $$(grep -RIl '^#!' updo)
 ```
 
 2. When opting to install the included executables:
