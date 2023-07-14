@@ -411,8 +411,9 @@ build the target. This is easy to do inadvertently with a git GUI tool when
 discarding changes or by doing a `git restore <project-name>`. As git advances
 the modified time, this is effectively the same as `touch <project-name>`.  To
 recover from this situation, either;
-- Run make with its `--always-make` flag.
 - Remove the target with `rm <project-name>`.
+- Run make with its `--always-make` flag but be careful with this if
+  bootstrapping updo itself within the makefile.
 
 ### Lock Files
 
