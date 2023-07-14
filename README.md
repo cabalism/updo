@@ -488,7 +488,7 @@ it[^replacing_versions]:
   the actual GHC version or resolver.
 
 ```
-$ make -f project-files.mk ghc-x.y.z.sha256map.nix --always-make
+$ make -f project-files.mk ghc-x.y.z.sha256map.nix
 echo \
   '[./project-dhall/ghc-x.y.z/deps-external.dhall
   , ./project-dhall/ghc-x.y.z/deps-internal.dhall
