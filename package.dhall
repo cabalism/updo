@@ -1,6 +1,6 @@
 { name = "updo"
 , version = "1.0.0"
-, synopsis = "A tool for maintenance and upgrading Haskell projects"
+, synopsis = "A style of maintaining and upgrading Haskell projects"
 , description =
     ''
     From configuration in .dhall, generate projects (stack.yaml and
