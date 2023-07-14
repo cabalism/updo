@@ -311,6 +311,48 @@ Unforking goes the other way, remove the `fork-*.dhall` entry and either
 fallback to the stackage version or another version for which you'll add an
 entry in `constraints.dhall`.
 
+# Getting Started
+
+Dhall is a prerequisite.
+
+As well as other make targets, updo can bootstrap itself by adding one of two
+recipes to `project-files.mk`:
+
+```make
+UPDO_VERSION ?= 1.0.0
+HACKAGE := http://hackage.haskell.org/package
+UPDO_URL := ${HACKAGE}/updo-${UPDO_VERSION}/updo-${UPDO_VERSION}.tar.gz
+```
+
+1. When opting for the scripts:
+
+```make
+updo/Makefile:
+	rm -rf updo
+	curl -sSL ${UPDO_URL} | tar -xz
+	chmod +x ./updo-${UPDO_VERSION}/project-nix/sha256map.hs
+	chmod +x ./updo-${UPDO_VERSION}/project-nix/sha256map.py
+	chmod +x ./updo-${UPDO_VERSION}/project-dhall/pkgs-sorted.hs
+	chmod +x ./updo-${UPDO_VERSION}/project-dhall/pkgs-upgrade-done.hs
+	chmod +x ./updo-${UPDO_VERSION}/project-dhall/pkgs-upgrade-partition.hs
+	chmod +x ./updo-${UPDO_VERSION}/project-dhall2config/pkg-groups.hs
+	mv updo-* updo
+```
+
+2. When opting to install the included executables:
+
+```make
+updo/Makefile:
+	rm -rf updo
+	curl -sSL ${UPDO_URL} | tar -xz
+	cd updo-${UPDO_VERSION}
+	stack install
+	cd -
+	mv updo-* updo
+```
+
+Instead of curl and tar, `cabal get` or `stack unpack` can unpack of package sources.
+
 # Make Targets
 
 In the root of your project, add two files.
