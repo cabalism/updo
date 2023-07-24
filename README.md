@@ -1,5 +1,4 @@
-# 🫸 Updo 🫷
-
+# <img src="updo-offset.svg" height="80px" />
 > A hairstyle and a way of maintaining and upgrading Haskell projects.
 
 ### What is a Project?
