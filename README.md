@@ -1,6 +1,9 @@
 # <img src="updo-offset.svg" height="80px" />
 > A hairstyle and a way of maintaining and upgrading Haskell projects.
 
+Make projects from local packages, dependency versions, source dependency
+commits and whatever else you need.
+
 ### What is a Project?
 
 Updo is good for project packages, constraints, source repository packages and
