@@ -1,14 +1,17 @@
 # <img src="updo-offset.svg" height="80px" />
 > A hairstyle and a way of maintaining and upgrading Haskell projects.
 
-Make projects from local packages, dependency versions, source dependency
-commits and whatever else you need.
+Make projects from packages, versions[^constraints],
+commits[^unpublished-packages] and whatever else you need.
+
+[^constraints]: A dependency version equality constraint.
 
 ### What is a Project?
 
-Updo is good for project packages, constraints, source repository packages and
-stackage resolver[^download-stackage-config]. More than this can be added into a
-project template.
+Updo is good for project packages, constraints[^constraints], source repository
+packages[^unpublished-packages] and stackage
+resolver[^download-stackage-config]. More than this can be added into a project
+template.
 
 [^download-stackage-config]: For cabal, the cabal.config will have to be
   downloaded to `project-stackage/resolver.config` and then edited to comment
@@ -69,13 +72,12 @@ using make to generate the projects. What do we want to configure? We don't need
 much:
 
 1. A stackage resolver[^download-stackage-config].
-2. A list of constraints (package dependencies with their versions).
+2. A list of constraints[^constraits].
 3. A list of source repository packages, for unpublished[^unpublished-packages]
   packages or for unpublished versions of packages.
 4. A list of packages.
 
 [^unpublished-packages]: A package not published to hackage or stackage.
-
 
 All configuration goes into `./project-dhall` (where `.` is the root folder for
 your Haskell project) except for the `cabal.config` that we'll need to download
