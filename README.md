@@ -1,8 +1,8 @@
 # <img src="updo-offset.svg" height="80px" />
 > A hairstyle and a way of maintaining and upgrading Haskell projects.
 
-Make projects from packages, versions[^constraints],
-commits[^unpublished-packages] and whatever else you need.
+Make projects from packages, versions[^constraints]  and
+commits[^unpublished-packages].
 
 [^constraints]: A dependency version equality constraint.
 
@@ -11,7 +11,7 @@ commits[^unpublished-packages] and whatever else you need.
 Updo is good for project packages, constraints[^constraints], source repository
 packages[^unpublished-packages] and stackage
 resolver[^download-stackage-config]. More than this can be added into a project
-template.
+template snippet for free-form content.
 
 [^download-stackage-config]: For cabal, the cabal.config will have to be
   downloaded to `project-stackage/resolver.config` and then edited to comment
