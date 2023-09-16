@@ -1,3 +1,5 @@
+UPDO_TMP := .updo
+
 ifeq ($(PKG_GROUPS_HS_EXE), true)
 PKG_GROUPS_HS := updo-pkg-groups
 else
@@ -43,14 +45,20 @@ project-cabal/ghc-%/constraints.config : \
   updo/text-templates/cabal/package.dhall \
   project-dhall/ghc-%/constraints.dhall
 	mkdir -p $(@D)
+	mkdir -p $(UPDO_TMP)/ghc-$*
 	echo "let f = ./$< in f.constraints ./project-dhall/ghc-$*/constraints.dhall" \
-	| dhall text | sed "s/@rev:.*//" >$@
+	| dhall text | sed "s/@rev:.*//" >$(UPDO_TMP)/ghc-$*/constraints.config
+	[ ! -s $(UPDO_TMP)/ghc-$*/constraints.config ] || cp $(UPDO_TMP)/ghc-$*/constraints.config $@
 
 # Mirror source repositories from dhall to config.
 project-cabal/ghc-%.config: \
   updo/text-templates/cabal/package.dhall \
   project-dhall/ghc-%.dhall
-	mkdir -p $(@D) && echo "let f = ./$< in f.repo-items ./project-dhall/ghc-$*.dhall" | dhall text --output $@
+	mkdir -p $(@D)
+	mkdir -p $(dir $(UPDO_TMP)/ghc-$*)
+	echo "let f = ./$< in f.repo-items ./project-dhall/ghc-$*.dhall" \
+	| dhall text --output $(UPDO_TMP)/ghc-$*.config
+	[ ! -s $(UPDO_TMP)/ghc-$*.config ] || cp $(UPDO_TMP)/ghc-$*.config $@
 
 ghc-$(GHC_VERSION).dhall2config.project: \
   project-dhall/ghc-$(GHC_VERSION)/text-templates/dhall2config.dhall \
