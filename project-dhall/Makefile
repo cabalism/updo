@@ -1,5 +1,3 @@
-UPDO_TMP := ./.updo
-
 ifeq ($(PKGS_SORTED_HS_EXE), true)
 PKGS_SORTED_HS := updo-pkgs-sorted
 else
@@ -11,6 +9,20 @@ PKGS_UPGRADE_DONE_HS := updo-pkgs-upgrade-done
 else
 PKGS_UPGRADE_DONE_HS := ./updo/project-dhall/pkgs-upgrade-done.hs
 endif
+
+config-version: \
+  $(UPDO_TMP)/ghc-$(GHC_VERSION)/constraints.dhall \
+  $(UPDO_TMP)/ghc-$(GHC_VERSION)/deps-external.dhall \
+  $(UPDO_TMP)/ghc-$(GHC_VERSION)/deps-internal.dhall \
+  $(UPDO_TMP)/ghc-$(GHC_VERSION)/forks-external.dhall \
+  $(UPDO_TMP)/ghc-$(GHC_VERSION)/forks-internal.dhall
+
+config-upgrade: \
+  $(UPDO_TMP)/ghc-$(GHC_UPGRADE)/constraints.dhall \
+  $(UPDO_TMP)/ghc-$(GHC_UPGRADE)/deps-external.dhall \
+  $(UPDO_TMP)/ghc-$(GHC_UPGRADE)/deps-internal.dhall \
+  $(UPDO_TMP)/ghc-$(GHC_UPGRADE)/forks-external.dhall \
+  $(UPDO_TMP)/ghc-$(GHC_UPGRADE)/forks-internal.dhall
 
 .PHONY: dhall2stack-projects
 dhall2stack-projects: \
@@ -24,51 +36,31 @@ dhall2cabal-projects: \
   ghc-$(GHC_VERSION).dhall2cabal.project \
   ghc-$(GHC_UPGRADE).dhall2cabal.project
 
-.PHONY: pkgs-sorted
-pkgs-sorted: $(UPDO_TMP)/pkgs-sorted.dhall
-
-.PHONY: pkgs-upgrade-done
-pkgs-upgrade-done: $(UPDO_TMP)/pkgs-upgrade-done.dhall
-
-$(UPDO_TMP)/pkgs-sorted.dhall: \
-  project-dhall/pkg-groups.dhall \
-  project-dhall/pkgs/*.dhall
-	mkdir -p $(@D) && $(PKGS_SORTED_HS) > $@
-
-$(UPDO_TMP)/pkgs-upgrade-done.dhall: \
-  project-dhall/pkgs/*.dhall \
-  $(UPDO_TMP)/pkgs-sorted.dhall \
-  project-dhall/pkgs-upgrade-todo.dhall
-	./updo/project-dhall/pkgs-upgrade-done.hs \
-	  ./$(UPDO_TMP)/pkgs-sorted.dhall \
-	  ./project-dhall/pkgs-upgrade-todo.dhall \
-	  > $@
-
 ghc-$(GHC_VERSION).dhall2stack.yaml: \
   project-dhall/ghc-$(GHC_VERSION)/text-templates/dhall2stack.dhall \
   $(UPDO_TMP)/pkgs-sorted.dhall \
-  project-dhall/ghc-$(GHC_VERSION)/*.dhall \
+  config-version \
   updo/text-templates/stack/*.dhall
 	echo './$< ./$(UPDO_TMP)/pkgs-sorted.dhall "$(STACKAGE_VERSION)"' | dhall text --output $@
 
 ghc-$(GHC_UPGRADE).dhall2stack.yaml: \
   project-dhall/ghc-$(GHC_UPGRADE)/text-templates/dhall2stack.dhall \
   $(UPDO_TMP)/pkgs-upgrade-done.dhall \
-  project-dhall/ghc-$(GHC_UPGRADE)/*.dhall \
+  config-upgrade \
   updo/text-templates/stack/*.dhall
 	echo './$< ./$(UPDO_TMP)/pkgs-upgrade-done.dhall "$(STACKAGE_UPGRADE)"' | dhall text --output $@
 
 ghc-$(GHC_VERSION).dhall2cabal.project: \
   project-dhall/ghc-$(GHC_VERSION)/text-templates/dhall2cabal.dhall \
   $(UPDO_TMP)/pkgs-sorted.dhall \
-  project-dhall/ghc-$(GHC_VERSION)/*.dhall \
+  config-version \
   updo/text-templates/cabal/*.dhall
 	echo './$< ./$(UPDO_TMP)/pkgs-sorted.dhall "$(STACKAGE_VERSION)"' | dhall text --output $@
 
 ghc-$(GHC_UPGRADE).dhall2cabal.project: \
   project-dhall/ghc-$(GHC_UPGRADE)/text-templates/dhall2cabal.dhall \
   $(UPDO_TMP)/pkgs-upgrade-done.dhall \
-  project-dhall/ghc-$(GHC_UPGRADE)/*.dhall \
+  config-upgrade \
   updo/text-templates/cabal/*.dhall
 	echo './$< ./$(UPDO_TMP)/pkgs-upgrade-done.dhall "$(STACKAGE_UPGRADE)"' | dhall text --output $@
 
