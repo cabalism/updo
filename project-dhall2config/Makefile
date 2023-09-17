@@ -37,26 +37,33 @@ generate-pkg-configs: \
 # SEE: https://www.gnu.org/software/make/manual/html_node/Empty-Recipes.html
 project-cabal/pkgs/%.config: project-dhall/pkgs/%.dhall generate-pkg-configs ;
 
+$(UPDO_TMP)/ghc-%/constraints.dhall:
+	mkdir -p $(UPDO_TMP)/ghc-$*
+	[ -e ./project-dhall/ghc-$*/constraints.dhall ] && cp ./project-dhall/ghc-$*/constraints.dhall $@ || cp ./updo/empty/constraints.dhall $@
+
+$(UPDO_TMP)/ghc-%.dhall:
+	mkdir -p $(dir $(UPDO_TMP)/ghc-$*)
+	[ -e ./project-dhall/ghc-$*.dhall ] && cp ./project-dhall/ghc-$*.dhall $@ || cp ./updo/empty/source-pkgs.dhall $@
+
 # Mirror constraints from dhall to config. Any revisions in the constraints are
 # stripped, like this for example:
 # - hedgehog-quickcheck ==0.1.1@rev:4
 # + hedgehog-quickcheck ==0.1.1
-project-cabal/ghc-%/constraints.config : \
+project-cabal/ghc-%/constraints.config: \
   updo/text-templates/cabal/package.dhall \
-  project-dhall/ghc-%/constraints.dhall
+  $(UPDO_TMP)/ghc-%/constraints.dhall
 	mkdir -p $(@D)
 	mkdir -p $(UPDO_TMP)/ghc-$*
-	echo "let f = ./$< in f.constraints ./project-dhall/ghc-$*/constraints.dhall" \
+	echo "let f = ./$< in f.constraints ./$(UPDO_TMP)/ghc-$*/constraints.dhall" \
 	| dhall text | sed "s/@rev:.*//" >$(UPDO_TMP)/ghc-$*/constraints.config
 	[ ! -s $(UPDO_TMP)/ghc-$*/constraints.config ] || cp $(UPDO_TMP)/ghc-$*/constraints.config $@
 
 # Mirror source repositories from dhall to config.
 project-cabal/ghc-%.config: \
   updo/text-templates/cabal/package.dhall \
-  project-dhall/ghc-%.dhall
+  $(UPDO_TMP)/ghc-%.dhall
 	mkdir -p $(@D)
-	mkdir -p $(dir $(UPDO_TMP)/ghc-$*)
-	echo "let f = ./$< in f.repo-items ./project-dhall/ghc-$*.dhall" \
+	echo "let f = ./$< in f.repo-items ./$(UPDO_TMP)/ghc-$*.dhall" \
 	| dhall text --output $(UPDO_TMP)/ghc-$*.config
 	[ ! -s $(UPDO_TMP)/ghc-$*.config ] || cp $(UPDO_TMP)/ghc-$*.config $@
 
