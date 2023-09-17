@@ -2,7 +2,8 @@ let TYPES = ../types.dhall
 
 let null = https://prelude.dhall-lang.org/List/null
 
-in  \(stackage-resolver : Text) ->
+in  \(stackage-location : TYPES.Stackage) ->
+    \(stackage-resolver : Text) ->
     \(ghc-version : Text) ->
     \ ( pkg-config
       : { constraints : List TYPES.PkgVer
@@ -33,7 +34,7 @@ in  \(stackage-resolver : Text) ->
       let pkgs = pkg-config.source-pkgs
 
       in      ''
-              import: ./project-stackage/${stackage-resolver}.config
+              ${./import-stackage.dhall stackage-location stackage-resolver}
 
               import: ./project-cabal/pkgs.config
               ''

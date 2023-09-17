@@ -80,14 +80,29 @@ much:
 [^unpublished-packages]: A package not published to hackage or stackage.
 
 All configuration goes into `./project-dhall` (where `.` is the root folder for
-your Haskell project) except for the `cabal.config` that we'll need to download
-from stackage. Save this file as `project-stackage/lts-m.n.config` using the
-exact resolver name.
+your Haskell project) except for the `cabal.config` that we'll likely need to
+download from stackage and modify. Save this file as
+`project-stackage/lts-m.n.config` using the exact resolver name.
 
 ```
 project-stackage
 └── lts-m.n.config
 ```
+
+Any `==` constraint that gives the cabal solver impossible constraints can then
+be commented out by prepending with `--`. If there are no impossible constraints
+then the stackage resolver can be imported directly from https://stackage.org.
+
+```dhall
+< StackageWeb | StackageLocal >
+```
+
+The `dhall2cabal` and `dhall2config` text templates import stackage constraints
+from one of the following locations by invoking
+`updo/text-templates/import-stackage.dhall`:
+
+* `StackageWeb`: "import: https://stackage.org/resolver/cabal.config"
+* `StackageLocal`: "import: ./project-stackage/resolver.config"
 
 For each `ghc-x.y.z` compiler version, create this set of inputs and templates:
 
