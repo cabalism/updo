@@ -1,5 +1,3 @@
-UPDO_TMP := .updo
-
 ifeq ($(PKGS_SORTED_HS_EXE), true)
 PKGS_SORTED_HS := updo-pkgs-sorted
 else
@@ -23,26 +21,6 @@ dhall2stack-projects: \
 dhall2cabal-projects: \
   ghc-$(GHC_VERSION).dhall2cabal.project \
   ghc-$(GHC_UPGRADE).dhall2cabal.project
-
-.PHONY: pkgs-sorted
-pkgs-sorted: $(UPDO_TMP)/pkgs-sorted.dhall
-
-.PHONY: pkgs-upgrade-done
-pkgs-upgrade-done: $(UPDO_TMP)/pkgs-upgrade-done.dhall
-
-$(UPDO_TMP)/pkgs-sorted.dhall: \
-  project-dhall/pkg-groups.dhall \
-  project-dhall/pkgs/*.dhall
-	mkdir -p $(@D) && $(PKGS_SORTED_HS) > $@
-
-$(UPDO_TMP)/pkgs-upgrade-done.dhall: \
-  project-dhall/pkgs/*.dhall \
-  $(UPDO_TMP)/pkgs-sorted.dhall \
-  project-dhall/pkgs-upgrade-todo.dhall
-	./updo/project-dhall/pkgs-upgrade-done.hs \
-	  ./$(UPDO_TMP)/pkgs-sorted.dhall \
-	  ./project-dhall/pkgs-upgrade-todo.dhall \
-	  > $@
 
 ghc-$(GHC_VERSION).dhall2stack.yaml: \
   project-dhall/ghc-$(GHC_VERSION)/text-templates/dhall2stack.dhall \

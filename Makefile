@@ -28,13 +28,12 @@ STACK_VIA ?= dhall2stack
 # ${../../project-stackage/$(STACKAGE_VERSION).config as Text}
 CABAL_VIA ?= dhall2config
 
-UPDO_TMP := .updo
-
 # Updo Dhall gives us these targets:
 #  - dhall2stack-projects
 #  - dhall2cabal-projects
 #  - dhall2config-projects
 #  - project-sha256maps
+include updo/temp/Makefile
 include updo/project-dhall/Makefile
 include updo/project-dhall2config/Makefile
 include updo/project-nix/Makefile

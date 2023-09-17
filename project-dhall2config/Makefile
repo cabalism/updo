@@ -1,5 +1,3 @@
-UPDO_TMP := .updo
-
 ifeq ($(PKG_GROUPS_HS_EXE), true)
 PKG_GROUPS_HS := updo-pkg-groups
 else
@@ -36,14 +34,6 @@ generate-pkg-configs: \
 # The "target: prerequisites ;" explicitly defines an empty recipe.
 # SEE: https://www.gnu.org/software/make/manual/html_node/Empty-Recipes.html
 project-cabal/pkgs/%.config: project-dhall/pkgs/%.dhall generate-pkg-configs ;
-
-$(UPDO_TMP)/ghc-%/constraints.dhall:
-	mkdir -p $(UPDO_TMP)/ghc-$*
-	[ -e ./project-dhall/ghc-$*/constraints.dhall ] && cp ./project-dhall/ghc-$*/constraints.dhall $@ || cp ./updo/empty/constraints.dhall $@
-
-$(UPDO_TMP)/ghc-%.dhall:
-	mkdir -p $(dir $(UPDO_TMP)/ghc-$*)
-	[ -e ./project-dhall/ghc-$*.dhall ] && cp ./project-dhall/ghc-$*.dhall $@ || cp ./updo/empty/source-pkgs.dhall $@
 
 # Mirror constraints from dhall to config. Any revisions in the constraints are
 # stripped, like this for example:
