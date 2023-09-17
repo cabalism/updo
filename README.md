@@ -72,7 +72,7 @@ using make to generate the projects. What do we want to configure? We don't need
 much:
 
 1. A stackage resolver[^download-stackage-config].
-2. A list of constraints[^constraits].
+2. A list of constraints[^constraints].
 3. A list of source repository packages, for unpublished[^unpublished-packages]
   packages or for unpublished versions of packages.
 4. A list of packages.
