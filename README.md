@@ -317,10 +317,10 @@ entry in `constraints.dhall`.
 
 # Getting Started
 
-Dhall is a prerequisite.
+Dhall is a prerequisite. Updo can bootstrap itself as a makefile recipe in
+`project-files.mk`.
 
-As well as other make targets, updo can bootstrap itself by adding one of two
-recipes to `project-files.mk`:
+## Bootstrap from Hackage
 
 ```make
 UPDO_VERSION ?= 1.0.0
@@ -350,7 +350,34 @@ updo/Makefile:
 	mv updo-* updo
 ```
 
-Instead of curl and tar, `cabal get` or `stack unpack` can unpack package sources.
+Both `cabal get` and `stack unpack` can also unpack package sources from
+Hackage.
+
+## Bootstrap from Source
+
+Updo can bootstrap itself from a revision or branch too.
+
+1. From a revision:
+
+```make
+UPDO_VERSION ?= 4a8359f4e5d8cad61f35bea9d0a8f04477829ca1
+UPDO_URL := https://github.com/cabalism/updo/archive/${UPDO_VERSION}.tar.gz
+
+updo/Makefile:
+	rm -rf updo
+	curl -sSL ${UPDO_URL} | tar -xz
+	mv updo-* updo
+	chmod +x $$(grep -RIl '^#!' updo)
+```
+
+2. From a branch:
+
+```make
+updo/Makefile:
+	rm -rf updo
+	git clone --depth=1 --branch main git@github.com:cabalism/updo
+	chmod +x $$(grep -RIl '^#!' updo)
+```
 
 # Make Targets
 
