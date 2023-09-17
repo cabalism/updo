@@ -121,6 +121,18 @@ project-dhall
         └── stacksnippet.dhall ▨ anything for ghc-x.y.z.dhall2stack.yaml
 ```
 
+All of the inputs can be omitted, any of:
+
+```
+project-dhall
+└── ghc-x.y.z
+    ├── constraints.dhall
+    ├── deps-external.dhall
+    ├── deps-internal.dhall
+    ├── forks-external.dhall
+    └── forks-internal.dhall
+```
+
 Anything in `stacksnippet.dhall` gets added to the top of the generated stack
 project[^base.yaml].  The rest of the files are inputs.
 
