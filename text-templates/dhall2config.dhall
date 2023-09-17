@@ -15,15 +15,6 @@ in  \(stackage-location : TYPES.Stackage) ->
             }
         }
       ) ->
-      let import-stackage =
-            merge
-              { StackageWeb =
-                  "import: https://stackage.org/${stackage-resolver}.config"
-              , StackageProject =
-                  "import: ./project-stackage/${stackage-resolver}.config"
-              }
-              stackage-location
-
       let import-constraints =
             if    null TYPES.PkgVer pkg-config.constraints
             then  ""
@@ -43,7 +34,7 @@ in  \(stackage-location : TYPES.Stackage) ->
       let pkgs = pkg-config.source-pkgs
 
       in      ''
-              ${import-stackage}
+              ${./import-stackage.dhall stackage-location stackage-resolver}
 
               import: ./project-cabal/pkgs.config
               ''

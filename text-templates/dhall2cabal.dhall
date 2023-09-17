@@ -56,17 +56,8 @@ in  \(stackage-location : TYPES.Stackage) ->
 
       let cabal = ./cabal/package.dhall
 
-      let import-stackage =
-            merge
-              { StackageWeb =
-                  "import: https://stackage.org/${stackage-resolver}.config"
-              , StackageProject =
-                  "import: ./project-stackage/${stackage-resolver}.config"
-              }
-              stackage-location
-
       in  ''
-          ${import-stackage}
+          ${./import-stackage.dhall stackage-location stackage-resolver}
 
           ${pkgs-comment}
           ${cabal.packages pkgs}
