@@ -3,7 +3,7 @@
 # Choices are:
 #  - dhall2stack = via a temporary ghc-x.y.z.dhall2stack.yaml
 #  - dhall2yaml2stack = via a temporary ghc-x.y.z.dhall2yaml2stack.yaml
-STACK_VIA := dhall2stack
+STACK_VIA ?= dhall2stack
 
 # How are we going to generate the cabal.project file?
 #
@@ -26,7 +26,7 @@ STACK_VIA := dhall2stack
 # contents of the stackage import like this:
 #
 # ${../../project-stackage/$(STACKAGE_VERSION).config as Text}
-CABAL_VIA := dhall2config
+CABAL_VIA ?= dhall2config
 
 UPDO_TMP := .updo
 
