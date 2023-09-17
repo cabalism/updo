@@ -4,7 +4,8 @@ let length = https://prelude.dhall-lang.org/List/length
 
 let show = https://prelude.dhall-lang.org/Natural/show
 
-in  \(stackage-resolver : Text) ->
+in  \(stackage-location : TYPES.Stackage) ->
+    \(stackage-resolver : Text) ->
     \(pkg-set : TYPES.PkgSet) ->
     \ ( pkg-config
       : { constraints : List TYPES.PkgVer
@@ -55,8 +56,17 @@ in  \(stackage-resolver : Text) ->
 
       let cabal = ./cabal/package.dhall
 
+      let import-stackage =
+            merge
+              { StackageWeb =
+                  "import: https://stackage.org/${stackage-resolver}.config"
+              , StackageProject =
+                  "import: ./project-stackage/${stackage-resolver}.config"
+              }
+              stackage-location
+
       in  ''
-          import: ./project-stackage/${stackage-resolver}.config
+          ${import-stackage}
 
           ${pkgs-comment}
           ${cabal.packages pkgs}
