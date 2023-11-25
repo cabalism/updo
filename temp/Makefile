@@ -1,12 +1,23 @@
 UPDO_TMP ?= .updo
 
+$(UPDO_TMP)/ghc-%/constraints.dhall: project-dhall/ghc-%/constraints.dhall
+	mkdir -p $(UPDO_TMP)/ghc-$*
+	[ -e ./project-dhall/ghc-$*/constraints.dhall ] && cp ./project-dhall/ghc-$*/constraints.dhall $@
+
+# NOTE: Fallback to the empty default if the constraints are missing.
 $(UPDO_TMP)/ghc-%/constraints.dhall:
 	mkdir -p $(UPDO_TMP)/ghc-$*
-	[ -e ./project-dhall/ghc-$*/constraints.dhall ] && cp ./project-dhall/ghc-$*/constraints.dhall $@ || cp ./updo/empty/constraints.dhall $@
+	[ -e ./project-dhall/ghc-$*/constraints.dhall ] || cp ./updo/empty/constraints.dhall $@
 
+$(UPDO_TMP)/ghc-%.dhall: project-dhall/ghc-%.dhall
+	mkdir -p $(dir $(UPDO_TMP)/ghc-$*)
+	[ -e ./project-dhall/ghc-$*.dhall ] && cp ./project-dhall/ghc-$*.dhall $@
+
+# NOTE: Fallback to the empty default if the matching source repository package
+# dependencies are missing.
 $(UPDO_TMP)/ghc-%.dhall:
 	mkdir -p $(dir $(UPDO_TMP)/ghc-$*)
-	[ -e ./project-dhall/ghc-$*.dhall ] && cp ./project-dhall/ghc-$*.dhall $@ || cp ./updo/empty/source-pkgs.dhall $@
+	[ -e ./project-dhall/ghc-$*.dhall ] || cp ./updo/empty/source-pkgs.dhall $@
 
 .PHONY: pkgs-sorted
 pkgs-sorted: $(UPDO_TMP)/pkgs-sorted.dhall
