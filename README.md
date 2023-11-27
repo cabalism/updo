@@ -189,6 +189,12 @@ The type of constraints is a list of records with dependency and version fields:
 List { dep : Text, ver : Text }
 ```
 
+The version can include a `@rev:...` or `@sha256:...` revision
+suffix[^revision].
+
+[^revision]: Cabal's [revision feature](https://github.com/haskell/cabal/issues/7833)
+    is not yet implemented so these suffixes are stripped for Cabal projects.
+
 ### 3. Source Repository Packages
 
 There are various reasons to depend on source packages and forks of source
