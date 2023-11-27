@@ -45,7 +45,7 @@ project-cabal/ghc-%/constraints.config: \
 	mkdir -p $(@D)
 	mkdir -p $(UPDO_TMP)/ghc-$*
 	echo "let f = ./$< in f.constraints ./$(UPDO_TMP)/ghc-$*/constraints.dhall" \
-	| dhall text | sed "s/@rev:.*//" >$(UPDO_TMP)/ghc-$*/constraints.config
+	| dhall text | sed -E "s/@(rev|sha256):.*$$//" >$(UPDO_TMP)/ghc-$*/constraints.config
 	[ ! -s $(UPDO_TMP)/ghc-$*/constraints.config ] || cp $(UPDO_TMP)/ghc-$*/constraints.config $@
 
 # Mirror source repositories from dhall to config.
