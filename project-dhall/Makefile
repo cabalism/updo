@@ -55,14 +55,16 @@ ghc-$(GHC_VERSION).dhall2cabal.project: \
   $(UPDO_TMP)/pkgs-sorted.dhall \
   config-version \
   updo/text-templates/cabal/*.dhall
-	echo './$< ./$(UPDO_TMP)/pkgs-sorted.dhall "$(STACKAGE_VERSION)"' | dhall text --output $@
+	echo './$< ./$(UPDO_TMP)/pkgs-sorted.dhall "$(STACKAGE_VERSION)"' \
+	| dhall text | sed -E "s/@(rev|sha256):.*$$//" > $@
 
 ghc-$(GHC_UPGRADE).dhall2cabal.project: \
   project-dhall/ghc-$(GHC_UPGRADE)/text-templates/dhall2cabal.dhall \
   $(UPDO_TMP)/pkgs-upgrade-done.dhall \
   config-upgrade \
   updo/text-templates/cabal/*.dhall
-	echo './$< ./$(UPDO_TMP)/pkgs-upgrade-done.dhall "$(STACKAGE_UPGRADE)"' | dhall text --output $@
+	echo './$< ./$(UPDO_TMP)/pkgs-upgrade-done.dhall "$(STACKAGE_UPGRADE)"' \
+	| dhall text | sed -E "s/@(rev|sha256):.*$$//" > $@
 
 ghc-%.dhall2stack.yaml.lock: ghc-%.dhall2stack.yaml
 	stack build  --test --no-run-tests --bench --no-run-benchmarks --dry-run --stack-yaml $<
