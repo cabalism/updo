@@ -4,6 +4,10 @@ let length = https://prelude.dhall-lang.org/List/length
 
 let show = https://prelude.dhall-lang.org/Natural/show
 
+let concatMapSep = https://prelude.dhall-lang.org/Text/concatMapSep
+
+let counts = ./internal/comments/counts.dhall
+
 in  \(stackage-location : TYPES.Stackage) ->
     \(stackage-resolver : Text) ->
     \(pkg-set : TYPES.PkgSet) ->
@@ -29,8 +33,7 @@ in  \(stackage-location : TYPES.Stackage) ->
             deps-external # deps-internal # forks-external # forks-internal
 
       let count =
-            \(xs : List TYPES.SourceRepoPkg) ->
-              show (length TYPES.SourceRepoPkg xs)
+            \(xs : List TYPES.SourceRepoPkg) -> length TYPES.SourceRepoPkg xs
 
       let countPkgs = \(xs : List Text) -> show (length Text xs)
 
@@ -56,18 +59,26 @@ in  \(stackage-location : TYPES.Stackage) ->
 
       let cabal = ./cabal/package.dhall
 
+      let deps-count-comment =
+            concatMapSep
+              "\n"
+              Text
+              (\(s : Text) -> "-- ${s}")
+              ( counts
+                  { deps-external = count deps-external
+                  , deps-internal = count deps-internal
+                  , forks-external = count forks-external
+                  , forks-internal = count forks-internal
+                  }
+              )
+
       in  ''
           ${./import-stackage.dhall stackage-location stackage-resolver}
 
           ${pkgs-comment}
           ${cabal.packages pkgs}
 
-          -- We have ${count source-deps} source packages listed in this order:
-          --   * external ${count deps-external}
-          --   * internal ${count deps-internal}
-          --   * external forks ${count forks-external}
-          --   * internal forks ${count forks-internal}
-
+          ${deps-count-comment}
           -- Source Packages, external (3rd party).
           ${cabal.repo-items deps-external}
 

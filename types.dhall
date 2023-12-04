@@ -4,4 +4,5 @@
 , SourceRepoPkg = ./types/SourceRepoPkg.dhall
 , CabalRelativity = ./types/CabalRelativity.dhall
 , Stackage = ./types/Stackage.dhall
+, DepCounts = ./types/DepCounts.dhall
 }
