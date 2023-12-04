@@ -4,6 +4,10 @@ let L = https://prelude.dhall-lang.org/List/package.dhall
 
 let show = https://prelude.dhall-lang.org/Natural/show
 
+let concatMapSep = https://prelude.dhall-lang.org/Text/concatMapSep
+
+let counts = ./internal/comments/counts.dhall
+
 in  \(stackage-resolver : Text) ->
     \(pkg-set : TYPES.PkgSet) ->
     \ ( pkg-config
@@ -28,8 +32,7 @@ in  \(stackage-resolver : Text) ->
             deps-external # deps-internal # forks-external # forks-internal
 
       let count =
-            \(xs : List TYPES.SourceRepoPkg) ->
-              show (L.length TYPES.SourceRepoPkg xs)
+            \(xs : List TYPES.SourceRepoPkg) -> L.length TYPES.SourceRepoPkg xs
 
       let countPkgs = \(xs : List Text) -> show (L.length Text xs)
 
@@ -54,17 +57,25 @@ in  \(stackage-resolver : Text) ->
 
       let stack = ./stack/package.dhall
 
+      let deps-count-comment =
+            concatMapSep
+              "\n"
+              Text
+              (\(s : Text) -> "# ${s}")
+              ( counts
+                  { deps-external = count deps-external
+                  , deps-internal = count deps-internal
+                  , forks-external = count forks-external
+                  , forks-internal = count forks-internal
+                  }
+              )
+
       in      ''
               resolver: ${stackage-resolver}
 
               ${pkgs-comment}
               ${stack.packages pkgs}
-              # We have ${count
-                            source-deps} source packages listed in this order:
-              #   * external ${count deps-external}
-              #   * internal ${count deps-internal}
-              #   * external forks ${count forks-external}
-              #   * internal forks ${count forks-internal}
+              ${deps-count-comment}
               ''
           ++  ( if        L.null TYPES.SourceRepoPkg source-deps
                       &&  L.null TYPES.PkgVer pkg-config.constraints
