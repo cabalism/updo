@@ -11,6 +11,9 @@
   for Cabal.
 * The grammar of the comment describing source package dependencies and forks is
   better, no longer saying 1 packages.
+* With `dhall2cabal` or `dhall2stack` generated projects, source dependencies
+  and their commentary are only included if there are dependencies in a
+  category; internal or external, dependency or fork.
 
 ### 1.0.0
 * First release
