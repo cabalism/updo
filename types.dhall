@@ -6,4 +6,5 @@
 , Stackage = ./types/Stackage.dhall
 , DepCounts = ./types/DepCounts.dhall
 , DepIntros = ./types/DepIntros.dhall
+, Verbosity = ./types/Verbosity.dhall
 }
