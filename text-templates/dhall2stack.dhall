@@ -8,6 +8,8 @@ let concatMapSep = https://prelude.dhall-lang.org/Text/concatMapSep
 
 let counts = ./internal/comments/counts.dhall
 
+let intros = ./internal/comments/intros.dhall
+
 in  \(stackage-resolver : Text) ->
     \(pkg-set : TYPES.PkgSet) ->
     \ ( pkg-config
@@ -57,11 +59,10 @@ in  \(stackage-resolver : Text) ->
 
       let stack = ./stack/package.dhall
 
+      let comment = concatMapSep "\n" Text (\(s : Text) -> "# ${s}")
+
       let deps-count-comment =
-            concatMapSep
-              "\n"
-              Text
-              (\(s : Text) -> "# ${s}")
+            comment
               ( counts
                   { deps-external = count deps-external
                   , deps-internal = count deps-internal
@@ -83,15 +84,13 @@ in  \(stackage-resolver : Text) ->
                 else  ''
                       extra-deps:
 
-                        # Source Packages, external (3rd party).
+                      ${comment intros.deps-external}
                       ${stack.repo-items deps-external}
-                        # Source Packages, internal to this organisation (private and public).
+                      ${comment intros.deps-internal}
                       ${stack.repo-items deps-internal}
-                        # Source Packages, external (3rd party) forks of other repositories.
-                        # Can we help upstream?
+                      ${comment intros.forks-external}
                       ${stack.repo-items forks-external}
-                        # Source Packages, internal forks of other repositories.
-                        # Can we upstream and unfork?
+                      ${comment intros.forks-internal}
                       ${stack.repo-items forks-internal}
                         # Package versions for published packages either not on Stackage or
                         # not matching the version on Stackage for the resolver we use.

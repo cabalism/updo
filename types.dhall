@@ -5,4 +5,5 @@
 , CabalRelativity = ./types/CabalRelativity.dhall
 , Stackage = ./types/Stackage.dhall
 , DepCounts = ./types/DepCounts.dhall
+, DepIntros = ./types/DepIntros.dhall
 }

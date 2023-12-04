@@ -8,6 +8,8 @@ let concatMapSep = https://prelude.dhall-lang.org/Text/concatMapSep
 
 let counts = ./internal/comments/counts.dhall
 
+let intros = ./internal/comments/intros.dhall
+
 in  \(stackage-location : TYPES.Stackage) ->
     \(stackage-resolver : Text) ->
     \(pkg-set : TYPES.PkgSet) ->
@@ -59,11 +61,10 @@ in  \(stackage-location : TYPES.Stackage) ->
 
       let cabal = ./cabal/package.dhall
 
+      let comment = concatMapSep "\n" Text (\(s : Text) -> "-- ${s}")
+
       let deps-count-comment =
-            concatMapSep
-              "\n"
-              Text
-              (\(s : Text) -> "-- ${s}")
+            comment
               ( counts
                   { deps-external = count deps-external
                   , deps-internal = count deps-internal
@@ -79,18 +80,17 @@ in  \(stackage-location : TYPES.Stackage) ->
           ${cabal.packages pkgs}
 
           ${deps-count-comment}
-          -- Source Packages, external (3rd party).
+
+          ${comment intros.deps-external}
           ${cabal.repo-items deps-external}
 
-          -- Source Packages, internal to this organisation (private and public).
+          ${comment intros.deps-internal}
           ${cabal.repo-items deps-internal}
 
-          -- Source Packages, external (3rd party) forks of other repositories.
-          -- Can we help upstream?
+          ${comment intros.forks-external}
           ${cabal.repo-items forks-external}
 
-          -- Source Packages, internal forks of other repositories.
-          -- Can we upstream and unfork?
+          ${comment intros.forks-internal}
           ${cabal.repo-items forks-internal}
 
           -- Constraints are equivalent to stack package-version extra dependencies.
