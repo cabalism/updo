@@ -10,7 +10,8 @@ let counts = ./internal/comments/counts.dhall
 
 let intros = ./internal/comments/intros.dhall
 
-in  \(stackage-resolver : Text) ->
+in  \(verbosity : TYPES.Verbosity) ->
+    \(stackage-resolver : Text) ->
     \(pkg-set : TYPES.PkgSet) ->
     \ ( pkg-config
       : { constraints : List TYPES.PkgVer
@@ -47,73 +48,116 @@ in  \(stackage-resolver : Text) ->
 
       let pkgs-comment =
             merge
-              { AllPkgs =
-                  \(pkgs : List Text) -> "# We have ${countPkgs pkgs} packages."
-              , PkgUpgrade =
-                  \(pkgs : TYPES.PkgTodoList) ->
-                    "# We have upgraded ${countPkgs
-                                            pkgs.done} packages and have ${countPkgs
-                                                                             pkgs.todo} yet to do."
+              { Quiet = ""
+              , Info =
+                  let comments =
+                        merge
+                          { AllPkgs =
+                              \(pkgs : List Text) ->
+                                [ "We have ${countPkgs pkgs} packages." ]
+                          , PkgUpgrade =
+                              \(pkgs : TYPES.PkgTodoList) ->
+                                [ "We have upgraded ${countPkgs
+                                                        pkgs.done} packages and have ${countPkgs
+                                                                                         pkgs.todo} yet to do."
+                                ]
+                          }
+                          pkg-set
+
+                  in      "\n"
+                      ++  concatMapSep
+                            "\n"
+                            Text
+                            (\(s : Text) -> "# ${s}")
+                            comments
               }
-              pkg-set
+              verbosity
 
       let stack = ./stack/package.dhall
 
-      let comment = concatMapSep "\n" Text (\(s : Text) -> "# ${s}")
-      let nested-comment = concatMapSep "\n" Text (\(s : Text) -> "  # ${s}")
+      let nested-comment =
+            merge
+              { Quiet = \(_ : List Text) -> ""
+              , Info =
+                  \(xs : List Text) ->
+                        "\n"
+                    ++  concatMapSep "\n" Text (\(s : Text) -> "  # ${s}") xs
+              }
+              verbosity
+
+      let null-source-deps = L.null TYPES.SourceRepoPkg source-deps
 
       let dep-counts =
-              { deps-external = count deps-external
-              , deps-internal = count deps-internal
-              , forks-external = count forks-external
-              , forks-internal = count forks-internal
+            { deps-external = count deps-external
+            , deps-internal = count deps-internal
+            , forks-external = count forks-external
+            , forks-internal = count forks-internal
+            }
+
+      let deps-count-comment =
+                "\n"
+            ++  merge
+                  { Quiet = ""
+                  , Info =
+                      if    null-source-deps
+                      then  ""
+                      else      concatMapSep
+                                  "\n"
+                                  Text
+                                  (\(s : Text) -> "# ${s}")
+                                  (counts dep-counts)
+                            ++  "\n"
+                  }
+                  verbosity
+
+      let constraints-intro =
+            merge
+              { Quiet = [] : List Text
+              , Info =
+                [ "Package versions for published packages either not on Stackage or"
+                , "not matching the version on Stackage for the resolver we use."
+                , "These package-version extra dependencies are equivalent to cabal constraints."
+                ]
               }
+              verbosity
 
-      let deps-count-comment = comment (counts dep-counts)
+      in      "resolver: ${stackage-resolver}"
+          ++  ''
 
-      in      ''
-              resolver: ${stackage-resolver}
+              ${pkgs-comment}''
+          ++  ''
 
-              ${pkgs-comment}
-              ${stack.packages pkgs}
-              ${deps-count-comment}
-              ''
-          ++  ( if        L.null TYPES.SourceRepoPkg source-deps
+              ${stack.packages pkgs}''
+          ++  "${deps-count-comment}"
+          ++  ( if        null-source-deps
                       &&  L.null TYPES.PkgVer pkg-config.constraints
                 then  "extra-deps: []"
-                else      "extra-deps:\n"
+                else      "extra-deps:"
                       ++  ( if    N.isZero dep-counts.deps-external
                             then  ""
                             else  ''
-
                                   ${nested-comment intros.deps-external}
                                   ${stack.repo-items deps-external}''
                           )
                       ++  ( if    N.isZero dep-counts.deps-internal
                             then  ""
                             else  ''
-
                                   ${nested-comment intros.deps-internal}
                                   ${stack.repo-items deps-internal}''
                           )
                       ++  ( if    N.isZero dep-counts.forks-external
                             then  ""
                             else  ''
-
                                   ${nested-comment intros.forks-external}
                                   ${stack.repo-items forks-external}''
                           )
                       ++  ( if    N.isZero dep-counts.forks-internal
                             then  ""
                             else  ''
-
                                   ${nested-comment intros.forks-internal}
                                   ${stack.repo-items forks-internal}''
                           )
                       ++  ''
-
-                            # Package versions for published packages either not on Stackage or
-                            # not matching the version on Stackage for the resolver we use.
-                            # These package-version extra dependencies are equivalent to cabal constraints.
+                          ${nested-comment constraints-intro}
                           ${stack.constraints pkg-config.constraints}''
               )

@@ -14,6 +14,7 @@
 * With `dhall2cabal` or `dhall2stack` generated projects, source dependencies
   and their commentary are only included if there are dependencies in a
   category; internal or external, dependency or fork.
+* Show comments with `Verbosity.Info` or not with `Verbosity.Quiet`.
 
 ### 1.0.0
 * First release
