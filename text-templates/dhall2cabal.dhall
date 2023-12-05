@@ -1,14 +1,14 @@
 let TYPES = ../types.dhall
 
+let COMMENTS = ./internal/comments.dhall
+
+let cabal = ./cabal/package.dhall
+
 let L = https://prelude.dhall-lang.org/List/package.dhall
 
 let N = https://prelude.dhall-lang.org/Natural/package.dhall
 
 let concatMapSep = https://prelude.dhall-lang.org/Text/concatMapSep
-
-let counts = ./internal/comments/dep-counts.dhall
-
-let intros = ./internal/comments/intros.dhall
 
 in  \(verbosity : TYPES.Verbosity) ->
     \(stackage-location : TYPES.Stackage) ->
@@ -48,33 +48,13 @@ in  \(verbosity : TYPES.Verbosity) ->
               pkg-set
 
       let pkgs-comment =
-            merge
-              { Quiet = ""
-              , Info =
-                  let comments =
-                        merge
-                          { AllPkgs =
-                              \(pkgs : List Text) ->
-                                [ "We have ${countPkgs pkgs} packages." ]
-                          , PkgUpgrade =
-                              \(pkgs : TYPES.PkgTodoList) ->
-                                [ "We have upgraded ${countPkgs
-                                                        pkgs.done} packages and have ${countPkgs
-                                                                                         pkgs.todo} yet to do."
-                                ]
-                          }
-                          pkg-set
-
-                  in      "\n"
-                      ++  concatMapSep
-                            "\n"
-                            Text
-                            (\(s : Text) -> "-- ${s}")
-                            comments
-              }
+            COMMENTS.pkg-counts
               verbosity
-
-      let cabal = ./cabal/package.dhall
+              pkg-set
+              ( \(comments : List Text) ->
+                      "\n"
+                  ++  concatMapSep "\n" Text (\(s : Text) -> "-- ${s}") comments
+              )
 
       let comment =
             merge
@@ -105,7 +85,7 @@ in  \(verbosity : TYPES.Verbosity) ->
                               "\n"
                               Text
                               (\(s : Text) -> "-- ${s}")
-                              (counts dep-counts)
+                              (COMMENTS.dep-counts dep-counts)
               }
               verbosity
 
@@ -132,25 +112,25 @@ in  \(verbosity : TYPES.Verbosity) ->
                       ++  ( if    N.isZero dep-counts.deps-external
                             then  ""
                             else  ''
-                                  ${comment intros.deps-external}
+                                  ${comment COMMENTS.intros.deps-external}
                                   ${cabal.repo-items deps-external}''
                           )
                       ++  ( if    N.isZero dep-counts.deps-internal
                             then  ""
                             else  ''
-                                  ${comment intros.deps-internal}
+                                  ${comment COMMENTS.intros.deps-internal}
                                   ${cabal.repo-items deps-internal}''
                           )
                       ++  ( if    N.isZero dep-counts.forks-external
                             then  ""
                             else  ''
-                                  ${comment intros.forks-external}
+                                  ${comment COMMENTS.intros.forks-external}
                                   ${cabal.repo-items forks-external}''
                           )
                       ++  ( if    N.isZero dep-counts.forks-internal
                             then  ""
                             else  ''
-                                  ${comment intros.forks-internal}
+                                  ${comment COMMENTS.intros.forks-internal}
                                   ${cabal.repo-items forks-internal}''
                           )
                       ++  "\n"

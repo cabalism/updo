@@ -1,14 +1,14 @@
 let TYPES = ../types.dhall
 
+let COMMENTS = ./internal/comments.dhall
+
+let stack = ./stack/package.dhall
+
 let L = https://prelude.dhall-lang.org/List/package.dhall
 
 let N = https://prelude.dhall-lang.org/Natural/package.dhall
 
 let concatMapSep = https://prelude.dhall-lang.org/Text/concatMapSep
-
-let counts = ./internal/comments/dep-counts.dhall
-
-let intros = ./internal/comments/intros.dhall
 
 in  \(verbosity : TYPES.Verbosity) ->
     \(stackage-resolver : Text) ->
@@ -47,33 +47,13 @@ in  \(verbosity : TYPES.Verbosity) ->
               pkg-set
 
       let pkgs-comment =
-            merge
-              { Quiet = ""
-              , Info =
-                  let comments =
-                        merge
-                          { AllPkgs =
-                              \(pkgs : List Text) ->
-                                [ "We have ${countPkgs pkgs} packages." ]
-                          , PkgUpgrade =
-                              \(pkgs : TYPES.PkgTodoList) ->
-                                [ "We have upgraded ${countPkgs
-                                                        pkgs.done} packages and have ${countPkgs
-                                                                                         pkgs.todo} yet to do."
-                                ]
-                          }
-                          pkg-set
-
-                  in      "\n"
-                      ++  concatMapSep
-                            "\n"
-                            Text
-                            (\(s : Text) -> "# ${s}")
-                            comments
-              }
+            COMMENTS.pkg-counts
               verbosity
-
-      let stack = ./stack/package.dhall
+              pkg-set
+              ( \(comments : List Text) ->
+                      "\n"
+                  ++  concatMapSep "\n" Text (\(s : Text) -> "# ${s}") comments
+              )
 
       let nested-comment =
             merge
@@ -105,7 +85,7 @@ in  \(verbosity : TYPES.Verbosity) ->
                                   "\n"
                                   Text
                                   (\(s : Text) -> "# ${s}")
-                                  (counts dep-counts)
+                                  (COMMENTS.dep-counts dep-counts)
                             ++  "\n"
                   }
                   verbosity
@@ -136,25 +116,29 @@ in  \(verbosity : TYPES.Verbosity) ->
                       ++  ( if    N.isZero dep-counts.deps-external
                             then  ""
                             else  ''
-                                  ${nested-comment intros.deps-external}
+                                  ${nested-comment
+                                      COMMENTS.intros.deps-external}
                                   ${stack.repo-items deps-external}''
                           )
                       ++  ( if    N.isZero dep-counts.deps-internal
                             then  ""
                             else  ''
-                                  ${nested-comment intros.deps-internal}
+                                  ${nested-comment
+                                      COMMENTS.intros.deps-internal}
                                   ${stack.repo-items deps-internal}''
                           )
                       ++  ( if    N.isZero dep-counts.forks-external
                             then  ""
                             else  ''
-                                  ${nested-comment intros.forks-external}
+                                  ${nested-comment
+                                      COMMENTS.intros.forks-external}
                                   ${stack.repo-items forks-external}''
                           )
                       ++  ( if    N.isZero dep-counts.forks-internal
                             then  ""
                             else  ''
-                                  ${nested-comment intros.forks-internal}
+                                  ${nested-comment
+                                      COMMENTS.intros.forks-internal}
                                   ${stack.repo-items forks-internal}''
                           )
                       ++  ''
