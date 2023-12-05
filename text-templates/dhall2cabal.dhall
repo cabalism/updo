@@ -6,7 +6,7 @@ let N = https://prelude.dhall-lang.org/Natural/package.dhall
 
 let concatMapSep = https://prelude.dhall-lang.org/Text/concatMapSep
 
-let counts = ./internal/comments/counts.dhall
+let counts = ./internal/comments/dep-counts.dhall
 
 let intros = ./internal/comments/intros.dhall
 
