@@ -10,7 +10,8 @@
   feature](https://github.com/haskell/cabal/issues/7833) is not yet implemented
   for Cabal.
 * The grammar of the comment describing source package dependencies and forks is
-  better, no longer saying 1 packages.
+  better, no longer saying 1 packages. Same goes for the comment describing
+  local packages.
 * With `dhall2cabal` or `dhall2stack` generated projects, source dependencies
   and their commentary are only included if there are dependencies in a
   category; internal or external, dependency or fork.
