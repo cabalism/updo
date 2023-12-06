@@ -1,12 +1,12 @@
 project-dhall/pkgs/%.dhall: \
   updo/project-skeleton/pkgs/all-in-one.dhall
 	mkdir -p project-dhall/pkgs
-	[ -e ./project-dhall/pkgs/*.dhall ] || cp $< project-dhall/pkgs/all-in-one.dhall
+	[ -e project-dhall/pkgs/$*.dhall ] || cp $< project-dhall/pkgs/all-in-one.dhall
 
 project-dhall/pkg-groups.dhall: \
   updo/project-skeleton/pkg-groups.dhall \
-  project-dhall/pkgs/*.dhall
-	cp $< $@
+  $(wildcard project-dhall/pkgs/*.dhall)
+	[ -e $@ ] || cp $< $@
 
 project-dhall/pkgs-upgrade-todo.dhall: \
   updo/project-skeleton/pkgs-upgrade-todo.dhall
