@@ -20,7 +20,7 @@
   put configuration into `project-dhall/ghc-x.y.z`. This will help get started
   with something like:
 
-  ```bash
+  ```
   $ tree project-dhall
   project-dhall
   ├── ghc-x.y.z
