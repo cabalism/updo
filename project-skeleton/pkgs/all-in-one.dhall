@@ -1,0 +1,30 @@
+-- NOTE: Using an empty list should trigger warnings like the following:
+--
+-- $ stack build
+-- Error: [S-8506]
+-- Stack failed to parse the target(s).
+--
+-- While parsing, Stack encountered the error:
+--
+-- The project contains no local packages (packages not marked with 'extra-dep').
+--
+-- Stack expects a target to be a package name (e.g. my-package), a package
+-- identifier (e.g.  my-package-0.1.2.3), a package component (e.g.
+-- my-package:test:my-test-suite), or, failing that, a relative path to a directory
+-- that is a local package directory or a parent directory of one or more local
+-- package directories.
+--
+-- $ cabal build
+-- Warning: There are no packages or optional-packages in the project
+-- Error: [Cabal-7136]
+-- There is no <pkgname>.cabal package file or cabal.project file. To build
+-- packages locally you need at minimum a <pkgname>.cabal file. You can use 'cabal
+-- init' to create one.
+-- 
+-- For non-trivial projects you will also want a cabal.project file in the root
+-- directory of your project. This file lists the packages in your project and all
+-- other build configuration. See the Cabal user guide for full details.
+--
+-- TODO: Add paths to directories of local packages here.  Use "folder-name" and
+-- not "./folder-name" or "folder-name/".
+[] : List Text

@@ -34,6 +34,7 @@ CABAL_VIA ?= dhall2config
 #  - dhall2config-projects
 #  - project-sha256maps
 include updo/temp/Makefile
+include updo/project-skeleton/Makefile
 include updo/project-dhall/Makefile
 include updo/project-dhall2config/Makefile
 include updo/project-nix/Makefile
