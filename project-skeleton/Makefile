@@ -6,6 +6,7 @@ project-dhall/pkgs/%.dhall: \
 project-dhall/pkg-groups.dhall: \
   updo/project-skeleton/pkg-groups.dhall \
   $(wildcard project-dhall/pkgs/*.dhall)
+	mkdir -p project-dhall
 	[ -e $@ ] || cp $< $@
 
 project-dhall/pkgs-upgrade-todo.dhall: \
