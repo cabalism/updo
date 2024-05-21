@@ -44,8 +44,8 @@ ensures correct versions in the freeze file.
 
 ```
 > stack2cabal --help
-Usage: stack2cabal [-f|--file STACK_YAML] [-o|--output-file CABAL_PROJECT] 
-                   [--no-inspect-remotes] [--no-pin-ghc] [--no-sort-repos] 
+Usage: stack2cabal [-f|--file STACK_YAML] [-o|--output-file CABAL_PROJECT]
+                   [--no-inspect-remotes] [--no-pin-ghc] [--no-sort-repos]
                    [--no-run-hpack] [-p|--pin-hackage-index FUZZY_DATE]
 
 Available options:
