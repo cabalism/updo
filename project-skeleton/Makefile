@@ -11,28 +11,30 @@ project-dhall/pkg-groups.dhall: \
 
 project-dhall/pkgs-upgrade-todo.dhall: \
   updo/project-skeleton/pkgs-upgrade-todo.dhall
-	cp $< $@
+	[ -e $@ ] || cp $< $@
 
 project-dhall/ghc-$(GHC_VERSION)/text-templates/cabal-snippet.dhall: \
   updo/project-skeleton/ghc-x.y.z/text-templates/cabal-snippet.dhall
-	cp $< $@
+	mkdir -p project-dhall/ghc-$(GHC_VERSION)/text-templates
+	[ -e $@ ] || cp $< $@
 
 project-dhall/ghc-$(GHC_VERSION)/text-templates/stack-snippet.dhall: \
   updo/project-skeleton/ghc-x.y.z/text-templates/stack-snippet.dhall
-	cp $< $@
+	mkdir -p project-dhall/ghc-$(GHC_VERSION)/text-templates
+	[ -e $@ ] || cp $< $@
 
+# dhall2stack needs stack-snippet
 project-dhall/ghc-$(GHC_VERSION)/text-templates/dhall2stack.dhall: \
   updo/project-skeleton/ghc-x.y.z/text-templates/dhall2stack.dhall \
   updo/project-skeleton/ghc-x.y.z/text-templates/stack-snippet.dhall \
   project-dhall/pkg-groups.dhall
 	mkdir -p project-dhall/ghc-$(GHC_VERSION)/text-templates
-	cp updo/project-skeleton/ghc-x.y.z/text-templates/stack-snippet.dhall project-dhall/ghc-$(GHC_VERSION)/text-templates/stack-snippet.dhall
-	cp $< $@
+	[ -e $@ ] || cp $< $@
 
+# dhall2cabal and dhall2config need cabal-snippet
 project-dhall/ghc-$(GHC_VERSION)/text-templates/%.dhall: \
   updo/project-skeleton/ghc-x.y.z/text-templates/%.dhall \
   updo/project-skeleton/ghc-x.y.z/text-templates/cabal-snippet.dhall \
   project-dhall/pkg-groups.dhall
 	mkdir -p project-dhall/ghc-$(GHC_VERSION)/text-templates
-	cp updo/project-skeleton/ghc-x.y.z/text-templates/cabal-snippet.dhall project-dhall/ghc-$(GHC_VERSION)/text-templates/cabal-snippet.dhall
-	cp $< $@
+	[ -e $@ ] || cp $< $@
