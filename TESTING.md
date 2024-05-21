@@ -18,7 +18,7 @@ Assuming this layout of make files in updo and at the root of your project.
 We'll need some versions, something like:
 
 ```
-$ cat project-versions.mk 
+$ cat project-versions.mk
 # Versions of GHC and stackage resolver, the ones we're on and the next ones
 # we're upgrading to.
 GHC_VERSION := 8.10.7
@@ -40,7 +40,7 @@ include project-versions.mk
 include updo/Makefile
 
 project-nix/ghc-%/sha256map.nix: ghc-%.sha256map.nix
-	mkdir -p $(@D) && cp $^ $@
+        mkdir -p $(@D) && cp $^ $@
 
 .PHONY: all
 all: \
@@ -70,9 +70,9 @@ include updo/alternatives/yaml2stack/Makefile
 # overriding the recipe for this target.
 ifeq ($(SHA256MAP_VIA_PYTHON), true)
 ghc-$(GHC_VERSION).sha256map.nix: stack.yaml
-	updo/project-nix/sha256map.py <$^ >$@
+        updo/project-nix/sha256map.py <$^ >$@
 ghc-$(GHC_UPGRADE).sha256map.nix: stack.yaml
-	updo/project-nix/sha256map.py <$^ >$@
+        updo/project-nix/sha256map.py <$^ >$@
 endif
 
 .DEFAULT_GOAL := all
@@ -149,7 +149,7 @@ cabal clean, this script will need to download dependencies.
 
 * [ ] Can it do that without polluting the generated file with status updates from cabal saying
       that it has downloaded this or that dependency[^silent-script]?
-      
+
 [^silent-script]: The Haskell script must run silently for this to work.
 
 ```

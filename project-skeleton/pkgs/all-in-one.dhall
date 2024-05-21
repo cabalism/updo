@@ -20,7 +20,7 @@
 -- There is no <pkgname>.cabal package file or cabal.project file. To build
 -- packages locally you need at minimum a <pkgname>.cabal file. You can use 'cabal
 -- init' to create one.
--- 
+--
 -- For non-trivial projects you will also want a cabal.project file in the root
 -- directory of your project. This file lists the packages in your project and all
 -- other build configuration. See the Cabal user guide for full details.

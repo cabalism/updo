@@ -365,22 +365,22 @@ UPDO_URL := ${HACKAGE}/updo-${UPDO_VERSION}/updo-${UPDO_VERSION}.tar.gz
 
 ```make
 updo/Makefile:
-	rm -rf updo
-	curl -sSL ${UPDO_URL} | tar -xz
-	mv updo-* updo
-	chmod +x $$(grep -RIl '^#!' updo)
+⇥ rm -rf updo
+⇥ curl -sSL ${UPDO_URL} | tar -xz
+⇥ mv updo-* updo
+⇥ chmod +x $$(grep -RIl '^#!' updo)
 ```
 
 2. When opting to install the included executables:
 
 ```make
 updo/Makefile:
-	rm -rf updo
-	curl -sSL ${UPDO_URL} | tar -xz
-	cd updo-${UPDO_VERSION}
-	stack install
-	cd -
-	mv updo-* updo
+⇥ rm -rf updo
+⇥ curl -sSL ${UPDO_URL} | tar -xz
+⇥ cd updo-${UPDO_VERSION}
+⇥ stack install
+⇥ cd -
+⇥ mv updo-* updo
 ```
 
 Both `cabal get` and `stack unpack` can also unpack package sources from
@@ -397,19 +397,19 @@ UPDO_VERSION ?= 4a8359f4e5d8cad61f35bea9d0a8f04477829ca1
 UPDO_URL := https://github.com/cabalism/updo/archive/${UPDO_VERSION}.tar.gz
 
 updo/Makefile:
-	rm -rf updo
-	curl -sSL ${UPDO_URL} | tar -xz
-	mv updo-* updo
-	chmod +x $$(grep -RIl '^#!' updo)
+⇥ rm -rf updo
+⇥ curl -sSL ${UPDO_URL} | tar -xz
+⇥ mv updo-* updo
+⇥ chmod +x $$(grep -RIl '^#!' updo)
 ```
 
 2. From a branch:
 
 ```make
 updo/Makefile:
-	rm -rf updo
-	git clone --depth=1 --branch main git@github.com:cabalism/updo
-	chmod +x $$(grep -RIl '^#!' updo)
+⇥ rm -rf updo
+⇥ git clone --depth=1 --branch main git@github.com:cabalism/updo
+⇥ chmod +x $$(grep -RIl '^#!' updo)
 ```
 
 # Make Targets
@@ -542,7 +542,7 @@ SHA256MAP_VIA_PYTHON ?= false
 # overriding the recipe for this target.
 ifeq ($(SHA256MAP_VIA_PYTHON), true)
 ghc-$(GHC_VERSION).sha256map.nix: stack.yaml
-	updo/project-nix/sha256map.py <$^ >$@
+⇥ updo/project-nix/sha256map.py <$^ >$@
 endif
 ```
 

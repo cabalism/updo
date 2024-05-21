@@ -37,7 +37,7 @@
 
   3 directories, 8 files
 
-  $ cat project-dhall/pkgs/all-in-one.dhall 
+  $ cat project-dhall/pkgs/all-in-one.dhall
   -- NOTE: Using an empty list should trigger warnings like the following:
   --
   -- $ stack build
@@ -60,7 +60,7 @@
   -- There is no <pkgname>.cabal package file or cabal.project file. To build
   -- packages locally you need at minimum a <pkgname>.cabal file. You can use 'cabal
   -- init' to create one.
-  -- 
+  --
   -- For non-trivial projects you will also want a cabal.project file in the root
   -- directory of your project. This file lists the packages in your project and all
   -- other build configuration. See the Cabal user guide for full details.
