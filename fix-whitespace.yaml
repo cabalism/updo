@@ -1,0 +1,15 @@
+excluded-dirs:
+  - "dist-newstyle"
+
+excluded-files:
+  - "**/*.mk"
+  - "**/Makefile"
+
+included-files:
+  - "**/*.cabal"
+  - "**/*.dhall"
+  - "**/*.hs"
+  - "**/*.md"
+  - "**/*.project"
+  - "**/*.yaml"
+  - "**/*.yml"
