@@ -1,6 +1,6 @@
 cabal-version: 1.12
 
--- This file has been generated from package.dhall by hpack version 0.35.2.
+-- This file has been generated from package.dhall by hpack version 0.36.0.
 --
 -- see: https://github.com/sol/hpack
 
@@ -14,15 +14,15 @@ homepage:       https://github.com/cabalism/updo#readme
 bug-reports:    https://github.com/cabalism/updo/issues
 author:         Phil de Joux
 maintainer:     phil.dejoux@blockscope.com
-copyright:      © 2023 Phil de Joux, © 2023 Block Scope Limited
+copyright:      © 2023 - 2024 Phil de Joux, © 2023 - 2024 Block Scope Limited
 license:        MPL-2.0
 license-file:   LICENSE
 build-type:     Simple
 tested-with:
-    GHC == 8.6.5
-  , GHC == 8.10.7
-  , GHC == 9.2.8
-  , GHC == 9.4.5
+    GHC == 9.2.8
+  , GHC == 9.4.8
+  , GHC == 9.6.5
+  , GHC == 9.8.2
 extra-source-files:
     ALTERNATIVES.md
     alternatives/cabal2stack/README.md
@@ -36,15 +36,30 @@ extra-source-files:
     README.md
     TEMPLATES.md
     TESTING.md
+    empty/constraints.dhall
+    empty/source-pkgs.dhall
     package.dhall
     project-dhall/pkgs-upgrade.dhall
     project-nix/project-versions.dhall
+    project-skeleton/ghc-x.y.z/text-templates/cabal-snippet.dhall
+    project-skeleton/ghc-x.y.z/text-templates/dhall2cabal.dhall
+    project-skeleton/ghc-x.y.z/text-templates/dhall2config.dhall
+    project-skeleton/ghc-x.y.z/text-templates/dhall2stack.dhall
+    project-skeleton/ghc-x.y.z/text-templates/stack-snippet.dhall
+    project-skeleton/pkg-groups.dhall
+    project-skeleton/pkgs-upgrade-todo.dhall
+    project-skeleton/pkgs/all-in-one.dhall
     text-templates/cabal/package.dhall
     text-templates/cabal/pkg-groups.dhall
     text-templates/cabal/repo-items.dhall
     text-templates/dhall2cabal.dhall
     text-templates/dhall2config.dhall
     text-templates/dhall2stack.dhall
+    text-templates/import-stackage.dhall
+    text-templates/internal/comments.dhall
+    text-templates/internal/comments/dep-counts.dhall
+    text-templates/internal/comments/intros.dhall
+    text-templates/internal/comments/pkg-counts.dhall
     text-templates/internal/constraint-items.dhall
     text-templates/internal/constraint-section.dhall
     text-templates/internal/pkg-items.dhall
@@ -57,10 +72,14 @@ extra-source-files:
     text-templates/yaml2stack/repo-items.dhall
     types.dhall
     types/CabalRelativity.dhall
+    types/DepCounts.dhall
+    types/DepIntros.dhall
     types/PkgSet.dhall
     types/PkgTodoList.dhall
     types/PkgVer.dhall
     types/SourceRepoPkg.dhall
+    types/Stackage.dhall
+    types/Verbosity.dhall
     alternatives/cabal2stack/Makefile
     alternatives/stack2cabal/Makefile
     alternatives/yaml2stack/Makefile
@@ -68,6 +87,8 @@ extra-source-files:
     project-dhall/Makefile
     project-dhall2config/Makefile
     project-nix/Makefile
+    project-skeleton/Makefile
+    temp/Makefile
     project-dhall/pkgs-sorted.hs
     project-dhall/pkgs-upgrade-done.hs
     project-dhall/pkgs-upgrade-partition.hs
@@ -85,11 +106,11 @@ executable updo-pkg-groups
   other-modules:
       Paths_updo
   build-depends:
-      aeson >=2.1.2 && <2.2
+      aeson >=2.1.2 && <2.3
     , base >=4.12 && <5
-    , dhall >=1.41.1 && <1.42
-    , filepath >=1.4.2 && <1.5
-    , text >=1.2.3 && <2.1
+    , dhall ==1.42.*
+    , filepath >=1.4.2 && <1.6
+    , text >=1.2.3 && <2.2
     , turtle >=1.6.1 && <1.7
     , utf8-string >=1.0.2 && <1.1
   default-language: Haskell2010
@@ -99,11 +120,11 @@ executable updo-pkgs-sorted
   other-modules:
       Paths_updo
   build-depends:
-      aeson >=2.1.2 && <2.2
+      aeson >=2.1.2 && <2.3
     , base >=4.12 && <5
-    , dhall >=1.41.1 && <1.42
-    , filepath >=1.4.2 && <1.5
-    , text >=1.2.3 && <2.1
+    , dhall ==1.42.*
+    , filepath >=1.4.2 && <1.6
+    , text >=1.2.3 && <2.2
     , turtle >=1.6.1 && <1.7
     , utf8-string >=1.0.2 && <1.1
   default-language: Haskell2010
@@ -113,11 +134,11 @@ executable updo-pkgs-upgrade-done
   other-modules:
       Paths_updo
   build-depends:
-      aeson >=2.1.2 && <2.2
+      aeson >=2.1.2 && <2.3
     , base >=4.12 && <5
-    , dhall >=1.41.1 && <1.42
-    , filepath >=1.4.2 && <1.5
-    , text >=1.2.3 && <2.1
+    , dhall ==1.42.*
+    , filepath >=1.4.2 && <1.6
+    , text >=1.2.3 && <2.2
     , turtle >=1.6.1 && <1.7
     , utf8-string >=1.0.2 && <1.1
   default-language: Haskell2010
@@ -127,11 +148,11 @@ executable updo-pkgs-upgrade-partition
   other-modules:
       Paths_updo
   build-depends:
-      aeson >=2.1.2 && <2.2
+      aeson >=2.1.2 && <2.3
     , base >=4.12 && <5
-    , dhall >=1.41.1 && <1.42
-    , filepath >=1.4.2 && <1.5
-    , text >=1.2.3 && <2.1
+    , dhall ==1.42.*
+    , filepath >=1.4.2 && <1.6
+    , text >=1.2.3 && <2.2
     , turtle >=1.6.1 && <1.7
     , utf8-string >=1.0.2 && <1.1
   default-language: Haskell2010
@@ -141,11 +162,11 @@ executable updo-sha256map
   other-modules:
       Paths_updo
   build-depends:
-      aeson >=2.1.2 && <2.2
+      aeson >=2.1.2 && <2.3
     , base >=4.12 && <5
-    , dhall >=1.41.1 && <1.42
-    , filepath >=1.4.2 && <1.5
-    , text >=1.2.3 && <2.1
+    , dhall ==1.42.*
+    , filepath >=1.4.2 && <1.6
+    , text >=1.2.3 && <2.2
     , turtle >=1.6.1 && <1.7
     , utf8-string >=1.0.2 && <1.1
   default-language: Haskell2010
