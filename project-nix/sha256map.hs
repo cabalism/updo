@@ -1,6 +1,5 @@
 #!/usr/bin/env cabal
-{-
-cabal:
+{- cabal:
   build-depends:
       aeson
     , base
