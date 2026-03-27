@@ -7,7 +7,10 @@ config-upgrade: \
 
 ghc-$(GHC_UPGRADE).dhall2stack.yaml: \
   project-dhall/ghc-$(GHC_UPGRADE)/text-templates/dhall2stack.dhall \
+  project-dhall/ghc-$(GHC_UPGRADE)/text-templates/wrap-stack.dhall \
   $(UPDO_TMP)/pkgs-upgrade-done.dhall \
   config-upgrade \
   updo/text-templates/stack/*.dhall
-	echo './$< ./$(UPDO_TMP)/pkgs-upgrade-done.dhall "$(STACKAGE_UPGRADE)"' | dhall text --output $@
+	echo './$< ./$(UPDO_TMP)/pkgs-upgrade-done.dhall "$(STACKAGE_UPGRADE)"' \
+    	| xargs echo 'project-dhall/ghc-$(GHC_UPGRADE)/text-templates/wrap-stack.dhall "$(GHC_UPGRADE)" "$(STACKAGE_UPGRADE)"' \
+    	| dhall text --output $@

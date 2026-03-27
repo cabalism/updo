@@ -21,7 +21,6 @@ in  \(pkgs-done : List Text) ->
             }
 
       in  ''
-          ${./stack-snippet.dhall (None Text)}
           ${../../../updo/text-templates/dhall2stack.dhall
               TYPES.Verbosity.Info
               stackage-resolver

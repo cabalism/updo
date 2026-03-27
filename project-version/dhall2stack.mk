@@ -7,7 +7,11 @@ config-version: \
 
 ghc-$(GHC_VERSION).dhall2stack.yaml: \
   project-dhall/ghc-$(GHC_VERSION)/text-templates/dhall2stack.dhall \
+  project-dhall/ghc-$(GHC_VERSION)/text-templates/wrap-stack.dhall \
   $(UPDO_TMP)/pkgs-sorted.dhall \
   config-version \
   updo/text-templates/stack/*.dhall
-	echo './$< ./$(UPDO_TMP)/pkgs-sorted.dhall "$(STACKAGE_VERSION)"' | dhall text --output $@
+	echo './$< ./$(UPDO_TMP)/pkgs-sorted.dhall "$(STACKAGE_VERSION)"' \
+		| dhall text
+		| xargs echo 'project-dhall/ghc-$(GHC_VERSION)/text-templates/wrap-stack.dhall "$(GHC_VERSION)" "$(STACKAGE_VERSION)"' \
+		| dhall text --output $@

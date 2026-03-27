@@ -43,11 +43,11 @@ extra-source-files:
     package.dhall
     project-dhall/pkgs-upgrade.dhall
     project-nix/project-versions.dhall
-    project-skeleton/ghc-x.y.z/text-templates/cabal-snippet.dhall
     project-skeleton/ghc-x.y.z/text-templates/dhall2cabal.dhall
     project-skeleton/ghc-x.y.z/text-templates/dhall2config.dhall
     project-skeleton/ghc-x.y.z/text-templates/dhall2stack.dhall
-    project-skeleton/ghc-x.y.z/text-templates/stack-snippet.dhall
+    project-skeleton/ghc-x.y.z/text-templates/wrap-cabal.dhall
+    project-skeleton/ghc-x.y.z/text-templates/wrap-stack.dhall
     project-skeleton/pkg-groups.dhall
     project-skeleton/pkgs-upgrade-todo.dhall
     project-skeleton/pkgs/all-in-one.dhall

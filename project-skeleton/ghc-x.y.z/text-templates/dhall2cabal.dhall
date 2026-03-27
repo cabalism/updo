@@ -31,5 +31,4 @@ in  \(pkgs-done : List Text) ->
                         { todo = pkgs-todo, done = pkgs-done }
               )
               pkg-config}
-          ${./cabal-snippet.dhall}
           ''

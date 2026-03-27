@@ -22,39 +22,39 @@ project-dhall/pkgs-upgrade-todo.dhall: \
 # The docs do not say this about .SECONDARY. But for the few explicit
 # exceptions, none of the special targets accept patterns.
 # SEE: https://stackoverflow.com/questions/27090032/why-secondary-does-not-work-with-patterns-while-precious-does 
-.PRECIOUS: project-dhall/ghc-%/text-templates/cabal-snippet.dhall
-.PRECIOUS: project-dhall/ghc-%/text-templates/stack-snippet.dhall
+.PRECIOUS: project-dhall/ghc-%/text-templates/wrap-cabal.dhall
+.PRECIOUS: project-dhall/ghc-%/text-templates/wrap-stack.dhall
 	
-project-dhall/ghc-%/text-templates/cabal-snippet.dhall: \
-  updo/project-skeleton/ghc-x.y.z/text-templates/cabal-snippet.dhall
+project-dhall/ghc-%/text-templates/wrap-cabal.dhall: \
+  updo/project-skeleton/ghc-x.y.z/text-templates/wrap-cabal.dhall
 	mkdir -p project-dhall/ghc-$*/text-templates
 	[ -e $@ ] || cp $< $@
 
-project-dhall/ghc-%/text-templates/stack-snippet.dhall: \
-  updo/project-skeleton/ghc-x.y.z/text-templates/stack-snippet.dhall
+project-dhall/ghc-%/text-templates/wrap-stack.dhall: \
+  updo/project-skeleton/ghc-x.y.z/text-templates/wrap-stack.dhall
 	mkdir -p project-dhall/ghc-$*/text-templates
 	[ -e $@ ] || cp $< $@
 
-# dhall2stack needs stack-snippet
+# dhall2stack needs wrap-stack
 project-dhall/ghc-%/text-templates/dhall2stack.dhall: \
   updo/project-skeleton/ghc-x.y.z/text-templates/dhall2stack.dhall \
-  project-dhall/ghc-%/text-templates/stack-snippet.dhall \
+  project-dhall/ghc-%/text-templates/wrap-stack.dhall \
   project-dhall/pkg-groups.dhall
 	mkdir -p project-dhall/ghc-$*/text-templates
 	[ -e $@ ] || cp $< $@
 
-# dhall2cabal needs cabal-snippet
+# dhall2cabal needs wrap-cabal
 project-dhall/ghc-%/text-templates/dhall2cabal.dhall: \
   updo/project-skeleton/ghc-x.y.z/text-templates/dhall2cabal.dhall \
-  project-dhall/ghc-%/text-templates/cabal-snippet.dhall \
+  project-dhall/ghc-%/text-templates/wrap-cabal.dhall \
   project-dhall/pkg-groups.dhall
 	mkdir -p project-dhall/ghc-$*/text-templates
 	[ -e $@ ] || cp $< $@
 	
-# dhall2config needs cabal-snippet
+# dhall2config needs wrap-cabal
 project-dhall/ghc-%/text-templates/dhall2config.dhall: \
   updo/project-skeleton/ghc-x.y.z/text-templates/dhall2config.dhall \
-  project-dhall/ghc-%/text-templates/cabal-snippet.dhall \
+  project-dhall/ghc-%/text-templates/wrap-cabal.dhall \
   project-dhall/pkg-groups.dhall
-	mkdir -p project-dhall/ghc-$*/text-templates
+	mkdir -p project-dhall/ghc-$*/text-template-snippets
 	[ -e $@ ] || cp $< $@
