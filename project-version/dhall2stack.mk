@@ -12,6 +12,6 @@ ghc-$(GHC_VERSION).dhall2stack.yaml: \
   config-version \
   updo/text-templates/stack/*.dhall
 	echo './$< ./$(UPDO_TMP)/pkgs-sorted.dhall "$(STACKAGE_VERSION)"' \
-		| dhall text
-		| xargs echo 'project-dhall/ghc-$(GHC_VERSION)/text-templates/wrap-stack.dhall "$(GHC_VERSION)" "$(STACKAGE_VERSION)"' \
+	    | dhall text --output $(UPDO_TMP)/gen-stack.txt
+	echo 'let generated-project = "$${./$(UPDO_TMP)/gen-stack.txt as Text}" in ./project-dhall/ghc-$(GHC_VERSION)/text-templates/wrap-stack.dhall "$(GHC_VERSION)" (Some "$(STACKAGE_VERSION)") generated-project' \
 		| dhall text --output $@

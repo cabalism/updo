@@ -14,5 +14,6 @@ ghc-$(GHC_UPGRADE).dhall2cabal.project: \
 	echo './$< ./$(UPDO_TMP)/pkgs-upgrade-done.dhall "$(STACKAGE_UPGRADE)"' \
     	| dhall text \
     	| sed -E "s/@(rev|sha256):.*$$//" \
-    	| xargs echo 'project-dhall/ghc-$(GHC_UPGRADE)/text-templates/wrap-cabal.dhall "$(GHC_UPGRADE)" "$(STACKAGE_UPGRADE)"' \
+        > $(UPDO_TMP)/gen-cabal.txt
+	echo 'let generated-project = "$${./$(UPDO_TMP)/gen-cabal.txt as Text}" in ./project-dhall/ghc-$(GHC_UPGRADE)/text-templates/wrap-cabal.dhall "$(GHC_UPGRADE)" (Some "$(STACKAGE_UPGRADE)") generated-project' \
     	| dhall text --output $@

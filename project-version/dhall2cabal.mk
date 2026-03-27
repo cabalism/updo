@@ -14,5 +14,6 @@ ghc-$(GHC_VERSION).dhall2cabal.project: \
 	echo './$< ./$(UPDO_TMP)/pkgs-sorted.dhall "$(STACKAGE_VERSION)"' \
     	| dhall text \
 	    | sed -E "s/@(rev|sha256):.*$$//" \
-    	| xargs echo 'project-dhall/ghc-$(GHC_VERSION)/text-templates/wrap-cabal.dhall "$(GHC_VERSION)" "$(STACKAGE_VERSION)"' \
+		> $(UPDO_TMP)/gen-cabal.txt
+	echo 'let generated-project = "$${./$(UPDO_TMP)/gen-cabal.txt as Text}" in ./project-dhall/ghc-$(GHC_VERSION)/text-templates/wrap-cabal.dhall "$(GHC_VERSION)" (Some "$(STACKAGE_VERSION)") generated-project' \
     	| dhall text --output $@
