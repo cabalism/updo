@@ -1,0 +1,62 @@
+name: build
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ghc: ['9.2.8', '9.4.8', '9.6.7', '9.8.4', '9.10.3', '9.12.2' ]
+    name: ghc-${{ matrix.ghc }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: haskell-actions/setup@v2
+        id: setup
+        with:
+          ghc-version: ${{ matrix.ghc }}
+          cabal-version: ${{ matrix.cabal }}
+      - name: configure
+        run: |
+          cabal configure --enable-tests --enable-benchmarks --disable-documentation
+          cabal build all --dry-run
+        # The last step generates dist-newstyle/cache/plan.json for the cache key.
+
+      - name: restore cached dependencies
+        uses: actions/cache/restore@v4
+        id: cache
+        env:
+          key: ${{ runner.os }}-ghc-${{ steps.setup.outputs.ghc-version }}-cabal-${{ steps.setup.outputs.cabal-version }}
+        with:
+          path: ${{ steps.setup.outputs.cabal-store }}
+          key: ${{ env.key }}-plan-${{ hashFiles('**/plan.json') }}
+          restore-keys: ${{ env.key }}-
+
+      - name: install dependencies
+        # If we had an exact cache hit, the dependencies will be up to date.
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: cabal build all --only-dependencies
+
+      # Cache dependencies already here, so that we do not have to rebuild them should the subsequent steps fail.
+      - name: Save cached dependencies
+        uses: actions/cache/save@v4
+        # If we had an exact cache hit, trying to save the cache would error because of key clash.
+        if: steps.cache.outputs.cache-hit != 'true'
+        with:
+          path: ${{ steps.setup.outputs.cabal-store }}
+          key: ${{ steps.cache.outputs.cache-primary-key }}
+
+      - name: build
+        run: cabal build all
+
+      - name: test
+        run: cabal test all
+
+      - name: check
+        run: cabal check
+
+      - name: haddock
+        run: cabal haddock all --disable-documentation
+        # --disable-documentation disables building documentation for dependencies.
+        # The package's own documentation is still built,
+        # yet contains no links to the documentation of the dependencies.
