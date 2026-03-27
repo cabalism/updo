@@ -12,15 +12,17 @@
 , maintainer = "phil.dejoux@blockscope.com"
 , copyright = "© 2023 - 2024 Phil de Joux, © 2023 - 2024 Block Scope Limited"
 , tested-with =
-  [ "GHC == 9.2.8", "GHC == 9.4.8", "GHC == 9.6.5", "GHC == 9.8.2" ]
+  [ "GHC == 9.2.8", "GHC == 9.4.8", "GHC == 9.6.7", "GHC == 9.8.4", "GHC == 9.10.3", "GHC == 9.12.2" ]
 , extra-source-files =
   [ "**/*.md"
   , "**/*.dhall"
   , "**/Makefile"
+  , "**/*.mk"
   , "project-dhall/**/*hs"
   , "project-nix/**/*hs"
   , "**/*.py"
-  , "**/*.sh"
+  , "*.sh"
+  , "alternatives/**/*.sh"
   ]
 , dependencies =
   [ "aeson >= 2.1.2 && <2.3"

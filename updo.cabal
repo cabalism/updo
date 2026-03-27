@@ -21,17 +21,19 @@ build-type:     Simple
 tested-with:
     GHC == 9.2.8
   , GHC == 9.4.8
-  , GHC == 9.6.5
-  , GHC == 9.8.2
+  , GHC == 9.6.7
+  , GHC == 9.8.4
+  , GHC == 9.10.3
+  , GHC == 9.12.2
 extra-source-files:
     ALTERNATIVES.md
     alternatives/cabal2stack/README.md
     alternatives/stack2cabal/README.md
     alternatives/yaml2stack/README.md
     CHANGELOG.md
+    docs/README.md
     HACKING.md
     project-dhall/README.md
-    project-dhall2config/README.md
     project-nix/README.md
     README.md
     TEMPLATES.md
@@ -84,17 +86,30 @@ extra-source-files:
     alternatives/stack2cabal/Makefile
     alternatives/yaml2stack/Makefile
     Makefile
-    project-dhall/Makefile
-    project-dhall2config/Makefile
     project-nix/Makefile
     project-skeleton/Makefile
     temp/Makefile
+    bootstrap/bootstrap.mk
+    bootstrap/hackage.mk
+    bootstrap/repo-archive.mk
+    ghc-compound-targets.mk
+    ghc-upgrade-projects.mk
+    ghc-version-projects.mk
+    project-dhall/dhall2config.mk
+    project-upgrade/dhall2cabal.mk
+    project-upgrade/dhall2config.mk
+    project-upgrade/dhall2stack.mk
+    project-version/dhall2cabal.mk
+    project-version/dhall2config.mk
+    project-version/dhall2stack.mk
+    project-dhall/pkg-groups.hs
     project-dhall/pkgs-sorted.hs
     project-dhall/pkgs-upgrade-done.hs
     project-dhall/pkgs-upgrade-partition.hs
-    project-dhall2config/pkg-groups.hs
     project-nix/sha256map.hs
     project-nix/sha256map.py
+    project-bootstrap-hackage.sh
+    project-bootstrap-repo.sh
     alternatives/yaml2stack/join-sort-fragments.sh
 
 source-repository head
@@ -102,7 +117,7 @@ source-repository head
   location: https://github.com/cabalism/updo
 
 executable updo-pkg-groups
-  main-is: project-dhall2config/pkg-groups.hs
+  main-is: project-dhall/pkg-groups.hs
   other-modules:
       Paths_updo
   build-depends:
