@@ -56,5 +56,5 @@ project-dhall/ghc-%/text-templates/dhall2config.dhall: \
   updo/project-skeleton/ghc-x.y.z/text-templates/dhall2config.dhall \
   project-dhall/ghc-%/text-templates/wrap-cabal.dhall \
   project-dhall/pkg-groups.dhall
-	mkdir -p project-dhall/ghc-$*/text-template-snippets
+	mkdir -p project-dhall/ghc-$*/text-templates
 	[ -e $@ ] || cp $< $@
