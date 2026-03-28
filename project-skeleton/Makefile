@@ -37,24 +37,18 @@ project-dhall/ghc-%/text-templates/wrap-stack.dhall: \
 
 # dhall2stack needs wrap-stack
 project-dhall/ghc-%/text-templates/dhall2stack.dhall: \
-  updo/project-skeleton/ghc-x.y.z/text-templates/dhall2stack.dhall \
-  project-dhall/ghc-%/text-templates/wrap-stack.dhall \
-  project-dhall/pkg-groups.dhall
+  updo/project-skeleton/ghc-x.y.z/text-templates/dhall2stack.dhall
 	mkdir -p project-dhall/ghc-$*/text-templates
 	[ -e $@ ] || cp $< $@
 
 # dhall2cabal needs wrap-cabal
 project-dhall/ghc-%/text-templates/dhall2cabal.dhall: \
-  updo/project-skeleton/ghc-x.y.z/text-templates/dhall2cabal.dhall \
-  project-dhall/ghc-%/text-templates/wrap-cabal.dhall \
-  project-dhall/pkg-groups.dhall
+  updo/project-skeleton/ghc-x.y.z/text-templates/dhall2cabal.dhall
 	mkdir -p project-dhall/ghc-$*/text-templates
 	[ -e $@ ] || cp $< $@
 	
 # dhall2config needs wrap-cabal
 project-dhall/ghc-%/text-templates/dhall2config.dhall: \
-  updo/project-skeleton/ghc-x.y.z/text-templates/dhall2config.dhall \
-  project-dhall/ghc-%/text-templates/wrap-cabal.dhall \
-  project-dhall/pkg-groups.dhall
+  updo/project-skeleton/ghc-x.y.z/text-templates/dhall2config.dhall
 	mkdir -p project-dhall/ghc-$*/text-templates
 	[ -e $@ ] || cp $< $@
